@@ -20,6 +20,8 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="Theme.Ribbit" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
         <!--<item name="android:actionBarItemBackground">@drawable/selectable_background_ribbit</item>-->
         <!--<item name="android:popupMenuStyle">@style/PopupMenu.Ribbit</item>-->
         <!--<item name="android:dropDownListViewStyle">@style/DropDownListView.Ribbit</item>-->

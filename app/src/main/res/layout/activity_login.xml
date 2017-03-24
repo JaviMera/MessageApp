@@ -1,58 +1,91 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/AuthBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.LoginActivity" >
+    android:fitsSystemWindows="true"
+    tools:context=".ui.MainActivity">
 
-    <ImageView
-        android:id="@+id/backgroundImage"
-        style="@style/AuthBackgroundImage"
-        android:contentDescription="@string/content_desc_background" />
-
-    <TextView
-        android:id="@+id/title"
-        android:paddingTop="150dp"
-        style="@style/AuthTitle" />
-
-    <TextView
-        android:id="@+id/subtitle"
-        style="@style/AuthTitle.AuthSubTitle" />
-
-    <LinearLayout
-        android:id="@+id/editTextLayout"
-        style="@style/AuthFieldContainer" >
-
-        <EditText
-            android:id="@+id/usernameField"
-            style="@style/AuthEditText"
-            android:hint="@string/username_hint" >
-
-            <requestFocus />
-        </EditText>
-
-        <EditText
-            android:id="@+id/passwordField"
-            style="@style/AuthEditText"
-            android:hint="@string/password_hint"
-            android:inputType="textPassword" />
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/loginButton"
-        style="@style/AuthButton"
-        android:text="@string/login_button_label"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/editTextLayout" />
-
-    <TextView
-        android:id="@+id/signUpText"
-        android:layout_width="wrap_content"
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/loginButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="12dp"
-        android:text="@string/sign_up_text"
-        android:textColor="@android:color/white" />
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-</RelativeLayout>
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+            <ProgressBar
+                android:id="@+id/loginProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:padding="10dp"/>
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <RelativeLayout
+        style="@style/AuthBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        tools:context=".ui.LoginActivity" >
+
+        <ImageView
+            android:id="@+id/backgroundImage"
+            style="@style/AuthBackgroundImage"
+            android:contentDescription="@string/content_desc_background" />
+
+        <TextView
+            android:id="@+id/title"
+            android:paddingTop="150dp"
+            style="@style/AuthTitle" />
+
+        <TextView
+            android:id="@+id/subtitle"
+            style="@style/AuthTitle.AuthSubTitle" />
+
+        <LinearLayout
+            android:id="@+id/editTextLayout"
+            style="@style/AuthFieldContainer" >
+
+            <EditText
+                android:id="@+id/usernameField"
+                style="@style/AuthEditText"
+                android:hint="@string/username_hint" >
+
+                <requestFocus />
+            </EditText>
+
+            <EditText
+                android:id="@+id/passwordField"
+                style="@style/AuthEditText"
+                android:hint="@string/password_hint"
+                android:inputType="textPassword" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/loginButton"
+            style="@style/AuthButton"
+            android:text="@string/login_button_label"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/editTextLayout" />
+
+        <TextView
+            android:id="@+id/signUpText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/loginButton"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="12dp"
+            android:text="@string/sign_up_text"
+            android:textColor="@android:color/white" />
+
+    </RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>
