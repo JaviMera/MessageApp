@@ -68,13 +68,13 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
 
                     // Login
-                    mProgressBar.setVisibility(View.INVISIBLE);
+                    mProgressBar.setVisibility(View.VISIBLE);
 
                     User.logInInBackground(username, password, new LogInCallback() {
                         @Override
                         public void done(User user, Exception e) {
 
-                    mProgressBar.setVisibility(View.VISIBLE);
+                    mProgressBar.setVisibility(View.INVISIBLE);
 
                     if (e == null) {
                         // Success!
