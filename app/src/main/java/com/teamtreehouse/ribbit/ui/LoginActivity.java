@@ -10,6 +10,7 @@ import android.widget.ProgressBar;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.dialogs.DialogFragmentError;
+import com.teamtreehouse.ribbit.exceptions.UserNotFoundException;
 import com.teamtreehouse.ribbit.models.callbacks.LogInCallback;
 import com.teamtreehouse.ribbit.models.User;
 
@@ -85,21 +86,21 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void done(User user, Exception e) {
 
-            mProgressBar.setVisibility(View.INVISIBLE);
+                mProgressBar.setVisibility(View.INVISIBLE);
 
-            if (e == null) {
-                // Success!
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-            } else {
+                if (e == null) {
+                    // Success!
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                } else {
 
-                DialogFragmentError dialog = DialogFragmentError.newInstance(
-                    e.getMessage());
+                    DialogFragmentError dialog = DialogFragmentError.newInstance(
+                        e.getMessage());
 
-                dialog.show(getSupportFragmentManager(), "dialog_error");
-            }
+                    dialog.show(getSupportFragmentManager(), "dialog_error");
+                }
             }
         });
     }

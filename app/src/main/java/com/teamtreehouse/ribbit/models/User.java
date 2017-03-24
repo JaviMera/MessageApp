@@ -1,5 +1,6 @@
 package com.teamtreehouse.ribbit.models;
 
+import com.teamtreehouse.ribbit.exceptions.UserNotFoundException;
 import com.teamtreehouse.ribbit.mockdata.MockRelations;
 import com.teamtreehouse.ribbit.mockdata.MockUsers;
 import com.teamtreehouse.ribbit.models.callbacks.LogInCallback;
@@ -119,14 +120,11 @@ public class User implements Comparable<User> {
                     callback.done(user, null);
                     return;
                 }
-                else {
-                    callback.done(null, new Exception("The username or password you entered is incorrect."));
-                }
             }
         }
 
         // No match
-        callback.done(null, new Exception());
+        callback.done(null, new UserNotFoundException());
     }
 
     @Override

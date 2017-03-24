@@ -7,6 +7,7 @@ import com.teamtreehouse.ribbit.models.User;
  */
 
 public class LogInCallback {
+
     public void done(User user, Exception e) {
 
     }
