@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.view.LayoutInflater;
@@ -35,15 +36,19 @@ public class InboxFragment extends ListFragment {
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
         mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
         // Deprecated method - what should we call instead?
-        mSwipeRefreshLayout.setColorScheme(
-                R.color.swipeRefresh1,
-                R.color.swipeRefresh2,
-                R.color.swipeRefresh3,
-                R.color.swipeRefresh4);
-
-        retrieveMessages();
+        mSwipeRefreshLayout.setColorSchemeResources(
+            R.color.swipeRefresh1,
+            R.color.swipeRefresh2,
+            R.color.swipeRefresh3,
+            R.color.swipeRefresh4);
 
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+
+        retrieveMessages();
     }
 
     @Override

@@ -86,7 +86,10 @@ public class Message implements Comparable<Message> {
 
     public static Query<Message> getQuery() {
         Query<Message> query = new Query<Message>(Message.class.getSimpleName());
-        query.setDataSet(MockMessages.getInstance().getMessagesForUser(User.getCurrentUser().getObjectId()));
+
+        User currentUser = User.getCurrentUser();
+        String userId = currentUser.getObjectId();
+        query.setDataSet(MockMessages.getInstance().getMessagesForUser(userId));
         return query;
     }
 }
