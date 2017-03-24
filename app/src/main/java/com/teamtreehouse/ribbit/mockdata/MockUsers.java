@@ -32,4 +32,9 @@ public class MockUsers {
     public static void add(User user) {
         testUsers.add(user);
     }
+
+    public static User get(int position) {
+
+        return testUsers.get(position);
+    }
 }

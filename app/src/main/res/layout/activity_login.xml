@@ -44,7 +44,6 @@
 
         <TextView
             android:id="@+id/title"
-            android:paddingTop="150dp"
             style="@style/AuthTitle" />
 
         <TextView

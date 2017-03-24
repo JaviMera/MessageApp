@@ -1,6 +1,5 @@
 package com.teamtreehouse.ribbit.ui;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -63,36 +62,45 @@ public class LoginActivity extends AppCompatActivity {
         if (username.isEmpty()) {
 
             DialogFragmentError dialog = DialogFragmentError.newInstance(
-                getString(R.string.login_error_message));
+                getString(R.string.login_error_empty_username_message));
 
             dialog.show(getSupportFragmentManager(), "dialog_error");
-
-        } else {
-
-            // Login
-            mProgressBar.setVisibility(View.VISIBLE);
-
-            User.logInInBackground(username, password, new LogInCallback() {
-                @Override
-                public void done(User user, Exception e) {
-
-                    mProgressBar.setVisibility(View.INVISIBLE);
-
-                    if (e == null) {
-                        // Success!
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-                    } else {
-
-                        DialogFragmentError dialog = DialogFragmentError.newInstance(
-                            e.getMessage());
-
-                        dialog.show(getSupportFragmentManager(), "dialog_error");
-                    }
-                }
-            });
+            return;
         }
+
+        if(password.isEmpty()) {
+
+            DialogFragmentError dialog = DialogFragmentError.newInstance(
+                getString(R.string.login_error_empty_password_message)
+            );
+
+            dialog.show(getSupportFragmentManager(), "dialog_error");
+            return;
+        }
+
+        // Login
+        mProgressBar.setVisibility(View.VISIBLE);
+
+        User.logInInBackground(username, password, new LogInCallback() {
+            @Override
+            public void done(User user, Exception e) {
+
+            mProgressBar.setVisibility(View.INVISIBLE);
+
+            if (e == null) {
+                // Success!
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            } else {
+
+                DialogFragmentError dialog = DialogFragmentError.newInstance(
+                    e.getMessage());
+
+                dialog.show(getSupportFragmentManager(), "dialog_error");
+            }
+            }
+        });
     }
 }
