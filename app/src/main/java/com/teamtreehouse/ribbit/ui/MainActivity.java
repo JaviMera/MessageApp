@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +27,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -151,17 +155,26 @@ public class MainActivity extends AppCompatActivity {
      */
     SectionsPagerAdapter mSectionsPagerAdapter;
 
-    private TabLayout mTabLayout;
+    @BindView(R.id.tabLayout)
+    TabLayout mTabLayout;
+
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
 
     /**
      * The {@link ViewPager} that will host the section contents.
      */
+    @BindView(R.id.pager)
     ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ButterKnife.bind(this);
+
+        setSupportActionBar(mToolbar);
 
         User currentUser = User.getCurrentUser();
         if (currentUser == null) {
@@ -172,11 +185,7 @@ public class MainActivity extends AppCompatActivity {
             mSectionsPagerAdapter = new SectionsPagerAdapter(this,
                     getSupportFragmentManager());
 
-            // Set up the Tab Layout
-            mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
-
             // Set up the ViewPager with the sections adapter.
-            mViewPager = (ViewPager) findViewById(R.id.pager);
             mViewPager.setAdapter(mSectionsPagerAdapter);
 
             // Tell the tab layout to set the view pager object
