@@ -6,12 +6,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.teamtreehouse.ribbit.R;
+import com.teamtreehouse.ribbit.dialogs.DialogFragmentError;
 import com.teamtreehouse.ribbit.models.callbacks.LogInCallback;
 import com.teamtreehouse.ribbit.models.User;
 
@@ -62,12 +61,12 @@ public class LoginActivity extends AppCompatActivity {
         password = password.trim();
 
         if (username.isEmpty()) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-            builder.setMessage(R.string.login_error_message)
-                    .setTitle(R.string.login_error_title)
-                    .setPositiveButton(android.R.string.ok, null);
-            AlertDialog dialog = builder.create();
-            dialog.show();
+
+            DialogFragmentError dialog = DialogFragmentError.newInstance(
+                getString(R.string.login_error_message));
+
+            dialog.show(getSupportFragmentManager(), "dialog_error");
+
         } else {
 
             // Login
@@ -86,12 +85,11 @@ public class LoginActivity extends AppCompatActivity {
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                     } else {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                        builder.setMessage(e.getMessage())
-                                .setTitle(R.string.login_error_title)
-                                .setPositiveButton(android.R.string.ok, null);
-                        AlertDialog dialog = builder.create();
-                        dialog.show();
+
+                        DialogFragmentError dialog = DialogFragmentError.newInstance(
+                            e.getMessage());
+
+                        dialog.show(getSupportFragmentManager(), "dialog_error");
                     }
                 }
             });
