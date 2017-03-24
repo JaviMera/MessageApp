@@ -1,20 +1,18 @@
 package com.teamtreehouse.ribbit.ui;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
-import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.FragmentActivity;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
 import android.widget.Toast;
 
 import com.teamtreehouse.ribbit.R;
@@ -29,8 +27,7 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MainActivity extends FragmentActivity implements
-        ActionBar.TabListener {
+public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
 
@@ -154,6 +151,8 @@ public class MainActivity extends FragmentActivity implements
      */
     SectionsPagerAdapter mSectionsPagerAdapter;
 
+    private TabLayout mTabLayout;
+
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -162,49 +161,38 @@ public class MainActivity extends FragmentActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_main);
 
         User currentUser = User.getCurrentUser();
         if (currentUser == null) {
             navigateToLogin();
+            finish();
         } else {
             Log.i(TAG, currentUser.getUsername());
         }
 
-        // Set up the action bar.
-        final ActionBar actionBar = getActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the app.
         mSectionsPagerAdapter = new SectionsPagerAdapter(this,
                 getSupportFragmentManager());
+
+        // Set up the Tab Layout
+        mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        // When swiping between different sections, select the corresponding
-        // tab. We can also use ActionBar.Tab#select() to do this if we have
-        // a reference to the Tab.
-        mViewPager
-                .setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-                    @Override
-                    public void onPageSelected(int position) {
-                        actionBar.setSelectedNavigationItem(position);
-                    }
-                });
+        // Tell the tab layout to set the view pager object
+        mTabLayout.setupWithViewPager(mViewPager);
 
-        // For each of the sections in the app, add a tab to the action bar.
-        for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
-            // Create a tab with text corresponding to the page title defined by
-            // the adapter. Also specify this Activity object, which implements
-            // the TabListener interface, as the callback (listener) for when
-            // this tab is selected.
-            actionBar.addTab(actionBar.newTab()
-                    .setIcon(mSectionsPagerAdapter.getIcon(i))
-                    .setTabListener(this));
+        // Setup icons to display for each tab
+        for(int tab = 0 ; tab < mTabLayout.getTabCount(); tab++) {
+
+            TabLayout.Tab currentTab = mTabLayout.getTabAt(tab);
+
+            if(currentTab != null) {
+
+                currentTab.setIcon(mSectionsPagerAdapter.getIcon(tab));
+            }
         }
     }
 
@@ -304,23 +292,5 @@ public class MainActivity extends FragmentActivity implements
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onTabSelected(ActionBar.Tab tab,
-                              FragmentTransaction fragmentTransaction) {
-        // When the given tab is selected, switch to the corresponding page in
-        // the ViewPager.
-        mViewPager.setCurrentItem(tab.getPosition());
-    }
-
-    @Override
-    public void onTabUnselected(ActionBar.Tab tab,
-                                FragmentTransaction fragmentTransaction) {
-    }
-
-    @Override
-    public void onTabReselected(ActionBar.Tab tab,
-                                FragmentTransaction fragmentTransaction) {
     }
 }

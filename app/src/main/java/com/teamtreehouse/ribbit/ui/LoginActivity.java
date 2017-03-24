@@ -26,11 +26,11 @@ public class LoginActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_login);
 
-        ActionBar actionBar = getActionBar();
-        actionBar.hide();
+        // TODO replace with tool bar implementation
+//        ActionBar actionBar = getActionBar();
+//        actionBar.hide();
 
         mSignUpTextView = (TextView) findViewById(R.id.signUpText);
         mSignUpTextView.setOnClickListener(new View.OnClickListener() {
@@ -61,13 +61,17 @@ public class LoginActivity extends Activity {
                     AlertDialog dialog = builder.create();
                     dialog.show();
                 } else {
+
                     // Login
-                    setProgressBarIndeterminateVisibility(true);
+                    // TODO replace with tool bar implementation
+//                    setProgressBarIndeterminateVisibility(true);
 
                     User.logInInBackground(username, password, new LogInCallback() {
                         @Override
                         public void done(User user, Exception e) {
-                            setProgressBarIndeterminateVisibility(false);
+
+                            // TODO replace with tool bar implementation
+//                            setProgressBarIndeterminateVisibility(false);
 
                             if (e == null) {
                                 // Success!
