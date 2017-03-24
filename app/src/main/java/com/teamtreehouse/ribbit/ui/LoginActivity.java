@@ -15,64 +15,67 @@ import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.models.callbacks.LogInCallback;
 import com.teamtreehouse.ribbit.models.User;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class LoginActivity extends AppCompatActivity {
 
+    @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
-    protected ProgressBar mProgressBar;
-    protected EditText mUsername;
-    protected EditText mPassword;
-    protected Button mLoginButton;
 
-    protected TextView mSignUpTextView;
+    @BindView(R.id.loginProgressBar)
+    protected ProgressBar mProgressBar;
+
+    @BindView(R.id.usernameField)
+    protected EditText mUsername;
+
+    @BindView(R.id.passwordField)
+    protected EditText mPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // TODO replace with tool bar implementation
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        ButterKnife.bind(this);
+
         setSupportActionBar(mToolbar);
 
-        mProgressBar = (ProgressBar) findViewById(R.id.loginProgressBar);
         mProgressBar.setVisibility(View.INVISIBLE);
+    }
 
-        mSignUpTextView = (TextView) findViewById(R.id.signUpText);
-        mSignUpTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
-                startActivity(intent);
-            }
-        });
+    @OnClick(R.id.signUpText)
+    public void onSignupClick(View view) {
 
-        mUsername = (EditText) findViewById(R.id.usernameField);
-        mPassword = (EditText) findViewById(R.id.passwordField);
-        mLoginButton = (Button) findViewById(R.id.loginButton);
-        mLoginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String username = mUsername.getText().toString();
-                String password = mPassword.getText().toString();
+        Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
+        startActivity(intent);
+    }
 
-                username = username.trim();
-                password = password.trim();
+    @OnClick(R.id.loginButton)
+    public void onLoginClick(View view) {
 
-                if (username.isEmpty()) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                    builder.setMessage(R.string.login_error_message)
-                            .setTitle(R.string.login_error_title)
-                            .setPositiveButton(android.R.string.ok, null);
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                } else {
+        String username = mUsername.getText().toString();
+        String password = mPassword.getText().toString();
 
-                    // Login
-                    mProgressBar.setVisibility(View.VISIBLE);
+        username = username.trim();
+        password = password.trim();
 
-                    User.logInInBackground(username, password, new LogInCallback() {
-                        @Override
-                        public void done(User user, Exception e) {
+        if (username.isEmpty()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+            builder.setMessage(R.string.login_error_message)
+                    .setTitle(R.string.login_error_title)
+                    .setPositiveButton(android.R.string.ok, null);
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        } else {
+
+            // Login
+            mProgressBar.setVisibility(View.VISIBLE);
+
+            User.logInInBackground(username, password, new LogInCallback() {
+                @Override
+                public void done(User user, Exception e) {
 
                     mProgressBar.setVisibility(View.INVISIBLE);
 
@@ -90,10 +93,8 @@ public class LoginActivity extends AppCompatActivity {
                         AlertDialog dialog = builder.create();
                         dialog.show();
                     }
-                    }
-                });
-            }
-            }
-        });
+                }
+            });
+        }
     }
 }
