@@ -51,8 +51,6 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         return "";
     }
 
-
-
     public int getIcon(int position) {
         switch (position) {
             case 0:

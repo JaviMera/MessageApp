@@ -166,34 +166,34 @@ public class MainActivity extends AppCompatActivity {
         User currentUser = User.getCurrentUser();
         if (currentUser == null) {
             navigateToLogin();
-            finish();
         } else {
             Log.i(TAG, currentUser.getUsername());
-        }
+            
+            mSectionsPagerAdapter = new SectionsPagerAdapter(this,
+                    getSupportFragmentManager());
 
-        mSectionsPagerAdapter = new SectionsPagerAdapter(this,
-                getSupportFragmentManager());
+            // Set up the Tab Layout
+            mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
 
-        // Set up the Tab Layout
-        mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
+            // Set up the ViewPager with the sections adapter.
+            mViewPager = (ViewPager) findViewById(R.id.pager);
+            mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+            // Tell the tab layout to set the view pager object
+            mTabLayout.setupWithViewPager(mViewPager);
 
-        // Tell the tab layout to set the view pager object
-        mTabLayout.setupWithViewPager(mViewPager);
+            // Setup icons to display for each tab
+            for(int tab = 0 ; tab < mTabLayout.getTabCount(); tab++) {
 
-        // Setup icons to display for each tab
-        for(int tab = 0 ; tab < mTabLayout.getTabCount(); tab++) {
+                TabLayout.Tab currentTab = mTabLayout.getTabAt(tab);
 
-            TabLayout.Tab currentTab = mTabLayout.getTabAt(tab);
+                if(currentTab != null) {
 
-            if(currentTab != null) {
-
-                currentTab.setIcon(mSectionsPagerAdapter.getIcon(tab));
+                    currentTab.setIcon(mSectionsPagerAdapter.getIcon(tab));
+                }
             }
         }
+
     }
 
     @Override
