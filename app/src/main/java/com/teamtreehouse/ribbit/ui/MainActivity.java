@@ -269,6 +269,13 @@ public class MainActivity extends AppCompatActivity {
     private void navigateToLogin() {
         Intent intent = new Intent(this, LoginActivity.class);
         // change this intent so that the user can't hit "back" and get into the inbox
+
+        // Set these flags to finish any other tasks that are related to Main Activity
+        // This way when login activity is launched, there is no previous activity to go back to,
+        // and this exiting the app by pressing the back button.
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
         startActivity(intent);
     }
 
