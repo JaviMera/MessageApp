@@ -3,17 +3,17 @@ package com.teamtreehouse.ribbit.ui;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
-import android.support.v4.content.ContextCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import com.teamtreehouse.ribbit.R;
-import com.teamtreehouse.ribbit.adapters.MessageAdapter;
+import com.teamtreehouse.ribbit.adapters.MessageRecyclerAdapter;
 import com.teamtreehouse.ribbit.models.Message;
 import com.teamtreehouse.ribbit.models.MessageFile;
 import com.teamtreehouse.ribbit.models.Query;
@@ -22,25 +22,43 @@ import com.teamtreehouse.ribbit.models.callbacks.FindCallback;
 
 import java.util.List;
 
-public class InboxFragment extends ListFragment {
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-    protected List<Message> mMessages;
-    protected SwipeRefreshLayout mSwipeRefreshLayout;
+public class InboxFragment extends Fragment
+    implements MessageRecyclerAdapter.OnRecyclerViewClick{
+
+    protected List<Message> messages;
+
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
+
+    @BindView(R.id.messagesRecyclerView)
+    RecyclerView recyclerView;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_inbox,
                 container, false);
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
-        mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
+        ButterKnife.bind(this, rootView);
+
+        swipeRefreshLayout.setOnRefreshListener(createRefresherLayoutListener());
+
         // Deprecated method - what should we call instead?
-        mSwipeRefreshLayout.setColorSchemeResources(
+        swipeRefreshLayout.setColorSchemeResources(
             R.color.swipeRefresh1,
             R.color.swipeRefresh2,
             R.color.swipeRefresh3,
             R.color.swipeRefresh4);
+
+        MessageRecyclerAdapter adapter = new MessageRecyclerAdapter(this);
+        recyclerView.setAdapter(adapter);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+
+        recyclerView.setHasFixedSize(true);
 
         return rootView;
     }
@@ -55,7 +73,7 @@ public class InboxFragment extends ListFragment {
     public void onResume() {
         super.onResume();
 
-        getActivity().setProgressBarIndeterminateVisibility(true);
+//        getActivity().setProgressBarIndeterminateVisibility(true);
     }
 
     private void retrieveMessages() {
@@ -65,41 +83,44 @@ public class InboxFragment extends ListFragment {
         query.findInBackground(new FindCallback<Message>() {
             @Override
             public void done(List<Message> messages, Exception e) {
-                getActivity().setProgressBarIndeterminateVisibility(false);
+//                getActivity().setProgressBarIndeterminateVisibility(false);
 
-                if (mSwipeRefreshLayout.isRefreshing()) {
-                    mSwipeRefreshLayout.setRefreshing(false);
+                if (swipeRefreshLayout.isRefreshing()) {
+                    swipeRefreshLayout.setRefreshing(false);
                 }
+
 
                 if (e == null) {
                     // We found messages!
-                    mMessages = messages;
+                    InboxFragment.this.messages = messages;
+                    MessageRecyclerAdapter adapter = (MessageRecyclerAdapter) recyclerView.getAdapter();
 
-                    String[] usernames = new String[mMessages.size()];
+                    String[] usernames = new String[InboxFragment.this.messages.size()];
                     int i = 0;
-                    for (Message message : mMessages) {
+                    for (Message message : InboxFragment.this.messages) {
                         usernames[i] = message.getString(Message.KEY_SENDER_NAME);
                         i++;
                     }
-                    if (getListView().getAdapter() == null) {
-                        MessageAdapter adapter = new MessageAdapter(
-                                getListView().getContext(),
-                                mMessages);
-                        setListAdapter(adapter);
-                    } else {
-                        // refill the adapter!
-                        ((MessageAdapter) getListView().getAdapter()).refill(mMessages);
-                    }
+
+                    adapter.addMessages(InboxFragment.this.messages);
                 }
             }
         });
     }
 
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
+    protected OnRefreshListener createRefresherLayoutListener() {
 
-        Message message = mMessages.get(position);
+        return new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                retrieveMessages();
+            }
+        };
+    }
+
+    @Override
+    public void onItemSingleClick(Message message) {
+
         String messageType = message.getString(Message.KEY_FILE_TYPE);
         MessageFile file = message.getFile(Message.KEY_FILE);
         Uri fileUri = file.getUri();
@@ -128,13 +149,6 @@ public class InboxFragment extends ListFragment {
             message.removeRecipient(User.getCurrentUser().getObjectId());
         }
     }
-
-    protected OnRefreshListener mOnRefreshListener = new OnRefreshListener() {
-        @Override
-        public void onRefresh() {
-            retrieveMessages();
-        }
-    };
 }
 
 

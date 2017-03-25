@@ -25,7 +25,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
         super(context, R.layout.message_item, messages);
         mContext = context;
 
-        // Create a full copy of mMessages
+        // Create a full copy of messages
         mMessages = new ArrayList<Message>();
         for (Message msg : messages) {
             mMessages.add(msg);
