@@ -42,7 +42,11 @@ public class MessageAdapter extends ArrayAdapter<Message> {
             holder.iconImageView = (ImageView) convertView.findViewById(R.id.messageIcon);
             holder.nameLabel = (TextView) convertView.findViewById(R.id.senderLabel);
             holder.timeLabel = (TextView) convertView.findViewById(R.id.timeLabel);
+
+            convertView.setTag(holder);
+
         } else {
+
             holder = (ViewHolder) convertView.getTag();
         }
 
