@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
             navigateToLogin();
         } else {
             Log.i(TAG, currentUser.getUsername());
-            
+
             mSectionsPagerAdapter = new SectionsPagerAdapter(this,
                     getSupportFragmentManager());
 
