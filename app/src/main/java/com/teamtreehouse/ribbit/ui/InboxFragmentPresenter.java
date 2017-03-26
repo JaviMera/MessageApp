@@ -14,4 +14,14 @@ public class InboxFragmentPresenter extends FragmentRecyclerPresenter<InboxFragm
 
         view.setEmptyTextViewVisibility(visible);
     }
+
+    public void setRefresherTheme(int[] colors) {
+
+        view.setRefresherColors(colors);
+    }
+
+    public void setRefresherListener() {
+
+
+    }
 }

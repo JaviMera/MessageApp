@@ -22,6 +22,7 @@ import com.teamtreehouse.ribbit.models.MessageFile;
 import com.teamtreehouse.ribbit.models.Query;
 import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.models.callbacks.FindCallback;
+import com.teamtreehouse.ribbit.utils.Resources;
 
 import java.util.List;
 
@@ -32,13 +33,6 @@ public class InboxFragment extends Fragment
     implements
     InboxFragmentView,
     MessageAdapter.OnRecyclerViewClick{
-
-    private int[] themeColors = new int[] {
-        R.color.swipeRefresh1,
-        R.color.swipeRefresh2,
-        R.color.swipeRefresh3,
-        R.color.swipeRefresh4
-    };
 
     protected List<Message> messages;
     protected InboxFragmentPresenter presenter;
@@ -68,12 +62,15 @@ public class InboxFragment extends Fragment
         ButterKnife.bind(this, rootView);
 
         presenter = new InboxFragmentPresenter(this);
+
+        // Initialize the recycler view
         presenter.setRecyclerAdapter(new MessageAdapter(this));
         presenter.setRecyclerLayout(new LinearLayoutManager(this.parent));
         presenter.setRecyclerFixedSize(true);
 
-        swipeRefreshLayout.setOnRefreshListener(createRefresherLayoutListener());
-        swipeRefreshLayout.setColorSchemeResources(themeColors);
+        // Initialize the refresher layout
+        presenter.setRefresherListener();
+        presenter.setRefresherTheme(Resources.getRefresherColors());
 
         return rootView;
     }
@@ -126,16 +123,6 @@ public class InboxFragment extends Fragment
                 }
             }
         });
-    }
-
-    protected OnRefreshListener createRefresherLayoutListener() {
-
-        return new OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                retrieveMessages();
-            }
-        };
     }
 
     @Override
@@ -196,6 +183,23 @@ public class InboxFragment extends Fragment
             ? View.VISIBLE
             : View.GONE
         );
+    }
+
+    @Override
+    public void setRefresherColors(int[] colors) {
+
+        swipeRefreshLayout.setColorSchemeResources(colors);
+    }
+
+    @Override
+    public void setRefresherListener() {
+
+        swipeRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                retrieveMessages();
+            }
+        });
     }
 }
 

@@ -7,4 +7,6 @@ package com.teamtreehouse.ribbit.ui;
 public interface InboxFragmentView extends FragmentRecyclerView {
 
     void setEmptyTextViewVisibility(boolean visible);
+    void setRefresherColors(int[] colors);
+    void setRefresherListener();
 }

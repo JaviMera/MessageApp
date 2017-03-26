@@ -77,4 +77,27 @@ public class InboxFragmentPresenterTest {
         // Assert
         Mockito.verify(view).setEmptyTextViewVisibility(visible);
     }
+
+    @Test
+    public void setRefresherTheme() throws Exception {
+
+        // Arrange
+        int[] colors = new int[0];
+
+        // Act
+        target.setRefresherTheme(colors);
+
+        // Assert
+        Mockito.verify(view).setRefresherColors(colors);
+    }
+
+    @Test
+    public void setRefresherListener() throws Exception {
+
+        // Act
+        target.setRefresherListener();
+
+        // Assert
+        Mockito.verify(view).setRefresherListener();
+    }
 }
