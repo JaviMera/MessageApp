@@ -8,7 +8,7 @@ import com.teamtreehouse.ribbit.adapters.MessageAdapter;
  * Created by javie on 3/25/2017.
  */
 
-public interface FragmentRecyclerView extends MessageAdapter.OnRecyclerViewClick {
+public interface FragmentRecyclerView {
 
     void setRecyclerAdapter(RecyclerView.Adapter adapter);
     void setRecyclerLayout(RecyclerView.LayoutManager layoutManager);

@@ -6,11 +6,11 @@ import android.support.v7.widget.RecyclerView;
  * Created by javie on 3/25/2017.
  */
 
-class FragmentRecyclerPresenter {
+abstract class FragmentRecyclerPresenter<T extends FragmentRecyclerView> {
 
-    private FragmentRecyclerView view;
+    protected T view;
 
-    FragmentRecyclerPresenter(FragmentRecyclerView view) {
+    FragmentRecyclerPresenter(T view) {
 
         this.view = view;
     }

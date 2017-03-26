@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.models.Message;
-import com.teamtreehouse.ribbit.ui.FragmentRecyclerView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -22,17 +21,17 @@ import java.util.List;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder>{
 
-    private List<Message> messages;
-    private FragmentRecyclerView parent;
-
     public interface OnRecyclerViewClick {
 
         void onItemSingleClick(Message message);
     }
 
-    public MessageAdapter(FragmentRecyclerView parent) {
+    private List<Message> messages;
+    private OnRecyclerViewClick listener;
 
-        this.parent = parent;
+    public MessageAdapter(OnRecyclerViewClick listener) {
+
+        this.listener = listener;
         this.messages = new LinkedList<>();
     }
 
@@ -105,7 +104,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         public void onClick(View view) {
 
             Message message = messages.get(getAdapterPosition());
-            parent.onItemSingleClick(message);
+            listener.onItemSingleClick(message);
         }
     }
 }

@@ -29,7 +29,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class InboxFragment extends Fragment
-    implements FragmentRecyclerView {
+    implements
+    InboxFragmentView,
+    MessageAdapter.OnRecyclerViewClick{
 
     private int[] themeColors = new int[] {
         R.color.swipeRefresh1,
@@ -39,7 +41,7 @@ public class InboxFragment extends Fragment
     };
 
     protected List<Message> messages;
-    protected FragmentRecyclerPresenter presenter;
+    protected InboxFragmentPresenter presenter;
     protected FragmentActivity parent;
 
     @BindView(R.id.swipeRefreshLayout)
@@ -65,7 +67,7 @@ public class InboxFragment extends Fragment
 
         ButterKnife.bind(this, rootView);
 
-        presenter = new FragmentRecyclerPresenter(this);
+        presenter = new InboxFragmentPresenter(this);
         presenter.setRecyclerAdapter(new MessageAdapter(this));
         presenter.setRecyclerLayout(new LinearLayoutManager(this.parent));
         presenter.setRecyclerFixedSize(true);
@@ -116,11 +118,11 @@ public class InboxFragment extends Fragment
 
                     adapter.addMessages(InboxFragment.this.messages);
 
-                    textView.setVisibility(View.GONE);
+                    presenter.setEmptyTextViewVisibility(false);
                 }
                 else {
 
-                    textView.setVisibility(View.VISIBLE);
+                    presenter.setEmptyTextViewVisibility(true);
                 }
             }
         });
@@ -184,6 +186,16 @@ public class InboxFragment extends Fragment
     public void setRecyclerFixedSize(boolean fixedSize) {
 
         recyclerView.setHasFixedSize(fixedSize);
+    }
+
+    @Override
+    public void setEmptyTextViewVisibility(boolean visible) {
+
+        textView.setVisibility(
+            visible
+            ? View.VISIBLE
+            : View.GONE
+        );
     }
 }
 

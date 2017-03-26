@@ -13,17 +13,17 @@ import org.mockito.runners.MockitoJUnitRunner;
  * Created by javie on 3/25/2017.
  */
 @RunWith(MockitoJUnitRunner.class)
-public class FragmentRecyclerPresenterTest {
+public class InboxFragmentPresenterTest {
 
-    private FragmentRecyclerPresenter target;
+    private InboxFragmentPresenter target;
 
     @Mock
-    public FragmentRecyclerView view;
+    public InboxFragmentView view;
 
     @Before
     public void setUp() throws Exception {
 
-        target = new FragmentRecyclerPresenter(view);
+        target = new InboxFragmentPresenter(view);
     }
 
     @Test
@@ -63,5 +63,18 @@ public class FragmentRecyclerPresenterTest {
 
         // Assert
         Mockito.verify(view).setRecyclerFixedSize(fixedSize);
+    }
+
+    @Test
+    public void setEmptyMessageViewVisibility() throws Exception {
+
+        // Arrange
+        boolean visible = true;
+
+        // Act
+        target.setEmptyTextViewVisibility(visible);
+
+        // Assert
+        Mockito.verify(view).setEmptyTextViewVisibility(visible);
     }
 }
