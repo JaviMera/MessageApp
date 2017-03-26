@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
@@ -14,17 +15,27 @@ import com.teamtreehouse.ribbit.R;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 // TODO add tool bar to view image activity layout
 public class ViewImageActivity extends AppCompatActivity {
+
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+
+    @BindView(R.id.imageView)
+    ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_image);
-        // Show the Up button in the action bar.
-//        setupActionBar();
 
-        ImageView imageView = (ImageView) findViewById(R.id.imageView);
+        ButterKnife.bind(this);
+
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Uri imageUri = getIntent().getData();
 
@@ -37,15 +48,6 @@ public class ViewImageActivity extends AppCompatActivity {
                 finish();
             }
         }, 10 * 1000);
-    }
-
-    /**
-     * Set up the {@link android.app.ActionBar}.
-     */
-    private void setupActionBar() {
-
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-
     }
 
     @Override
