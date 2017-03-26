@@ -14,6 +14,7 @@ import com.teamtreehouse.ribbit.R;
 import java.util.Timer;
 import java.util.TimerTask;
 
+// TODO add tool bar to view image activity layout
 public class ViewImageActivity extends AppCompatActivity {
 
     @Override

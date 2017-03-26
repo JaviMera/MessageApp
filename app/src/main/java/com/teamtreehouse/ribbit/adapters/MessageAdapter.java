@@ -1,89 +1,111 @@
 package com.teamtreehouse.ribbit.adapters;
 
-import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.models.Message;
+import com.teamtreehouse.ribbit.ui.FragmentRecyclerView;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
-public class MessageAdapter extends ArrayAdapter<Message> {
+/**
+ * Created by javie on 3/25/2017.
+ */
 
-    protected Context mContext;
-    protected List<Message> mMessages;
+public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder>{
 
-    public MessageAdapter(Context context, List<Message> messages) {
-        super(context, R.layout.message_item, messages);
-        mContext = context;
+    private List<Message> messages;
+    private FragmentRecyclerView parent;
 
-        // Create a full copy of messages
-        mMessages = new ArrayList<Message>();
-        for (Message msg : messages) {
-            mMessages.add(msg);
-        }
+    public interface OnRecyclerViewClick {
+
+        void onItemSingleClick(Message message);
+    }
+
+    public MessageAdapter(FragmentRecyclerView parent) {
+
+        this.parent = parent;
+        this.messages = new LinkedList<>();
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
+    public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        if (convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.message_item, null);
-            holder = new ViewHolder();
-            holder.iconImageView = (ImageView) convertView.findViewById(R.id.messageIcon);
-            holder.nameLabel = (TextView) convertView.findViewById(R.id.senderLabel);
-            holder.timeLabel = (TextView) convertView.findViewById(R.id.timeLabel);
+        View view = LayoutInflater
+            .from(parent.getContext())
+            .inflate(R.layout.message_item, parent, false);
 
-            convertView.setTag(holder);
-
-        } else {
-
-            holder = (ViewHolder) convertView.getTag();
-        }
-
-        Message message = mMessages.get(position);
-
-        Date createdAt = message.getCreatedAt();
-        long now = new Date().getTime();
-        SimpleDateFormat format = new SimpleDateFormat("EEE, MMM d");
-        String convertedDate = format.format(createdAt);
-
-        holder.timeLabel.setText(convertedDate);
-
-        if (message.getString(Message.KEY_FILE_TYPE).equals(Message.TYPE_IMAGE)) {
-            holder.iconImageView.setImageResource(R.drawable.ic_picture);
-        } else {
-            holder.iconImageView.setImageResource(R.drawable.ic_video);
-        }
-        holder.nameLabel.setText(message.getString(Message.KEY_SENDER_NAME));
-
-        return convertView;
+        return new MessageViewHolder(view);
     }
 
-    private static class ViewHolder {
+    @Override
+    public void onBindViewHolder(MessageViewHolder holder, int position) {
+
+        holder.bind(this.messages.get(position));
+    }
+
+    @Override
+    public int getItemCount() {
+
+        return this.messages.size();
+    }
+
+    public void addMessages(List<Message> messages) {
+
+        int start = this.messages.size();
+        this.messages.addAll(messages);
+        notifyItemRangeInserted(start, this.messages.size());
+    }
+
+    class MessageViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView iconImageView;
         TextView nameLabel;
         TextView timeLabel;
-    }
 
-    public void refill(List<Message> messages) {
-        mMessages.clear();
-        mMessages.addAll(messages);
-        notifyDataSetChanged();
+        MessageViewHolder(View itemView) {
+            super(itemView);
+
+            iconImageView = (ImageView) itemView.findViewById(R.id.messageIcon);
+            nameLabel = (TextView) itemView.findViewById(R.id.senderLabel);
+            timeLabel = (TextView) itemView.findViewById(R.id.timeLabel);
+        }
+
+        void bind(final Message message) {
+
+            itemView.setOnClickListener(this);
+
+            Date createdAt = message.getCreatedAt();
+            long now = new Date().getTime();
+            SimpleDateFormat format = new SimpleDateFormat("EEE, MMM d");
+            String convertedDate = format.format(createdAt);
+
+            this.timeLabel.setText(convertedDate);
+
+            if (message.getString(Message.KEY_FILE_TYPE).equals(Message.TYPE_IMAGE)) {
+
+                this.iconImageView.setImageResource(R.drawable.ic_picture);
+
+            } else {
+
+                this.iconImageView.setImageResource(R.drawable.ic_video);
+            }
+
+            this.nameLabel.setText(message.getString(Message.KEY_SENDER_NAME));
+        }
+
+        @Override
+        public void onClick(View view) {
+
+            Message message = messages.get(getAdapterPosition());
+            parent.onItemSingleClick(message);
+        }
     }
 }
-
-
-
-
-
-

@@ -1,9 +1,11 @@
 package com.teamtreehouse.ribbit.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,7 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.teamtreehouse.ribbit.R;
-import com.teamtreehouse.ribbit.adapters.MessageRecyclerAdapter;
+import com.teamtreehouse.ribbit.adapters.MessageAdapter;
 import com.teamtreehouse.ribbit.models.Message;
 import com.teamtreehouse.ribbit.models.MessageFile;
 import com.teamtreehouse.ribbit.models.Query;
@@ -26,9 +28,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class InboxFragment extends Fragment
-    implements MessageRecyclerAdapter.OnRecyclerViewClick{
+    implements FragmentRecyclerView {
+
+    private int[] themeColors = new int[] {
+        R.color.swipeRefresh1,
+        R.color.swipeRefresh2,
+        R.color.swipeRefresh3,
+        R.color.swipeRefresh4
+    };
 
     protected List<Message> messages;
+    protected FragmentRecyclerPresenter presenter;
+    protected FragmentActivity parent;
 
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
@@ -37,28 +48,26 @@ public class InboxFragment extends Fragment
     RecyclerView recyclerView;
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        this.parent = (FragmentActivity) context;
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_inbox,
                 container, false);
 
         ButterKnife.bind(this, rootView);
 
+        presenter = new FragmentRecyclerPresenter(this);
+        presenter.setRecyclerAdapter(new MessageAdapter(this));
+        presenter.setRecyclerLayout(new LinearLayoutManager(this.parent));
+        presenter.setRecyclerFixedSize(true);
+
         swipeRefreshLayout.setOnRefreshListener(createRefresherLayoutListener());
-
-        // Deprecated method - what should we call instead?
-        swipeRefreshLayout.setColorSchemeResources(
-            R.color.swipeRefresh1,
-            R.color.swipeRefresh2,
-            R.color.swipeRefresh3,
-            R.color.swipeRefresh4);
-
-        MessageRecyclerAdapter adapter = new MessageRecyclerAdapter(this);
-        recyclerView.setAdapter(adapter);
-
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
-
-        recyclerView.setHasFixedSize(true);
+        swipeRefreshLayout.setColorSchemeResources(themeColors);
 
         return rootView;
     }
@@ -89,11 +98,10 @@ public class InboxFragment extends Fragment
                     swipeRefreshLayout.setRefreshing(false);
                 }
 
-
                 if (e == null) {
                     // We found messages!
                     InboxFragment.this.messages = messages;
-                    MessageRecyclerAdapter adapter = (MessageRecyclerAdapter) recyclerView.getAdapter();
+                    MessageAdapter adapter = (MessageAdapter) recyclerView.getAdapter();
 
                     String[] usernames = new String[InboxFragment.this.messages.size()];
                     int i = 0;
@@ -148,6 +156,24 @@ public class InboxFragment extends Fragment
             // remove the recipient
             message.removeRecipient(User.getCurrentUser().getObjectId());
         }
+    }
+
+    @Override
+    public void setRecyclerAdapter(RecyclerView.Adapter adapter) {
+
+        recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void setRecyclerLayout(RecyclerView.LayoutManager layoutManager) {
+
+        recyclerView.setLayoutManager(layoutManager);
+    }
+
+    @Override
+    public void setRecyclerFixedSize(boolean fixedSize) {
+
+        recyclerView.setHasFixedSize(fixedSize);
     }
 }
 
