@@ -7,6 +7,7 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.ui.LoginActivity;
+import com.teamtreehouse.ribbit.ui.SignUpActivity;
 
 /**
  * Created by javie on 4/4/2017.
@@ -16,7 +17,7 @@ public class MessageDB {
 
     public static final String USERS_NODE = "users";
 
-    public static void insertUser(final User newUser, final LoginActivity.InsertCallback listener) {
+    public static void insertUser(final User newUser, final SignUpActivity.InsertCallback listener) {
 
         FirebaseDatabase
             .getInstance()
@@ -34,8 +35,14 @@ public class MessageDB {
                 @Override
                 public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
 
-                    if(databaseError == null)
+                    if(databaseError == null){
+
                         listener.onSuccess(newUser);
+                    }
+                    else {
+
+                        listener.onFailure(databaseError.getMessage());
+                    }
                 }
             });
     }

@@ -20,11 +20,6 @@ import butterknife.OnClick;
 
 public class LoginActivity extends AppCompatActivity {
 
-    public interface InsertCallback {
-
-        void onSuccess(User user);
-    }
-
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
 

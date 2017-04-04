@@ -28,6 +28,12 @@ import butterknife.OnClick;
 
 public class SignUpActivity extends AppCompatActivity {
 
+    public interface InsertCallback {
+
+        void onSuccess(User user);
+        void onFailure(String message);
+    }
+
     @BindView(R.id.usernameField)
     protected EditText mUsername;
 
@@ -46,36 +52,10 @@ public class SignUpActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+
         setContentView(R.layout.activity_sign_up);
 
         ButterKnife.bind(this);
-//        ActionBar actionBar = getActionBar();
-//        actionBar.hide();
-
-                    // create the new user!
-//                    setProgressBarIndeterminateVisibility(true);
-
-//                    ObsoleteUser newUser = new ObsoleteUser();
-//                    newUser.setUsername(username);
-//                    newUser.setPassword(password);
-//                    newUser.setEmail(email);
-//                    newUser.signUpInBackground(new SignUpCallback() {
-//                        @Override
-//                        public void done(Exception e) {
-////                            setProgressBarIndeterminateVisibility(false);
-//                        if (e == null) {
-//                            // Success!
-//                            Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
-//                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                            startActivity(intent);
-//                        } else {
-//
-//
-//                        }
-//                        }
-//                    });
     }
 
 
@@ -126,12 +106,22 @@ public class SignUpActivity extends AppCompatActivity {
                                 finalUsername
                             );
 
-                            MessageDB.insertUser(newUser, new LoginActivity.InsertCallback() {
+                            MessageDB.insertUser(newUser, new InsertCallback() {
                                 @Override
                                 public void onSuccess(User user) {
 
                                     startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
                                     finish();
+                                }
+
+                                @Override
+                                public void onFailure(String message) {
+
+                                    DialogFragment dialog = DialogFragmentError.newInstance(
+                                            getString(R.string.existing_user_error_title),
+                                            message);
+
+                                    dialog.show(getSupportFragmentManager(), "dialog_signup");
                                 }
                             });
                         }
