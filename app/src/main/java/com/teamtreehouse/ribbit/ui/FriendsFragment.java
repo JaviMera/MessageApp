@@ -46,45 +46,45 @@ public class FriendsFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        mCurrentUser = ObsoleteUser.getCurrentUser();
-        mFriendsRelation = mCurrentUser.getRelation(ObsoleteUser.KEY_FRIENDS_RELATION);
-
-        getActivity().setProgressBarIndeterminateVisibility(true);
-
-
-        Query<ObsoleteUser> query = mFriendsRelation.getQuery();
-        query.addAscendingOrder(ObsoleteUser.KEY_USER_ID);
-        query.findInBackground(new FindCallback<ObsoleteUser>() {
-            @Override
-            public void done(List<ObsoleteUser> friends, Exception e) {
-                getActivity().setProgressBarIndeterminateVisibility(false);
-
-                if (e == null) {
-                    mFriends = friends;
-
-                    String[] usernames = new String[mFriends.size()];
-                    int i = 0;
-                    for (ObsoleteUser user : mFriends) {
-                        usernames[i] = user.getUsername();
-                        i++;
-                    }
-                    if (mGridView.getAdapter() == null) {
-                        UserAdapter adapter = new UserAdapter(getActivity(), mFriends);
-                        mGridView.setAdapter(adapter);
-                    } else {
-                        ((UserAdapter) mGridView.getAdapter()).refill(mFriends);
-                    }
-                } else {
-                    Log.e(TAG, e.getMessage());
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setMessage(e.getMessage())
-                            .setTitle(R.string.error_title)
-                            .setPositiveButton(android.R.string.ok, null);
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                }
-            }
-        });
+//        mCurrentUser = ObsoleteUser.getCurrentUser();
+//        mFriendsRelation = mCurrentUser.getRelation(ObsoleteUser.KEY_FRIENDS_RELATION);
+//
+//        getActivity().setProgressBarIndeterminateVisibility(true);
+//
+//
+//        Query<ObsoleteUser> query = mFriendsRelation.getQuery();
+//        query.addAscendingOrder(ObsoleteUser.KEY_USER_ID);
+//        query.findInBackground(new FindCallback<ObsoleteUser>() {
+//            @Override
+//            public void done(List<ObsoleteUser> friends, Exception e) {
+//                getActivity().setProgressBarIndeterminateVisibility(false);
+//
+//                if (e == null) {
+//                    mFriends = friends;
+//
+//                    String[] usernames = new String[mFriends.size()];
+//                    int i = 0;
+//                    for (ObsoleteUser user : mFriends) {
+//                        usernames[i] = user.getUsername();
+//                        i++;
+//                    }
+//                    if (mGridView.getAdapter() == null) {
+//                        UserAdapter adapter = new UserAdapter(getActivity(), mFriends);
+//                        mGridView.setAdapter(adapter);
+//                    } else {
+//                        ((UserAdapter) mGridView.getAdapter()).refill(mFriends);
+//                    }
+//                } else {
+//                    Log.e(TAG, e.getMessage());
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//                    builder.setMessage(e.getMessage())
+//                            .setTitle(R.string.error_title)
+//                            .setPositiveButton(android.R.string.ok, null);
+//                    AlertDialog dialog = builder.create();
+//                    dialog.show();
+//                }
+//            }
+//        });
     }
 
 }

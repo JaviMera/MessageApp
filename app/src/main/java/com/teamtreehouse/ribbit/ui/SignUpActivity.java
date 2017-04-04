@@ -21,14 +21,15 @@ import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.dialogs.DialogFragmentError;
 import com.teamtreehouse.ribbit.models.User;
+import com.teamtreehouse.ribbit.models.UserCurrent;
 import com.teamtreehouse.ribbit.models.UserRequest;
-import com.teamtreehouse.ribbit.ui.callbacks.InsertCallback;
+import com.teamtreehouse.ribbit.ui.callbacks.UserInsertCallback;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SignUpActivity extends AppCompatActivity implements InsertCallback{
+public class SignUpActivity extends AppCompatActivity implements UserInsertCallback {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -93,7 +94,7 @@ public class SignUpActivity extends AppCompatActivity implements InsertCallback{
             final String password = passwordView.getText().toString();
 
             auth
-                .createUserWithEmailAndPassword(email, password)
+                .createUserWithEmailAndPassword(username + "@harambe.com", password)
                 .addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -108,7 +109,7 @@ public class SignUpActivity extends AppCompatActivity implements InsertCallback{
                         } else {
 
                             FirebaseUser firebaseUser = task.getResult().getUser();
-                            User newUser = new UserRequest(
+                            User newUser = new UserCurrent(
                                 firebaseUser.getUid(),
                                 email,
                                 username
@@ -131,7 +132,10 @@ public class SignUpActivity extends AppCompatActivity implements InsertCallback{
     public void onSuccess(User user) {
 
         progressBar.setVisibility(View.INVISIBLE);
-        startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
+        Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
         finish();
     }
 

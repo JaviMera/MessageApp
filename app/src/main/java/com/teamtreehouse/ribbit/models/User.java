@@ -11,21 +11,28 @@ public abstract class User implements Parcelable {
 
     private String uId;
     private String email;
-    private String userName;
+    private String username;
 
     public User() {}
 
-    public User(String uId, String email, String userName) {
+    public User(String uId, String email, String username) {
 
         this.uId = uId;
         this.email = email;
-        this.userName = userName;
+        this.username = username;
+    }
+
+    public User(String uId, String username) {
+
+        this.uId = uId;
+        this.username = username;
+        this.email = "";
     }
 
     protected User(Parcel in) {
         uId = in.readString();
         email = in.readString();
-        userName = in.readString();
+        username = in.readString();
     }
 
     public String getId() {
@@ -37,9 +44,9 @@ public abstract class User implements Parcelable {
         return this.email;
     }
 
-    public String getUserName() {
+    public String getUsername() {
 
-        return this.userName;
+        return this.username;
     }
 
     @Override
@@ -52,7 +59,7 @@ public abstract class User implements Parcelable {
 
         parcel.writeString(this.uId);
         parcel.writeString(this.email);
-        parcel.writeString(this.userName);
+        parcel.writeString(this.username);
     }
 
     public void setId(String id) {

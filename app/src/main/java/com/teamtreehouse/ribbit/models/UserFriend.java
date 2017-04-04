@@ -3,32 +3,31 @@ package com.teamtreehouse.ribbit.models;
 import android.os.Parcel;
 
 /**
- * Created by javie on 3/29/2017.
+ * Created by javie on 3/30/2017.
  */
 
-public class UserRequest extends User {
+public class UserFriend extends User {
 
-    public UserRequest(){
-        super();
-    }
+    public UserFriend(){super();}
 
-    public UserRequest(String uId, String userName) {
-        super(uId, userName);
+    public UserFriend(String uId, String username) {
+        super(uId, username);
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
         @Override
         public User createFromParcel(Parcel in) {
-            return new UserRequest(in);
+            return new UserFriend(in);
         }
 
         @Override
         public User[] newArray(int size) {
-            return new User[size];
+            return new UserFriend[size];
         }
     };
 
-    public UserRequest(Parcel in) {
+    public UserFriend(Parcel in) {
         super(in);
     }
+
 }

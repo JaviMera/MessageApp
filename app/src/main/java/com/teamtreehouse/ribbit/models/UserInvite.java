@@ -6,20 +6,27 @@ import android.os.Parcel;
  * Created by javie on 3/29/2017.
  */
 
-public class UserRequest extends User {
+public class UserInvite extends User {
 
-    public UserRequest(){
+    public UserInvite(){
+
         super();
     }
 
-    public UserRequest(String uId, String userName) {
-        super(uId, userName);
+    public UserInvite(String uId, String username) {
+        super(uId, username);
+    }
+
+    @Override
+    public String getEmail() {
+
+        return "";
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
         @Override
         public User createFromParcel(Parcel in) {
-            return new UserRequest(in);
+            return new UserInvite(in);
         }
 
         @Override
@@ -28,7 +35,7 @@ public class UserRequest extends User {
         }
     };
 
-    public UserRequest(Parcel in) {
+    public UserInvite(Parcel in) {
         super(in);
     }
 }

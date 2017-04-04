@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -14,10 +15,13 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.SectionsPagerAdapter;
+import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.purgatory.Message;
 import com.teamtreehouse.ribbit.models.purgatory.ObsoleteUser;
 
@@ -30,6 +34,7 @@ import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -153,19 +158,19 @@ public class MainActivity extends AppCompatActivity {
      * intensive, it may be best to switch to a
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
-    SectionsPagerAdapter mSectionsPagerAdapter;
+    SectionsPagerAdapter viewPagerAdapter;
 
     @BindView(R.id.tabLayout)
-    TabLayout mTabLayout;
+    TabLayout tabLayout;
 
     @BindView(R.id.toolbar)
-    Toolbar mToolbar;
+    Toolbar toolbar;
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     @BindView(R.id.pager)
-    ViewPager mViewPager;
+    ViewPager viewPager;
+
+    @BindView(R.id.addFriendFab)
+    FloatingActionButton addFriendsFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,35 +179,35 @@ public class MainActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        setSupportActionBar(mToolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(Auth.getInstance().getUsername());
 
-        ObsoleteUser currentUser = ObsoleteUser.getCurrentUser();
-        if (currentUser == null) {
-            navigateToLogin();
-        } else {
-            Log.i(TAG, currentUser.getUsername());
+        viewPagerAdapter = new SectionsPagerAdapter(
+            this, getSupportFragmentManager());
 
-            mSectionsPagerAdapter = new SectionsPagerAdapter(this,
-                    getSupportFragmentManager());
+        // Set up the ViewPager with the sections adapter.
+        viewPager.setAdapter(viewPagerAdapter);
 
-            // Set up the ViewPager with the sections adapter.
-            mViewPager.setAdapter(mSectionsPagerAdapter);
+        // Tell the tab layout to set the view pager object
+        tabLayout.setupWithViewPager(viewPager);
 
-            // Tell the tab layout to set the view pager object
-            mTabLayout.setupWithViewPager(mViewPager);
+        // Setup icons to display for each tab
+        for(int tab = 0; tab < tabLayout.getTabCount(); tab++) {
 
-            // Setup icons to display for each tab
-            for(int tab = 0 ; tab < mTabLayout.getTabCount(); tab++) {
+            TabLayout.Tab currentTab = tabLayout.getTabAt(tab);
 
-                TabLayout.Tab currentTab = mTabLayout.getTabAt(tab);
+            if(currentTab != null) {
 
-                if(currentTab != null) {
-
-                    currentTab.setIcon(mSectionsPagerAdapter.getIcon(tab));
-                }
+                currentTab.setIcon(viewPagerAdapter.getIcon(tab));
             }
         }
+    }
 
+    @OnClick(R.id.addFriendFab)
+    public void onAddFriendClick(View view) {
+
+        Intent intent = new Intent(MainActivity.this, UsersActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -308,5 +313,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        if(isFinishing()) {
+
+            FirebaseAuth
+                .getInstance()
+                .signOut();
+        }
     }
 }

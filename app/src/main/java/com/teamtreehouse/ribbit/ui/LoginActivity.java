@@ -2,17 +2,23 @@ package com.teamtreehouse.ribbit.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.teamtreehouse.ribbit.R;
+import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.dialogs.DialogFragmentError;
+import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.User;
-import com.teamtreehouse.ribbit.models.purgatory.ObsoleteUser;
-import com.teamtreehouse.ribbit.models.callbacks.LogInCallback;
+import com.teamtreehouse.ribbit.ui.callbacks.UserReadCallback;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -84,27 +90,63 @@ public class LoginActivity extends AppCompatActivity {
         // Login
         mProgressBar.setVisibility(View.VISIBLE);
 
-        ObsoleteUser.logInInBackground(username, password, new LogInCallback() {
-            @Override
-            public void done(ObsoleteUser user, Exception e) {
 
-                mProgressBar.setVisibility(View.INVISIBLE);
+        final String finalUsername = username;
+        FirebaseAuth
+            .getInstance()
+            .signInWithEmailAndPassword(username + "@harambe.com", password)
+            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
 
-                if (e == null) {
-                    // Success!
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                } else {
+                    mProgressBar.setVisibility(View.INVISIBLE);
 
-                    DialogFragmentError dialog = DialogFragmentError.newInstance(
-                        e.getMessage(),
-                        getString(R.string.login_error_title));
+                    if(!task.isSuccessful()) {
 
-                    dialog.show(getSupportFragmentManager(), "dialog_error");
+                        DialogFragmentError dialog = DialogFragmentError.newInstance(
+                            task.getException().getMessage(),
+                            getString(R.string.login_error_title));
+
+                        dialog.show(getSupportFragmentManager(), "dialog_error");
+                    }
+                    else{
+
+                        MessageDB.readUser(finalUsername, new UserReadCallback() {
+                            @Override
+                            public void onUserRead(User user) {
+
+                                Auth.getInstance().setUser(user);
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                            }
+                        });
+                    }
+
                 }
-            }
-        });
+            });
+//        ObsoleteUser.logInInBackground(username, password, new LogInCallback() {
+//            @Override
+//            public void done(ObsoleteUser user, Exception e) {
+//
+//                mProgressBar.setVisibility(View.INVISIBLE);
+//
+//                if (e == null) {
+//                    // Success!
+//                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                    startActivity(intent);
+//                } else {
+//
+//                    DialogFragmentError dialog = DialogFragmentError.newInstance(
+//                        e.getMessage(),
+//                        getString(R.string.login_error_title));
+//
+//                    dialog.show(getSupportFragmentManager(), "dialog_error");
+//                }
+//            }
+//        });
     }
 }
