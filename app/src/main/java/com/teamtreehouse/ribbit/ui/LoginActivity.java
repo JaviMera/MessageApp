@@ -10,15 +10,20 @@ import android.widget.ProgressBar;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.dialogs.DialogFragmentError;
-import com.teamtreehouse.ribbit.exceptions.UserNotFoundException;
-import com.teamtreehouse.ribbit.models.callbacks.LogInCallback;
 import com.teamtreehouse.ribbit.models.User;
+import com.teamtreehouse.ribbit.models.purgatory.ObsoleteUser;
+import com.teamtreehouse.ribbit.models.callbacks.LogInCallback;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class LoginActivity extends AppCompatActivity {
+
+    public interface InsertCallback {
+
+        void onSuccess(User user);
+    }
 
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
@@ -63,7 +68,8 @@ public class LoginActivity extends AppCompatActivity {
         if (username.isEmpty()) {
 
             DialogFragmentError dialog = DialogFragmentError.newInstance(
-                getString(R.string.login_error_empty_username_message));
+                getString(R.string.login_error_empty_username_message),
+                getString(R.string.login_error_title));
 
             dialog.show(getSupportFragmentManager(), "dialog_error");
             return;
@@ -72,7 +78,8 @@ public class LoginActivity extends AppCompatActivity {
         if(password.isEmpty()) {
 
             DialogFragmentError dialog = DialogFragmentError.newInstance(
-                getString(R.string.login_error_empty_password_message)
+                getString(R.string.login_error_empty_password_message),
+                getString(R.string.login_error_title)
             );
 
             dialog.show(getSupportFragmentManager(), "dialog_error");
@@ -82,9 +89,9 @@ public class LoginActivity extends AppCompatActivity {
         // Login
         mProgressBar.setVisibility(View.VISIBLE);
 
-        User.logInInBackground(username, password, new LogInCallback() {
+        ObsoleteUser.logInInBackground(username, password, new LogInCallback() {
             @Override
-            public void done(User user, Exception e) {
+            public void done(ObsoleteUser user, Exception e) {
 
                 mProgressBar.setVisibility(View.INVISIBLE);
 
@@ -97,7 +104,8 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
 
                     DialogFragmentError dialog = DialogFragmentError.newInstance(
-                        e.getMessage());
+                        e.getMessage(),
+                        getString(R.string.login_error_title));
 
                     dialog.show(getSupportFragmentManager(), "dialog_error");
                 }

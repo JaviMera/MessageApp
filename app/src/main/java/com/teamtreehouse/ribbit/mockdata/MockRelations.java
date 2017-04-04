@@ -1,13 +1,13 @@
 package com.teamtreehouse.ribbit.mockdata;
 
-import com.teamtreehouse.ribbit.models.Relation;
-import com.teamtreehouse.ribbit.models.User;
+import com.teamtreehouse.ribbit.models.purgatory.ObsoleteUser;
+import com.teamtreehouse.ribbit.models.purgatory.Relation;
 
 import java.util.Random;
 
 public class MockRelations {
 
-    private static Relation<User> friendRelation;
+    private static Relation<ObsoleteUser> friendRelation;
 
     public static Relation getUserRelations(String id) {
         if (friendRelation == null) {
@@ -17,7 +17,7 @@ public class MockRelations {
             }
 
             // Return a relation with a random number of users
-            friendRelation = new Relation<User>();
+            friendRelation = new Relation<ObsoleteUser>();
             for (int i = 0; i < numberOfRelations; i++) {
                 friendRelation.add(MockUsers.testUsers.get(i));
             }

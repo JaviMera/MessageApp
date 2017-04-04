@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.teamtreehouse.ribbit.R;
-import com.teamtreehouse.ribbit.models.Message;
+import com.teamtreehouse.ribbit.models.purgatory.Message;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

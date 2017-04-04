@@ -11,24 +11,24 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.teamtreehouse.ribbit.R;
-import com.teamtreehouse.ribbit.models.User;
+import com.teamtreehouse.ribbit.models.purgatory.ObsoleteUser;
 import com.teamtreehouse.ribbit.utils.MD5Util;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserAdapter extends ArrayAdapter<User> {
+public class UserAdapter extends ArrayAdapter<ObsoleteUser> {
 
     protected Context mContext;
-    protected List<User> mUsers;
+    protected List<ObsoleteUser> mUsers;
 
-    public UserAdapter(Context context, List<User> users) {
+    public UserAdapter(Context context, List<ObsoleteUser> users) {
         super(context, R.layout.message_item, users);
         mContext = context;
 
         // Create a full copy of mUsers
-        mUsers = new ArrayList<User>();
-        for (User user : users) {
+        mUsers = new ArrayList<ObsoleteUser>();
+        for (ObsoleteUser user : users) {
             mUsers.add(user);
         }
     }
@@ -53,7 +53,7 @@ public class UserAdapter extends ArrayAdapter<User> {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        User user = mUsers.get(position);
+        ObsoleteUser user = mUsers.get(position);
         String email = user.getEmail();
 
         if (email == null || email.equals("")) {
@@ -87,7 +87,7 @@ public class UserAdapter extends ArrayAdapter<User> {
         TextView nameLabel;
     }
 
-    public void refill(List<User> users) {
+    public void refill(List<ObsoleteUser> users) {
         mUsers.addAll(users);
         notifyDataSetChanged();
     }

@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
 
-import com.teamtreehouse.ribbit.models.Message;
+import com.teamtreehouse.ribbit.models.purgatory.Message;
 
 import org.apache.commons.io.IOUtils;
 

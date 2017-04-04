@@ -1,4 +1,4 @@
-package com.teamtreehouse.ribbit.models;
+package com.teamtreehouse.ribbit.models.purgatory;
 
 import com.teamtreehouse.ribbit.models.callbacks.FindCallback;
 

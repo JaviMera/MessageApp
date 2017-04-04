@@ -15,11 +15,12 @@ import com.teamtreehouse.ribbit.ui.LoginActivity;
 
 public class DialogFragmentError extends DialogFragment {
 
-    public static DialogFragmentError newInstance(String message) {
+    public static DialogFragmentError newInstance(String message, String title) {
 
         DialogFragmentError dialogFragment = new DialogFragmentError();
         Bundle bundle = new Bundle();
         bundle.putString("dialog_message", message);
+        bundle.putString("dialog_title", title);
         dialogFragment.setArguments(bundle);
 
         return dialogFragment;
@@ -32,10 +33,13 @@ public class DialogFragmentError extends DialogFragment {
         // Get the message from bundle
         String message = getArguments().getString("dialog_message");
 
+        // Get the title from bundle
+        String title = getArguments().getString("dialog_title");
+
         return new AlertDialog
             .Builder(getContext())
             .setMessage(message)
-            .setTitle(R.string.login_error_title)
+            .setTitle(title)
             .setPositiveButton(android.R.string.ok, null)
             .create();
     }

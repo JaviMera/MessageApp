@@ -18,8 +18,8 @@ import android.widget.Toast;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.SectionsPagerAdapter;
-import com.teamtreehouse.ribbit.models.Message;
-import com.teamtreehouse.ribbit.models.User;
+import com.teamtreehouse.ribbit.models.purgatory.Message;
+import com.teamtreehouse.ribbit.models.purgatory.ObsoleteUser;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(mToolbar);
 
-        User currentUser = User.getCurrentUser();
+        ObsoleteUser currentUser = ObsoleteUser.getCurrentUser();
         if (currentUser == null) {
             navigateToLogin();
         } else {
@@ -292,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
 
         switch (itemId) {
             case R.id.action_logout:
-                User.logOut();
+                ObsoleteUser.logOut();
                 navigateToLogin();
                 break;
             case R.id.action_edit_friends:

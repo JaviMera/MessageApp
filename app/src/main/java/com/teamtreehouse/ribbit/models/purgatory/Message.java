@@ -1,4 +1,4 @@
-package com.teamtreehouse.ribbit.models;
+package com.teamtreehouse.ribbit.models.purgatory;
 
 
 import com.teamtreehouse.ribbit.mockdata.MockMessages;
@@ -87,7 +87,7 @@ public class Message implements Comparable<Message> {
     public static Query<Message> getQuery() {
         Query<Message> query = new Query<Message>(Message.class.getSimpleName());
 
-        User currentUser = User.getCurrentUser();
+        ObsoleteUser currentUser = ObsoleteUser.getCurrentUser();
         String userId = currentUser.getObjectId();
         query.setDataSet(MockMessages.getInstance().getMessagesForUser(userId));
         return query;

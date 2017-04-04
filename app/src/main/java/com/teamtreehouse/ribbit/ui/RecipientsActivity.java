@@ -20,11 +20,11 @@ import android.widget.Toast;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.UserAdapter;
-import com.teamtreehouse.ribbit.models.Message;
-import com.teamtreehouse.ribbit.models.MessageFile;
-import com.teamtreehouse.ribbit.models.Query;
-import com.teamtreehouse.ribbit.models.Relation;
-import com.teamtreehouse.ribbit.models.User;
+import com.teamtreehouse.ribbit.models.purgatory.Message;
+import com.teamtreehouse.ribbit.models.purgatory.MessageFile;
+import com.teamtreehouse.ribbit.models.purgatory.ObsoleteUser;
+import com.teamtreehouse.ribbit.models.purgatory.Query;
+import com.teamtreehouse.ribbit.models.purgatory.Relation;
 import com.teamtreehouse.ribbit.models.callbacks.FindCallback;
 import com.teamtreehouse.ribbit.models.callbacks.SaveCallback;
 import com.teamtreehouse.ribbit.utils.FileHelper;
@@ -36,9 +36,9 @@ public class RecipientsActivity extends Activity {
 
     public static final String TAG = RecipientsActivity.class.getSimpleName();
 
-    protected Relation<User> mFriendsRelation;
-    protected User mCurrentUser;
-    protected List<User> mFriends;
+    protected Relation<ObsoleteUser> mFriendsRelation;
+    protected ObsoleteUser mCurrentUser;
+    protected List<ObsoleteUser> mFriends;
     protected MenuItem mSendMenuItem;
     protected Uri mMediaUri;
     protected String mFileType;
@@ -67,16 +67,16 @@ public class RecipientsActivity extends Activity {
     public void onResume() {
         super.onResume();
 
-        mCurrentUser = User.getCurrentUser();
-        mFriendsRelation = mCurrentUser.getRelation(User.KEY_FRIENDS_RELATION);
+        mCurrentUser = ObsoleteUser.getCurrentUser();
+        mFriendsRelation = mCurrentUser.getRelation(ObsoleteUser.KEY_FRIENDS_RELATION);
 
         setProgressBarIndeterminateVisibility(true);
 
-        Query<User> query = mFriendsRelation.getQuery();
-        query.addAscendingOrder(User.KEY_USERNAME);
-        query.findInBackground(new FindCallback<User>() {
+        Query<ObsoleteUser> query = mFriendsRelation.getQuery();
+        query.addAscendingOrder(ObsoleteUser.KEY_USERNAME);
+        query.findInBackground(new FindCallback<ObsoleteUser>() {
             @Override
-            public void done(List<User> friends, Exception e) {
+            public void done(List<ObsoleteUser> friends, Exception e) {
                 setProgressBarIndeterminateVisibility(false);
 
                 if (e == null) {
@@ -84,7 +84,7 @@ public class RecipientsActivity extends Activity {
 
                     String[] usernames = new String[mFriends.size()];
                     int i = 0;
-                    for (User user : mFriends) {
+                    for (ObsoleteUser user : mFriends) {
                         usernames[i] = user.getUsername();
                         i++;
                     }
@@ -159,8 +159,8 @@ public class RecipientsActivity extends Activity {
 
     protected Message createMessage() {
         Message message = new Message(Message.class.getSimpleName());
-        message.put(Message.KEY_SENDER_ID, User.getCurrentUser().getObjectId());
-        message.put(Message.KEY_SENDER_NAME, User.getCurrentUser().getUsername());
+        message.put(Message.KEY_SENDER_ID, ObsoleteUser.getCurrentUser().getObjectId());
+        message.put(Message.KEY_SENDER_NAME, ObsoleteUser.getCurrentUser().getUsername());
         message.put(Message.KEY_RECIPIENT_IDS, getRecipientIds());
         message.put(Message.KEY_FILE_TYPE, mFileType);
 

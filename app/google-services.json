@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1054204660953",
+    "firebase_url": "https://message-app-6ff7f.firebaseio.com",
+    "project_id": "message-app-6ff7f",
+    "storage_bucket": "message-app-6ff7f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1054204660953:android:313aef6adfee646b",
+        "android_client_info": {
+          "package_name": "com.teamtreehouse.ribbit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1054204660953-p0nsfhoa47595vm9tqf9oc5h3phuu38r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQD6l8sIKjVO0bQFGMkjdg82qbAtLSXwA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

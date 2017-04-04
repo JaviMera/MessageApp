@@ -17,10 +17,10 @@ import android.widget.TextView;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.MessageAdapter;
-import com.teamtreehouse.ribbit.models.Message;
-import com.teamtreehouse.ribbit.models.MessageFile;
-import com.teamtreehouse.ribbit.models.Query;
-import com.teamtreehouse.ribbit.models.User;
+import com.teamtreehouse.ribbit.models.purgatory.Message;
+import com.teamtreehouse.ribbit.models.purgatory.MessageFile;
+import com.teamtreehouse.ribbit.models.purgatory.ObsoleteUser;
+import com.teamtreehouse.ribbit.models.purgatory.Query;
 import com.teamtreehouse.ribbit.models.callbacks.FindCallback;
 import com.teamtreehouse.ribbit.utils.Resources;
 
@@ -90,7 +90,7 @@ public class InboxFragment extends Fragment
 
     private void retrieveMessages() {
         Query<Message> query = Message.getQuery();
-        query.whereEqualTo(Message.KEY_RECIPIENT_IDS, User.getCurrentUser().getObjectId());
+        query.whereEqualTo(Message.KEY_RECIPIENT_IDS, ObsoleteUser.getCurrentUser().getObjectId());
         query.addDescendingOrder(Message.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<Message>() {
             @Override
@@ -153,7 +153,7 @@ public class InboxFragment extends Fragment
         }
         else {
             // remove the recipient
-            message.removeRecipient(User.getCurrentUser().getObjectId());
+            message.removeRecipient(ObsoleteUser.getCurrentUser().getObjectId());
         }
     }
 

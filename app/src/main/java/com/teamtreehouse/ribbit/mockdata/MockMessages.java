@@ -4,9 +4,9 @@ import android.net.Uri;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.RibbitApplication;
-import com.teamtreehouse.ribbit.models.Message;
-import com.teamtreehouse.ribbit.models.MessageFile;
-import com.teamtreehouse.ribbit.models.User;
+import com.teamtreehouse.ribbit.models.purgatory.Message;
+import com.teamtreehouse.ribbit.models.purgatory.MessageFile;
+import com.teamtreehouse.ribbit.models.purgatory.ObsoleteUser;
 import com.teamtreehouse.ribbit.utils.FileHelper;
 
 import java.util.ArrayList;
@@ -64,7 +64,7 @@ public class MockMessages {
 
     private Message getTestPhotoMessage() {
         int randomUserIndex = new Random().nextInt(MockUsers.testUsers.size());
-        User sender = MockUsers.testUsers.get(randomUserIndex);
+        ObsoleteUser sender = MockUsers.testUsers.get(randomUserIndex);
 
         Message photoMessage = new Message("");
 
@@ -73,7 +73,7 @@ public class MockMessages {
         photoMessage.put(Message.KEY_SENDER_NAME, sender.getUsername());
 
         ArrayList<String> recipientIds = new ArrayList<>();
-        recipientIds.add(User.getCurrentUser().getObjectId());
+        recipientIds.add(ObsoleteUser.getCurrentUser().getObjectId());
         photoMessage.put(Message.KEY_RECIPIENT_IDS, recipientIds);
 
         photoMessage.put(Message.KEY_FILE_TYPE, Message.TYPE_IMAGE);

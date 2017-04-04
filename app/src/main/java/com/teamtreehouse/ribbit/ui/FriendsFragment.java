@@ -12,9 +12,9 @@ import android.widget.TextView;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.UserAdapter;
-import com.teamtreehouse.ribbit.models.Query;
-import com.teamtreehouse.ribbit.models.Relation;
-import com.teamtreehouse.ribbit.models.User;
+import com.teamtreehouse.ribbit.models.purgatory.ObsoleteUser;
+import com.teamtreehouse.ribbit.models.purgatory.Query;
+import com.teamtreehouse.ribbit.models.purgatory.Relation;
 import com.teamtreehouse.ribbit.models.callbacks.FindCallback;
 
 import java.util.List;
@@ -23,9 +23,9 @@ public class FriendsFragment extends Fragment {
 
     public static final String TAG = FriendsFragment.class.getSimpleName();
 
-    protected Relation<User> mFriendsRelation;
-    protected User mCurrentUser;
-    protected List<User> mFriends;
+    protected Relation<ObsoleteUser> mFriendsRelation;
+    protected ObsoleteUser mCurrentUser;
+    protected List<ObsoleteUser> mFriends;
     protected GridView mGridView;
 
     @Override
@@ -46,17 +46,17 @@ public class FriendsFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        mCurrentUser = User.getCurrentUser();
-        mFriendsRelation = mCurrentUser.getRelation(User.KEY_FRIENDS_RELATION);
+        mCurrentUser = ObsoleteUser.getCurrentUser();
+        mFriendsRelation = mCurrentUser.getRelation(ObsoleteUser.KEY_FRIENDS_RELATION);
 
         getActivity().setProgressBarIndeterminateVisibility(true);
 
 
-        Query<User> query = mFriendsRelation.getQuery();
-        query.addAscendingOrder(User.KEY_USER_ID);
-        query.findInBackground(new FindCallback<User>() {
+        Query<ObsoleteUser> query = mFriendsRelation.getQuery();
+        query.addAscendingOrder(ObsoleteUser.KEY_USER_ID);
+        query.findInBackground(new FindCallback<ObsoleteUser>() {
             @Override
-            public void done(List<User> friends, Exception e) {
+            public void done(List<ObsoleteUser> friends, Exception e) {
                 getActivity().setProgressBarIndeterminateVisibility(false);
 
                 if (e == null) {
@@ -64,7 +64,7 @@ public class FriendsFragment extends Fragment {
 
                     String[] usernames = new String[mFriends.size()];
                     int i = 0;
-                    for (User user : mFriends) {
+                    for (ObsoleteUser user : mFriends) {
                         usernames[i] = user.getUsername();
                         i++;
                     }
