@@ -52,7 +52,7 @@ public class RecipientsActivity extends Activity {
         // Show the Up button in the action bar.
         setupActionBar();
 
-        mGridView = (GridView) findViewById(R.id.friendsGrid);
+//        mGridView = (GridView) findViewById(R.id.friendsGrid);
         mGridView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         mGridView.setOnItemClickListener(mOnItemClickListener);
 

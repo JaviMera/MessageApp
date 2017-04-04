@@ -1,30 +1,21 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity$DummySectionFragment" >
+    tools:context=".ui.MainActivity">
 
-    <GridView
-        android:id="@+id/friendsGrid"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:clipToPadding="false"
-        android:horizontalSpacing="@dimen/user_grid_spacing"
-        android:numColumns="auto_fit"
-        android:columnWidth="90dp"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="@dimen/user_grid_spacing"
-        android:gravity="center"
-        android:layout_centerHorizontal="true" >
-    </GridView>
+        android:layout_margin="10dp" />
 
     <TextView
-        android:id="@android:id/empty"
-        android:layout_width="match_parent"
+        android:id="@+id/messageTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/activity_horizontal_margin"
-        android:text="@string/empty_friends_label" />
-
-</RelativeLayout>
+        android:text="no friends"
+        android:layout_gravity="center"
+        android:textSize="20sp"/>
+</FrameLayout>

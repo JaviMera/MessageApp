@@ -42,7 +42,7 @@ public class EditFriendsActivity extends Activity {
         // Show the Up button in the action bar.
         setupActionBar();
 
-        mGridView = (GridView) findViewById(R.id.friendsGrid);
+//        mGridView = (GridView) findViewById(R.id.friendsGrid);
         mGridView.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
         mGridView.setOnItemClickListener(mOnItemClickListener);
 

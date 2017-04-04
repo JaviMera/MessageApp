@@ -2,7 +2,11 @@ package com.teamtreehouse.ribbit.ui;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,22 +15,34 @@ import android.widget.GridView;
 import android.widget.TextView;
 
 import com.teamtreehouse.ribbit.R;
+import com.teamtreehouse.ribbit.adapters.RecyclerActivityView;
+import com.teamtreehouse.ribbit.adapters.RecyclerAdapter;
 import com.teamtreehouse.ribbit.adapters.UserAdapter;
+import com.teamtreehouse.ribbit.adapters.viewholders.actions.ButtonAction;
+import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.models.purgatory.ObsoleteUser;
 import com.teamtreehouse.ribbit.models.purgatory.Query;
 import com.teamtreehouse.ribbit.models.purgatory.Relation;
 import com.teamtreehouse.ribbit.models.callbacks.FindCallback;
+import com.teamtreehouse.ribbit.ui.callbacks.FriendsCallback;
+import com.teamtreehouse.ribbit.ui.callbacks.InvitesCallback;
 
 import java.util.List;
 
-public class FriendsFragment extends Fragment {
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-    public static final String TAG = FriendsFragment.class.getSimpleName();
+public class FriendsFragment extends Fragment
+    implements
+    RecyclerActivityView,
+    InvitesCallback.OnInviteListener,
+    FriendsCallback.OnFriendsListener{
 
-    protected Relation<ObsoleteUser> mFriendsRelation;
-    protected ObsoleteUser mCurrentUser;
-    protected List<ObsoleteUser> mFriends;
-    protected GridView mGridView;
+    private InvitesCallback invitesCallback;
+    private FriendsCallback friendsCallback;
+
+    @BindView(R.id.recycler)
+    RecyclerView recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,12 +50,23 @@ public class FriendsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.user_grid,
                 container, false);
 
-        mGridView = (GridView) rootView.findViewById(R.id.friendsGrid);
+        ButterKnife.bind(this, rootView);
 
-        TextView emptyTextView = (TextView) rootView.findViewById(android.R.id.empty);
-        mGridView.setEmptyView(emptyTextView);
+        RecyclerAdapter adapter = new RecyclerAdapter(this);
+        recyclerView.setAdapter(adapter);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
 
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+
+        this.invitesCallback = new InvitesCallback(this);
+        this.friendsCallback = new FriendsCallback(this);
     }
 
     @Override
@@ -87,4 +114,51 @@ public class FriendsFragment extends Fragment {
 //        });
     }
 
+    @Override
+    public void onButtonClick(List<ButtonAction> buttonActions, int position) {
+
+        RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
+        User user = adapter.getItem(position);
+
+        for(ButtonAction buttonAction : buttonActions) {
+
+            buttonAction.execute(user);
+        }
+    }
+
+    @Override
+    public void onRemoveItem(int position) {
+
+        RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
+        adapter.removeItem(position);
+    }
+
+    @Override
+    public void onChangeItem(User user, int position) {
+
+        RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
+        adapter.changeItem(user, position);
+    }
+
+    @Override
+    public void onFriendAdded(User userFriend) {
+
+        RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
+        adapter.addUser(userFriend);
+    }
+
+    @Override
+    public void onInvitesAdded(User userInvite) {
+
+        RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
+        adapter.addUser(userInvite);
+    }
+
+    @Override
+    public void onInviteRemoved(User userInvite) {
+
+        RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
+        int position = adapter.getPosition(userInvite);
+        adapter.removeItem(position);
+    }
 }
