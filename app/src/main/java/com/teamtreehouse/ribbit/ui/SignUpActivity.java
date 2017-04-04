@@ -21,18 +21,13 @@ import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.dialogs.DialogFragmentError;
 import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.models.UserRequest;
+import com.teamtreehouse.ribbit.ui.callbacks.InsertCallback;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SignUpActivity extends AppCompatActivity {
-
-    public interface InsertCallback {
-
-        void onSuccess(User user);
-        void onFailure(String message);
-    }
 
     @BindView(R.id.usernameField)
     protected EditText mUsername;

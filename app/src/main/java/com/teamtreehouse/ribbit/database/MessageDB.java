@@ -8,6 +8,7 @@ import com.google.firebase.database.Transaction;
 import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.ui.LoginActivity;
 import com.teamtreehouse.ribbit.ui.SignUpActivity;
+import com.teamtreehouse.ribbit.ui.callbacks.InsertCallback;
 
 /**
  * Created by javie on 4/4/2017.
@@ -17,7 +18,7 @@ public class MessageDB {
 
     public static final String USERS_NODE = "users";
 
-    public static void insertUser(final User newUser, final SignUpActivity.InsertCallback listener) {
+    public static void insertUser(final User newUser, final InsertCallback listener) {
 
         FirebaseDatabase
             .getInstance()
