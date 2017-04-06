@@ -2,7 +2,6 @@ package com.teamtreehouse.ribbit.adapters.viewholders.user;
 
 import android.view.View;
 
-import com.teamtreehouse.ribbit.adapters.FragmentRecyclerView;
 import com.teamtreehouse.ribbit.ui.FragmentUsersView;
 
 /**

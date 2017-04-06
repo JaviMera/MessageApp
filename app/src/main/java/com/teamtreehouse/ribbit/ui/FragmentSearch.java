@@ -3,7 +3,9 @@ package com.teamtreehouse.ribbit.ui;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
-import com.teamtreehouse.ribbit.adapters.FragmentRecyclerView;
+
+import com.teamtreehouse.ribbit.R;
+import com.teamtreehouse.ribbit.adapters.FragmentFriendsAdapter;
 import com.teamtreehouse.ribbit.adapters.RecyclerAdapter;
 import com.teamtreehouse.ribbit.adapters.FragmentSearchAdapter;
 import com.teamtreehouse.ribbit.models.Auth;
@@ -19,13 +21,11 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import butterknife.ButterKnife;
-
 /**
  * Created by javie on 4/6/2017.
  */
 
-public class FragmentSearch extends FragmentUsers
+public class FragmentSearch extends FragmentUsers<FragmentUsersPresenter,FragmentSearchAdapter>
     implements
     SenderListener{
 
@@ -58,9 +58,21 @@ public class FragmentSearch extends FragmentUsers
     }
 
     @Override
-    protected RecyclerAdapter getAdapter() {
+    protected FragmentSearchAdapter getAdapter() {
 
         return new FragmentSearchAdapter(this);
+    }
+
+    @Override
+    protected FragmentUsersPresenter getPresenter() {
+
+        return new FragmentUsersPresenter(this);
+    }
+
+    @Override
+    protected int getLayout() {
+
+        return R.layout.fragment_search;
     }
 
     @Override
@@ -127,15 +139,15 @@ public class FragmentSearch extends FragmentUsers
 
             if (friends.containsKey(user.getId())) {
 
-                adapter.addUser(friends.get(user.getId()));
+                adapter.add(friends.get(user.getId()));
 
             } else if (invites.containsKey(user.getId())) {
 
-                adapter.addUser(invites.get(user.getId()));
+                adapter.add(invites.get(user.getId()));
 
             } else {
 
-                adapter.addUser(user);
+                adapter.add(user);
             }
         }
     }

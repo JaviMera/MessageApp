@@ -4,11 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +14,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.teamtreehouse.ribbit.R;
+import com.teamtreehouse.ribbit.adapters.InboxFragmentAdapter;
 import com.teamtreehouse.ribbit.adapters.MessageAdapter;
+import com.teamtreehouse.ribbit.adapters.RecyclerAdapter;
 import com.teamtreehouse.ribbit.models.purgatory.Message;
 import com.teamtreehouse.ribbit.models.purgatory.MessageFile;
 import com.teamtreehouse.ribbit.models.purgatory.ObsoleteUser;
@@ -27,22 +27,17 @@ import com.teamtreehouse.ribbit.utils.Resources;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
-public class InboxFragment extends Fragment
+public class InboxFragment extends FragmentRecycler<InboxFragmentPresenter, InboxFragmentAdapter>
     implements
     InboxFragmentView,
     MessageAdapter.OnRecyclerViewClick{
 
     protected List<Message> messages;
-    protected InboxFragmentPresenter presenter;
     protected FragmentActivity parent;
 
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
-
-    @BindView(R.id.messagesRecyclerView)
-    RecyclerView recyclerView;
 
     @BindView(R.id.emptyMessagesTextView)
     TextView textView;
@@ -55,18 +50,27 @@ public class InboxFragment extends Fragment
     }
 
     @Override
+    protected InboxFragmentAdapter getAdapter() {
+
+        return new InboxFragmentAdapter(this);
+    }
+
+    @Override
+    protected InboxFragmentPresenter getPresenter() {
+
+        return new InboxFragmentPresenter(this);
+    }
+
+    @Override
+    protected int getLayout() {
+
+        return R.layout.fragment_inbox;
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_inbox,
-                container, false);
 
-        ButterKnife.bind(this, rootView);
-
-        presenter = new InboxFragmentPresenter(this);
-
-        // Initialize the recycler view
-        presenter.setRecyclerAdapter(new MessageAdapter(this));
-        presenter.setRecyclerLayout(new LinearLayoutManager(this.parent));
-        presenter.setRecyclerFixedSize(true);
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
 
         // Initialize the refresher layout
         presenter.setRefresherListener();

@@ -6,9 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.teamtreehouse.ribbit.R;
+import com.teamtreehouse.ribbit.adapters.viewholders.RecyclerViewHolder;
 import com.teamtreehouse.ribbit.adapters.viewholders.user.UserViewHolder;
 import com.teamtreehouse.ribbit.models.User;
-import com.teamtreehouse.ribbit.ui.FragmentUsersView;
+import com.teamtreehouse.ribbit.ui.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -17,28 +18,28 @@ import java.util.List;
  * Created by javie on 3/27/2017.
  */
 
-public abstract class RecyclerAdapter extends RecyclerView.Adapter<UserViewHolder> {
+public abstract class RecyclerAdapter<T extends User, V extends FragmentRecyclerView> extends RecyclerView.Adapter<RecyclerViewHolder<T>> {
 
-    protected abstract UserViewHolder getViewHolder(FragmentUsersView parent, View view);
+    protected abstract RecyclerViewHolder getViewHolder(V parent, View view);
 
-    private FragmentUsersView parent;
-    private List<User> items;
+    private V parent;
+    private List<T> items;
 
-    public RecyclerAdapter(FragmentUsersView parent) {
+    public RecyclerAdapter(V parent) {
 
         this.parent = parent;
         this.items = new LinkedList<>();
     }
 
     @Override
-    public UserViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item, parent, false);
         return getViewHolder(this.parent, view);
     }
 
     @Override
-    public void onBindViewHolder(UserViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerViewHolder holder, int position) {
 
         holder.bind(this.items.get(position));
     }
@@ -56,16 +57,16 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<UserViewHolde
         notifyItemRangeRemoved(0, size);
     }
 
-    public User getItem(int position) {
+    public T getItem(int position) {
 
         return items.get(position);
     }
 
-    public void changeItem(User user, int position) {
+    public void changeItem(T item, int position) {
 
-        if(user != null) {
+        if(item != null) {
 
-            this.items.set(position, user);
+            this.items.set(position, item);
             notifyItemChanged(position);
         }
     }
@@ -80,15 +81,15 @@ public abstract class RecyclerAdapter extends RecyclerView.Adapter<UserViewHolde
         return this.items.contains(user);
     }
 
-    public void addUser(User userInvite, int i) {
+    public void add(T item, int i) {
 
-        items.add(i, userInvite);
+        items.add(i, item);
         notifyItemInserted(i);
     }
 
-    public void addUser(User user) {
+    public void add(T item) {
 
-        items.add(user);
+        items.add(item);
         notifyItemInserted(items.size() - 1);
     }
 

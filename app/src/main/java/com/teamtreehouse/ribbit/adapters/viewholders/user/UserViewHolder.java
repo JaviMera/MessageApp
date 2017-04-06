@@ -1,13 +1,12 @@
 package com.teamtreehouse.ribbit.adapters.viewholders.user;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.teamtreehouse.ribbit.R;
-import com.teamtreehouse.ribbit.adapters.FragmentRecyclerView;
+import com.teamtreehouse.ribbit.adapters.viewholders.RecyclerViewHolder;
 import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.ui.FragmentUsersView;
 
@@ -15,7 +14,7 @@ import com.teamtreehouse.ribbit.ui.FragmentUsersView;
  * Created by javie on 4/3/2017.
  */
 
-public abstract class UserViewHolder extends RecyclerView.ViewHolder {
+public abstract class UserViewHolder extends RecyclerViewHolder<User> {
     
     protected FragmentUsersView activity;
     protected TextView userEmailTextView;
@@ -36,6 +35,7 @@ public abstract class UserViewHolder extends RecyclerView.ViewHolder {
     }
 
     @SuppressWarnings("ResourceType")
+    @Override
     public void bind(final User user) {
 
         userEmailTextView.setText(user.getUsername());

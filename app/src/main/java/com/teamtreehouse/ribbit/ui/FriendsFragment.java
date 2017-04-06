@@ -1,15 +1,13 @@
 package com.teamtreehouse.ribbit.ui;
 
+import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.FragmentFriendsAdapter;
 import com.teamtreehouse.ribbit.adapters.RecyclerAdapter;
-import com.teamtreehouse.ribbit.adapters.viewholders.actions.ButtonAction;
 import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.models.UserFriend;
 import com.teamtreehouse.ribbit.models.UserInvite;
 
-import java.util.List;
-
-public class FriendsFragment extends FragmentUsers {
+public class FriendsFragment extends FragmentUsers<FragmentUsersPresenter, FragmentFriendsAdapter> {
 
     @Override
     public void onResume() {
@@ -75,21 +73,21 @@ public class FriendsFragment extends FragmentUsers {
     }
 
     @Override
-    protected RecyclerAdapter getAdapter() {
+    protected FragmentFriendsAdapter getAdapter() {
 
         return new FragmentFriendsAdapter(this);
     }
 
     @Override
-    public void onButtonClick(List<ButtonAction> buttonActions, int position) {
+    protected FragmentUsersPresenter getPresenter() {
 
-        RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
-        User user = adapter.getItem(position);
+        return new FragmentUsersPresenter(this);
+    }
 
-        for(ButtonAction buttonAction : buttonActions) {
+    @Override
+    protected int getLayout() {
 
-            buttonAction.execute(user);
-        }
+        return R.layout.fragment_search;
     }
 
     @Override
@@ -103,13 +101,13 @@ public class FriendsFragment extends FragmentUsers {
             adapter.removeItem(position);
         }
 
-        adapter.addUser(userFriend);
+        adapter.add(userFriend);
     }
 
     @Override
     public void onInvitesAdded(User userInvite) {
 
         RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
-        adapter.addUser(userInvite, 0);
+        adapter.add(userInvite, 0);
     }
 }
