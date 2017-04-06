@@ -17,12 +17,12 @@ import com.teamtreehouse.ribbit.utils.MD5Util;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserAdapter extends ArrayAdapter<ObsoleteUser> {
+public class ObseleteUserAdapter extends ArrayAdapter<ObsoleteUser> {
 
     protected Context mContext;
     protected List<ObsoleteUser> mUsers;
 
-    public UserAdapter(Context context, List<ObsoleteUser> users) {
+    public ObseleteUserAdapter(Context context, List<ObsoleteUser> users) {
         super(context, R.layout.message_item, users);
         mContext = context;
 

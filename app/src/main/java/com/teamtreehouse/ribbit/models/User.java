@@ -2,12 +2,15 @@ package com.teamtreehouse.ribbit.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+
+import java.util.Comparator;
 
 /**
  * Created by javie on 4/4/2017.
  */
 
-public abstract class User implements Parcelable {
+public abstract class User implements Parcelable, Comparable<User> {
 
     private String uId;
     private String email;
@@ -85,5 +88,10 @@ public abstract class User implements Parcelable {
 
         User other = (User) obj;
         return this.uId.equals(other.getId());
+    }
+
+    @Override
+    public int compareTo(@NonNull User user) {
+        return this.getUsername().compareTo(user.getUsername());
     }
 }

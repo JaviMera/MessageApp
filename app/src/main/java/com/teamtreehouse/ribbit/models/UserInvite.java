@@ -3,18 +3,26 @@ package com.teamtreehouse.ribbit.models;
 import android.os.Parcel;
 
 /**
- * Created by javie on 3/29/2017.
+ * Created by javie on 4/6/2017.
  */
 
-public class UserInvite extends User {
+public abstract class UserInvite extends User {
 
-    public UserInvite(){
+    private int status;
 
+    public UserInvite(String uId, String username, int status) {
+        super(uId, username);
+
+        this.status = status;
+    }
+
+    public UserInvite() {
         super();
     }
 
-    public UserInvite(String uId, String username) {
-        super(uId, username);
+    public int getStatus() {
+
+        return this.status;
     }
 
     @Override
@@ -23,19 +31,16 @@ public class UserInvite extends User {
         return "";
     }
 
-    public static final Creator<User> CREATOR = new Creator<User>() {
-        @Override
-        public User createFromParcel(Parcel in) {
-            return new UserInvite(in);
-        }
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        super.writeToParcel(parcel, i);
 
-        @Override
-        public User[] newArray(int size) {
-            return new User[size];
-        }
-    };
+        parcel.writeInt(this.status);
+    }
 
     public UserInvite(Parcel in) {
         super(in);
+
+        this.status = in.readInt();
     }
 }

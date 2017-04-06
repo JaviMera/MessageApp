@@ -31,7 +31,6 @@ public class ItemInvite implements RecyclerItemType {
     public List<ButtonAction> getPositiveButtonResponses() {
         return new LinkedList<ButtonAction>(){
             {
-                add(new ButtonCancel());
                 add(new ButtonAccept());
             }
         };

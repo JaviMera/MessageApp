@@ -2,8 +2,8 @@ package com.teamtreehouse.ribbit.adapters.viewholders.user;
 
 import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.models.UserFriend;
-import com.teamtreehouse.ribbit.models.UserInvite;
-import com.teamtreehouse.ribbit.models.UserPending;
+import com.teamtreehouse.ribbit.models.UserRecipient;
+import com.teamtreehouse.ribbit.models.UserSender;
 
 /**
  * Created by javie on 4/2/2017.
@@ -17,11 +17,11 @@ public class UserFactory {
 
             return new ItemFriend();
         }
-        else if(user instanceof UserPending) {
+        else if(user instanceof UserSender) {
 
             return new ItemPending();
         }
-        else if(user instanceof UserInvite) {
+        else if(user instanceof UserRecipient) {
 
             return new ItemInvite();
         }

@@ -19,7 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.teamtreehouse.ribbit.R;
-import com.teamtreehouse.ribbit.adapters.UserAdapter;
+import com.teamtreehouse.ribbit.adapters.ObseleteUserAdapter;
 import com.teamtreehouse.ribbit.models.purgatory.Message;
 import com.teamtreehouse.ribbit.models.purgatory.MessageFile;
 import com.teamtreehouse.ribbit.models.purgatory.ObsoleteUser;
@@ -90,10 +90,10 @@ public class RecipientsActivity extends Activity {
                     }
 
                     if (mGridView.getAdapter() == null) {
-                        UserAdapter adapter = new UserAdapter(RecipientsActivity.this, mFriends);
+                        ObseleteUserAdapter adapter = new ObseleteUserAdapter(RecipientsActivity.this, mFriends);
                         mGridView.setAdapter(adapter);
                     } else {
-                        ((UserAdapter) mGridView.getAdapter()).refill(mFriends);
+                        ((ObseleteUserAdapter) mGridView.getAdapter()).refill(mFriends);
                     }
                 } else {
                     Log.e(TAG, e.getMessage());

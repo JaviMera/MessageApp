@@ -3,24 +3,21 @@ package com.teamtreehouse.ribbit.database;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
-import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.models.UserCurrent;
 import com.teamtreehouse.ribbit.models.UserFriend;
-import com.teamtreehouse.ribbit.models.UserInvite;
-import com.teamtreehouse.ribbit.models.UserPending;
+import com.teamtreehouse.ribbit.models.UserRecipient;
+import com.teamtreehouse.ribbit.models.UserSender;
 import com.teamtreehouse.ribbit.models.UserRequest;
-import com.teamtreehouse.ribbit.ui.callbacks.InviteDeleteCallback;
+import com.teamtreehouse.ribbit.ui.callbacks.UpdateInviteCallback;
 import com.teamtreehouse.ribbit.ui.callbacks.UserInsertCallback;
 import com.teamtreehouse.ribbit.ui.callbacks.UserReadCallback;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -75,7 +72,7 @@ public class MessageDB {
             .child(RECIPIENTS_NODE)
             .child(otherUser.getId())
             .push()
-            .setValue(new UserInvite(currentUser.getId(), currentUser.getUsername()));
+            .setValue(new UserRecipient(currentUser.getId(), currentUser.getUsername(), 0));
 
         FirebaseDatabase
             .getInstance()
@@ -84,7 +81,7 @@ public class MessageDB {
             .child(SENDERS_NODE)
             .child(currentUser.getId())
             .push()
-            .setValue(new UserPending(otherUser.getId(), otherUser.getUsername()));
+            .setValue(new UserSender(otherUser.getId(), otherUser.getUsername(), 0));
     }
 
     public static void readUser(final String username, final UserReadCallback userReadCallback) {
@@ -169,40 +166,36 @@ public class MessageDB {
             .addChildEventListener(listener);
     }
 
-    public static void deleteInvites(User currentUser, User otherUser, final InviteDeleteCallback inviteDeleteCallback) {
+    public static void updateInvites(final User currentUser, final User otherUser, final int status, final UpdateInviteCallback cb) {
 
-        final HashMap<String, String> map = new HashMap<String, String>();
-        map.put(RECIPIENTS_NODE + "/" + currentUser.getId(), otherUser.getUsername());
-        map.put(SENDERS_NODE + "/" + otherUser.getId(), currentUser.getUsername());
-
-        FirebaseDatabase.getInstance().getReference()
+        final HashMap<String, User> map = new HashMap<>();
+        map.put(RECIPIENTS_NODE + "/" + currentUser.getId(), new UserRecipient(otherUser.getId(), otherUser.getUsername(), status));
+        map.put(SENDERS_NODE + "/" + otherUser.getId(), new UserSender(currentUser.getId(), currentUser.getUsername(), status));
+        FirebaseDatabase
+            .getInstance()
+            .getReference()
             .child(INVITES_NODE)
-            .runTransaction(new Transaction.Handler() {
+            .addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public Transaction.Result doTransaction(MutableData mutableData) {
+                public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    for(Map.Entry<String, String> entry : map.entrySet()) {
+                    for(Map.Entry<String, User> entry : map.entrySet()) {
 
-                        for(MutableData md : mutableData.child(entry.getKey()).getChildren()) {
-
-                            HashMap<String, String> childMap = (HashMap<String, String>) md.getValue();
-                            if(childMap.get(USERNAME_PROP).equals(entry.getValue())) {
-                                md.setValue(null);
-                                break;
-                            }
-                        }
+                        dataSnapshot
+                            .child(entry.getKey())
+                            .getChildren()
+                            .iterator()
+                            .next()
+                            .getRef()
+                            .setValue(entry.getValue());
                     }
 
-                    return Transaction.success(mutableData);
+                    cb.onSuccess();
                 }
 
                 @Override
-                public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+                public void onCancelled(DatabaseError databaseError) {
 
-                    if(databaseError == null) {
-
-                        inviteDeleteCallback.onInviteDeleted();
-                    }
                 }
             });
     }
@@ -220,5 +213,41 @@ public class MessageDB {
             .child(otherUser.getId())
             .push()
             .setValue(new UserFriend(currentUser.getId(), currentUser.getUsername()));
+    }
+
+    public static void deleteInvites(User currentUser, User otherUser) {
+
+        final HashMap<String, String> map = new HashMap<String, String>();
+        map.put(RECIPIENTS_NODE + "/" + currentUser.getId(), otherUser.getUsername());
+        map.put(SENDERS_NODE + "/" + otherUser.getId(), currentUser.getUsername());
+
+        FirebaseDatabase.getInstance().getReference()
+                .child(INVITES_NODE)
+                .runTransaction(new Transaction.Handler() {
+                    @Override
+                    public Transaction.Result doTransaction(MutableData mutableData) {
+
+                        for(Map.Entry<String, String> entry : map.entrySet()) {
+
+                            for(MutableData md : mutableData.child(entry.getKey()).getChildren()) {
+
+                                HashMap<String, String> childMap = (HashMap<String, String>) md.getValue();
+                                if(childMap.get(USERNAME_PROP).equals(entry.getValue())) {
+                                    md.setValue(null);
+                                    break;
+                                }
+                            }
+                        }
+
+                        return Transaction.success(mutableData);
+                    }
+
+                    @Override
+                    public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+
+                        if(databaseError == null) {
+                        }
+                    }
+                });
     }
 }

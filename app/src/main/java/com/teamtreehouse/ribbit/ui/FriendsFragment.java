@@ -1,31 +1,26 @@
 package com.teamtreehouse.ribbit.ui;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
-import android.widget.TextView;
 
 import com.teamtreehouse.ribbit.R;
+import com.teamtreehouse.ribbit.adapters.FragmentFriendsAdapter;
 import com.teamtreehouse.ribbit.adapters.RecyclerActivityView;
 import com.teamtreehouse.ribbit.adapters.RecyclerAdapter;
-import com.teamtreehouse.ribbit.adapters.UserAdapter;
 import com.teamtreehouse.ribbit.adapters.viewholders.actions.ButtonAction;
 import com.teamtreehouse.ribbit.models.User;
-import com.teamtreehouse.ribbit.models.purgatory.ObsoleteUser;
-import com.teamtreehouse.ribbit.models.purgatory.Query;
-import com.teamtreehouse.ribbit.models.purgatory.Relation;
-import com.teamtreehouse.ribbit.models.callbacks.FindCallback;
+import com.teamtreehouse.ribbit.models.UserFriend;
+import com.teamtreehouse.ribbit.models.UserInvite;
+import com.teamtreehouse.ribbit.models.UserRecipient;
 import com.teamtreehouse.ribbit.ui.callbacks.FriendsCallback;
 import com.teamtreehouse.ribbit.ui.callbacks.InvitesCallback;
+import com.teamtreehouse.ribbit.ui.callbacks.RecipientListener;
 
 import java.util.List;
 
@@ -35,7 +30,7 @@ import butterknife.ButterKnife;
 public class FriendsFragment extends Fragment
     implements
     RecyclerActivityView,
-    InvitesCallback.OnInviteListener,
+        RecipientListener,
     FriendsCallback.OnFriendsListener{
 
     private InvitesCallback invitesCallback;
@@ -52,7 +47,7 @@ public class FriendsFragment extends Fragment
 
         ButterKnife.bind(this, rootView);
 
-        RecyclerAdapter adapter = new RecyclerAdapter(this);
+        RecyclerAdapter adapter = new FragmentFriendsAdapter(this);
         recyclerView.setAdapter(adapter);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -96,10 +91,10 @@ public class FriendsFragment extends Fragment
 //                        i++;
 //                    }
 //                    if (mGridView.getAdapter() == null) {
-//                        UserAdapter adapter = new UserAdapter(getActivity(), mFriends);
+//                        ObseleteUserAdapter adapter = new ObseleteUserAdapter(getActivity(), mFriends);
 //                        mGridView.setAdapter(adapter);
 //                    } else {
-//                        ((UserAdapter) mGridView.getAdapter()).refill(mFriends);
+//                        ((ObseleteUserAdapter) mGridView.getAdapter()).refill(mFriends);
 //                    }
 //                } else {
 //                    Log.e(TAG, e.getMessage());
@@ -127,23 +122,16 @@ public class FriendsFragment extends Fragment
     }
 
     @Override
-    public void onRemoveItem(int position) {
-
-        RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
-        adapter.removeItem(position);
-    }
-
-    @Override
-    public void onChangeItem(User user, int position) {
-
-        RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
-        adapter.changeItem(user, position);
-    }
-
-    @Override
     public void onFriendAdded(User userFriend) {
 
         RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
+        int position = adapter.getPosition(userFriend);
+
+        if(position > -1) {
+
+            adapter.removeItem(position);
+        }
+
         adapter.addUser(userFriend);
     }
 
@@ -151,14 +139,27 @@ public class FriendsFragment extends Fragment
     public void onInvitesAdded(User userInvite) {
 
         RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
-        adapter.addUser(userInvite);
+        adapter.addUser(userInvite, 0);
     }
 
     @Override
-    public void onInviteRemoved(User userInvite) {
+    public void onChanged(UserInvite user) {
 
         RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
-        int position = adapter.getPosition(userInvite);
-        adapter.removeItem(position);
+        int position = adapter.getPosition(user);
+
+        if(position == -1)
+            return;
+
+        if(user.getStatus() == 1) {
+
+            // When an invitation is accepted, change the current item to a UserFriend type
+            adapter.changeItem(new UserFriend(user.getId(), user.getUsername()), position);
+        }
+        else if(user.getStatus() == 2) {
+
+            // When an invitation is rejected, delete the item from the friends recycler view
+            adapter.removeItem(position);
+        }
     }
 }

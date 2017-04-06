@@ -5,8 +5,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.models.Auth;
-import com.teamtreehouse.ribbit.models.User;
-import com.teamtreehouse.ribbit.models.UserInvite;
+import com.teamtreehouse.ribbit.models.UserRecipient;
 
 /**
  * Created by javie on 3/31/2017.
@@ -14,9 +13,9 @@ import com.teamtreehouse.ribbit.models.UserInvite;
 
 public class InvitesCallback implements ChildEventListener {
 
-    private final OnInviteListener listener;
+    private final RecipientListener listener;
 
-    public InvitesCallback(OnInviteListener listener) {
+    public InvitesCallback(RecipientListener listener) {
 
         this.listener = listener;
 
@@ -26,18 +25,18 @@ public class InvitesCallback implements ChildEventListener {
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-        this.listener.onInvitesAdded(dataSnapshot.getValue(UserInvite.class));
+        this.listener.onInvitesAdded(dataSnapshot.getValue(UserRecipient.class));
     }
 
     @Override
     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
+        this.listener.onChanged(dataSnapshot.getValue(UserRecipient.class));
     }
 
     @Override
     public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-        this.listener.onInviteRemoved(dataSnapshot.getValue(UserInvite.class));
     }
 
     @Override
@@ -48,11 +47,5 @@ public class InvitesCallback implements ChildEventListener {
     @Override
     public void onCancelled(DatabaseError databaseError) {
 
-    }
-
-    public interface OnInviteListener {
-
-        void onInvitesAdded(User userInvite);
-        void onInviteRemoved(User userInvite);
     }
 }

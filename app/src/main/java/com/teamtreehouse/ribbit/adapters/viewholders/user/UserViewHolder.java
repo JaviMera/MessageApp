@@ -14,8 +14,8 @@ import com.teamtreehouse.ribbit.models.User;
  * Created by javie on 4/3/2017.
  */
 
-public class ViewHolderUser extends RecyclerView.ViewHolder {
-
+public abstract class UserViewHolder extends RecyclerView.ViewHolder {
+    
     protected RecyclerActivityView activity;
     protected TextView userEmailTextView;
     protected Button negativeButtonView;
@@ -24,7 +24,7 @@ public class ViewHolderUser extends RecyclerView.ViewHolder {
 
     UserFactory factory = new UserFactory();
 
-    public ViewHolderUser(RecyclerActivityView activity, View itemView) {
+    public UserViewHolder(RecyclerActivityView activity, View itemView) {
         super(itemView);
 
         this.activity = activity;
@@ -46,7 +46,6 @@ public class ViewHolderUser extends RecyclerView.ViewHolder {
             public void onClick(View view) {
 
             activity.onButtonClick(viewHolder.getNegativeButtonResponses(), getAdapterPosition());
-            activity.onChangeItem(viewHolder.cancelUserType(user), getAdapterPosition());
             }
         });
 
@@ -55,7 +54,6 @@ public class ViewHolderUser extends RecyclerView.ViewHolder {
             public void onClick(View view) {
 
             activity.onButtonClick(viewHolder.getPositiveButtonResponses(), getAdapterPosition());
-            activity.onChangeItem(viewHolder.acceptUserType(user), getAdapterPosition());
             }
         });
 

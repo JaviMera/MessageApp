@@ -12,11 +12,17 @@ import android.view.MenuItem;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.RecyclerActivityView;
 import com.teamtreehouse.ribbit.adapters.RecyclerAdapter;
+import com.teamtreehouse.ribbit.adapters.UserActivityAdapter;
 import com.teamtreehouse.ribbit.adapters.viewholders.actions.ButtonAction;
 import com.teamtreehouse.ribbit.models.User;
+import com.teamtreehouse.ribbit.models.UserFriend;
+import com.teamtreehouse.ribbit.models.UserInvite;
+import com.teamtreehouse.ribbit.models.UserRequest;
 import com.teamtreehouse.ribbit.ui.callbacks.FriendsCallback;
 import com.teamtreehouse.ribbit.ui.callbacks.InvitesCallback;
 import com.teamtreehouse.ribbit.ui.callbacks.PendingCallback;
+import com.teamtreehouse.ribbit.ui.callbacks.RecipientListener;
+import com.teamtreehouse.ribbit.ui.callbacks.SenderListener;
 import com.teamtreehouse.ribbit.ui.callbacks.UserFilterCallback;
 
 import java.util.HashMap;
@@ -27,8 +33,8 @@ public class UsersActivity extends AppCompatActivity
     implements
     RecyclerActivityView,
     UserFilterCallback.UserListener,
-    PendingCallback.OnPendingListener,
-    InvitesCallback.OnInviteListener,
+    SenderListener,
+    RecipientListener,
     FriendsCallback.OnFriendsListener{
 
     private UserFilterCallback userFilterCallback;
@@ -83,7 +89,7 @@ public class UsersActivity extends AppCompatActivity
 
         recycler = (RecyclerView) findViewById(R.id.recycler);
 
-        RecyclerAdapter adapter = new RecyclerAdapter(this);
+        RecyclerAdapter adapter = new UserActivityAdapter(this);
         recycler.setAdapter(adapter);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recycler.setLayoutManager(layoutManager);
@@ -115,21 +121,8 @@ public class UsersActivity extends AppCompatActivity
     }
 
     @Override
-    public void onRemoveItem(int position) {
-
-        RecyclerAdapter adapter = (RecyclerAdapter) recycler.getAdapter();
-        adapter.removeItem(position);
-    }
-
-    @Override
-    public void onChangeItem(User user, int position) {
-
-        RecyclerAdapter adapter = (RecyclerAdapter) recycler.getAdapter();
-        adapter.changeItem(user, position);
-    }
-
-    @Override
     public void onFriendAdded(User userFriend) {
+
         friends.put(userFriend.getId(), userFriend);
     }
 
@@ -137,15 +130,51 @@ public class UsersActivity extends AppCompatActivity
     public void onPendingAdded(User user) {
 
         invites.put(user.getId(), user);
+
+        RecyclerAdapter adapter = (RecyclerAdapter) recycler.getAdapter();
+        int position = adapter.getPosition(user);
+
+        if(position == -1)
+            return;
+
+        if(adapter.getItem(position) instanceof UserFriend)
+            return;
+
+        // When an invitation is sent, change the current item to a UserSender type
+        adapter.changeItem(user, position);
     }
 
     @Override
     public void onInvitesAdded(User userInvite) {
+
         invites.put(userInvite.getId(), userInvite);
+
+        // When the current user sends an invite, check if the receiver of this invite
+        // also happens to be looking for the sender user.
+        RecyclerAdapter adapter = (RecyclerAdapter) recycler.getAdapter();
+        if(adapter.contains(userInvite)) {
+
+            // If so, then update their screen by displaying the sender user as a User Invite type,
+            // instead of just showing it as a User Request type
+            int position = adapter.getPosition(userInvite);
+            adapter.changeItem(userInvite, position);
+        }
     }
 
     @Override
-    public void onInviteRemoved(User userInvite) {
-        invites.remove(userInvite.getId());
+    public void onChanged(UserInvite user) {
+
+        RecyclerAdapter adapter = (RecyclerAdapter) recycler.getAdapter();
+        int position = adapter.getPosition(user);
+
+        if(user.getStatus() == 1) {
+
+            // When an invitation is accepted, change the current item to a UserFriend type
+            adapter.changeItem(new UserFriend(user.getId(), user.getUsername()), position);
+        }
+        else if(user.getStatus() == 2) {
+
+            adapter.changeItem(new UserRequest(user.getId(), user.getUsername()), position);
+        }
     }
 }

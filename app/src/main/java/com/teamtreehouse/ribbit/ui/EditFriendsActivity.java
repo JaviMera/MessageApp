@@ -15,7 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.teamtreehouse.ribbit.R;
-import com.teamtreehouse.ribbit.adapters.UserAdapter;
+import com.teamtreehouse.ribbit.adapters.ObseleteUserAdapter;
 import com.teamtreehouse.ribbit.models.purgatory.ObsoleteUser;
 import com.teamtreehouse.ribbit.models.purgatory.Query;
 import com.teamtreehouse.ribbit.models.purgatory.Relation;
@@ -77,10 +77,10 @@ public class EditFriendsActivity extends Activity {
                         i++;
                     }
                     if (mGridView.getAdapter() == null) {
-                        UserAdapter adapter = new UserAdapter(EditFriendsActivity.this, mUsers);
+                        ObseleteUserAdapter adapter = new ObseleteUserAdapter(EditFriendsActivity.this, mUsers);
                         mGridView.setAdapter(adapter);
                     } else {
-                        ((UserAdapter) mGridView.getAdapter()).refill(mUsers);
+                        ((ObseleteUserAdapter) mGridView.getAdapter()).refill(mUsers);
                     }
 
                     addFriendCheckmarks();

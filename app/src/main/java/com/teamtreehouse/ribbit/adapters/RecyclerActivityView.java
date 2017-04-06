@@ -12,6 +12,4 @@ import java.util.List;
 public interface RecyclerActivityView {
 
     void onButtonClick(List<ButtonAction> buttonActions, int position);
-    void onRemoveItem(int position);
-    void onChangeItem(User user, int position);
 }

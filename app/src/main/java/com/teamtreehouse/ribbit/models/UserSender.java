@@ -6,24 +6,21 @@ import android.os.Parcel;
  * Created by javie on 3/29/2017.
  */
 
-public class UserPending extends User {
+public class UserSender extends UserInvite {
 
-    public UserPending(){super();}
-
-    public UserPending(String uId, String username) {
-        super(uId, username);
+    public UserSender(){
+        super();
     }
 
-    @Override
-    public String getEmail() {
+    public UserSender(String uId, String username, int status) {
+        super(uId, username, status);
 
-        return "";
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
         @Override
         public User createFromParcel(Parcel in) {
-            return new UserPending(in);
+            return new UserSender(in);
         }
 
         @Override
@@ -32,7 +29,7 @@ public class UserPending extends User {
         }
     };
 
-    public UserPending(Parcel in) {
+    public UserSender(Parcel in) {
         super(in);
     }
 }

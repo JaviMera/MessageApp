@@ -5,7 +5,7 @@ import android.view.View;
 import com.teamtreehouse.ribbit.adapters.viewholders.actions.ButtonAction;
 import com.teamtreehouse.ribbit.adapters.viewholders.actions.ButtonRequest;
 import com.teamtreehouse.ribbit.models.User;
-import com.teamtreehouse.ribbit.models.UserPending;
+import com.teamtreehouse.ribbit.models.UserSender;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -40,7 +40,7 @@ public class ItemRequest implements RecyclerItemType {
     @Override
     public User acceptUserType(User user) {
 
-        return new UserPending(user.getId(), user.getUsername());
+        return new UserSender(user.getId(), user.getUsername(), 0);
     }
 
     @Override

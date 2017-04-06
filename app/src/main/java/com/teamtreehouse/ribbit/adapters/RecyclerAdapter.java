@@ -6,8 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.teamtreehouse.ribbit.R;
-import com.teamtreehouse.ribbit.adapters.viewholders.user.ViewHolderUser;
+import com.teamtreehouse.ribbit.adapters.viewholders.user.UserViewHolder;
 import com.teamtreehouse.ribbit.models.User;
+import com.teamtreehouse.ribbit.models.UserFriend;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -16,76 +17,84 @@ import java.util.List;
  * Created by javie on 3/27/2017.
  */
 
-public class RecyclerAdapter extends RecyclerView.Adapter<ViewHolderUser> {
+public abstract class RecyclerAdapter extends RecyclerView.Adapter<UserViewHolder> {
 
-    public void addUser(User user) {
-
-        users.add(user);
-        notifyItemInserted(users.size() - 1);
-    }
-
-    public void removeItem(int position) {
-
-        users.remove(position);
-        notifyItemRemoved(position);
-    }
+    protected abstract UserViewHolder getViewHolder(RecyclerActivityView parent, View view);
 
     private RecyclerActivityView parent;
-    private List<User> users;
+    private List<User> items;
 
     public RecyclerAdapter(RecyclerActivityView parent) {
 
         this.parent = parent;
-        this.users = new LinkedList<>();
+        this.items = new LinkedList<>();
     }
 
     @Override
-    public ViewHolderUser onCreateViewHolder(ViewGroup parent, int viewType) {
+    public UserViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item, parent, false);
-        return new ViewHolderUser(this.parent, view);
+        return getViewHolder(this.parent, view);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolderUser holder, int position) {
+    public void onBindViewHolder(UserViewHolder holder, int position) {
 
-        holder.bind(this.users.get(position));
+        holder.bind(this.items.get(position));
     }
 
     @Override
     public int getItemCount() {
 
-        return this.users.size();
+        return this.items.size();
     }
 
     public void clear() {
 
-        int size = users.size();
-        users.clear();
+        int size = items.size();
+        items.clear();
         notifyItemRangeRemoved(0, size);
     }
 
     public User getItem(int position) {
 
-        return users.get(position);
+        return items.get(position);
     }
 
     public void changeItem(User user, int position) {
 
         if(user != null) {
 
-            this.users.set(position, user);
+            this.items.set(position, user);
             notifyItemChanged(position);
         }
     }
 
     public int getPosition(User userFriend) {
 
-        return users.indexOf(userFriend);
+        return items.indexOf(userFriend);
     }
 
     public boolean contains(User user) {
 
-        return this.users.contains(user);
+        return this.items.contains(user);
+    }
+
+    public void addUser(User userInvite, int i) {
+
+        items.add(i, userInvite);
+        notifyItemInserted(i);
+    }
+
+    public void addUser(User user) {
+
+        items.add(user);
+        notifyItemInserted(items.size() - 1);
+    }
+
+    public void removeItem(int position) {
+
+        items.remove(position);
+        notifyItemRemoved(position);
     }
 }
