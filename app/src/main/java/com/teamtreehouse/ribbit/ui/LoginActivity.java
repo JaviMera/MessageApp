@@ -20,6 +20,8 @@ import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.ui.callbacks.UserReadCallback;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -113,9 +115,9 @@ public class LoginActivity extends AppCompatActivity {
 
                         MessageDB.readUser(finalUsername, new UserReadCallback() {
                             @Override
-                            public void onUserRead(User user) {
+                            public void onUserRead(List<User> user) {
 
-                                Auth.getInstance().setUser(user);
+                                Auth.getInstance().setUser(user.get(0));
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

@@ -1,53 +1,31 @@
 package com.teamtreehouse.ribbit.ui;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.teamtreehouse.ribbit.R;
-import com.teamtreehouse.ribbit.adapters.RecyclerActivityView;
-import com.teamtreehouse.ribbit.adapters.RecyclerAdapter;
-import com.teamtreehouse.ribbit.adapters.UserActivityAdapter;
-import com.teamtreehouse.ribbit.adapters.viewholders.actions.ButtonAction;
+import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.models.User;
-import com.teamtreehouse.ribbit.models.UserFriend;
-import com.teamtreehouse.ribbit.models.UserInvite;
-import com.teamtreehouse.ribbit.models.UserRequest;
-import com.teamtreehouse.ribbit.ui.callbacks.FriendsCallback;
-import com.teamtreehouse.ribbit.ui.callbacks.InvitesCallback;
-import com.teamtreehouse.ribbit.ui.callbacks.PendingCallback;
-import com.teamtreehouse.ribbit.ui.callbacks.RecipientListener;
-import com.teamtreehouse.ribbit.ui.callbacks.SenderListener;
-import com.teamtreehouse.ribbit.ui.callbacks.UserFilterCallback;
+import com.teamtreehouse.ribbit.ui.callbacks.UserReadCallback;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 
-public class UsersActivity extends AppCompatActivity
-    implements
-    RecyclerActivityView,
-    UserFilterCallback.UserListener,
-    SenderListener,
-    RecipientListener,
-    FriendsCallback.OnFriendsListener{
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-    private UserFilterCallback userFilterCallback;
-    private PendingCallback pendingCallback;
-    private FriendsCallback friendsCallback;
-    private InvitesCallback invitesCallback;
+public class UsersActivity extends AppCompatActivity {
 
-    private HashMap<String, User> friends = new LinkedHashMap<>();
-    private HashMap<String, User> invites = new LinkedHashMap<>();
-
-    private RecyclerView recycler;
     private SearchView searchView;
-    private Toolbar toolbar;
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -63,118 +41,46 @@ public class UsersActivity extends AppCompatActivity
             }
 
             @Override
-            public boolean onQueryTextChange(String userEmail) {
+            public boolean onQueryTextChange(String username) {
 
-                RecyclerAdapter adapter = (RecyclerAdapter) recycler.getAdapter();
-                adapter.clear();
-                userFilterCallback.filterUsers(userEmail, friends, invites);
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                final FragmentSearch fragmentSearch = (FragmentSearch) fragmentManager.findFragmentById(R.id.container);
+
+                if (username.isEmpty()) {
+
+                    // Pass in an empty list of users, when an empty string is typed in the search view
+                    fragmentSearch.addUsers(new LinkedList<User>());
+                    return false;
+                }
+
+                MessageDB.filterUsers(username, new UserReadCallback() {
+
+                    @Override
+                    public void onUserRead(List<User> users) {
+
+                        fragmentSearch.addUsers(users);
+                    }
+                });
+
                 return false;
             }
         });
+
         return true;
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_users);
 
+        ButterKnife.bind(this);
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        userFilterCallback = new UserFilterCallback(this);
-        pendingCallback = new PendingCallback(this);
-        invitesCallback = new InvitesCallback(this);
-        friendsCallback = new FriendsCallback(this);
-
-        recycler = (RecyclerView) findViewById(R.id.recycler);
-
-        RecyclerAdapter adapter = new UserActivityAdapter(this);
-        recycler.setAdapter(adapter);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recycler.setLayoutManager(layoutManager);
-        recycler.setHasFixedSize(true);
-    }
-
-    @Override
-    public void onUserAdded(User user) {
-
-        if(user != null) {
-
-            RecyclerAdapter adapter = (RecyclerAdapter) recycler.getAdapter();
-
-            if(!adapter.contains(user))
-                adapter.addUser(user);
-        }
-    }
-
-    @Override
-    public void onButtonClick(List<ButtonAction> buttonActions, int position) {
-
-        RecyclerAdapter adapter = (RecyclerAdapter) recycler.getAdapter();
-        User user = adapter.getItem(position);
-
-        for(ButtonAction buttonAction : buttonActions) {
-
-            buttonAction.execute(user);
-        }
-    }
-
-    @Override
-    public void onFriendAdded(User userFriend) {
-
-        friends.put(userFriend.getId(), userFriend);
-    }
-
-    @Override
-    public void onPendingAdded(User user) {
-
-        invites.put(user.getId(), user);
-
-        RecyclerAdapter adapter = (RecyclerAdapter) recycler.getAdapter();
-        int position = adapter.getPosition(user);
-
-        if(position == -1)
-            return;
-
-        if(adapter.getItem(position) instanceof UserFriend)
-            return;
-
-        // When an invitation is sent, change the current item to a UserSender type
-        adapter.changeItem(user, position);
-    }
-
-    @Override
-    public void onInvitesAdded(User userInvite) {
-
-        invites.put(userInvite.getId(), userInvite);
-
-        // When the current user sends an invite, check if the receiver of this invite
-        // also happens to be looking for the sender user.
-        RecyclerAdapter adapter = (RecyclerAdapter) recycler.getAdapter();
-        if(adapter.contains(userInvite)) {
-
-            // If so, then update their screen by displaying the sender user as a User Invite type,
-            // instead of just showing it as a User Request type
-            int position = adapter.getPosition(userInvite);
-            adapter.changeItem(userInvite, position);
-        }
-    }
-
-    @Override
-    public void onChanged(UserInvite user) {
-
-        RecyclerAdapter adapter = (RecyclerAdapter) recycler.getAdapter();
-        int position = adapter.getPosition(user);
-
-        if(user.getStatus() == 1) {
-
-            // When an invitation is accepted, change the current item to a UserFriend type
-            adapter.changeItem(new UserFriend(user.getId(), user.getUsername()), position);
-        }
-        else if(user.getStatus() == 2) {
-
-            adapter.changeItem(new UserRequest(user.getId(), user.getUsername()), position);
-        }
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.container, FragmentSearch.newInstance());
+        fragmentTransaction.commit();
     }
 }

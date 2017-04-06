@@ -7,8 +7,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.teamtreehouse.ribbit.R;
-import com.teamtreehouse.ribbit.adapters.RecyclerActivityView;
+import com.teamtreehouse.ribbit.adapters.FragmentRecyclerView;
 import com.teamtreehouse.ribbit.models.User;
+import com.teamtreehouse.ribbit.ui.FragmentUsersView;
 
 /**
  * Created by javie on 4/3/2017.
@@ -16,7 +17,7 @@ import com.teamtreehouse.ribbit.models.User;
 
 public abstract class UserViewHolder extends RecyclerView.ViewHolder {
     
-    protected RecyclerActivityView activity;
+    protected FragmentUsersView activity;
     protected TextView userEmailTextView;
     protected Button negativeButtonView;
     protected Button positiveButtonView;
@@ -24,7 +25,7 @@ public abstract class UserViewHolder extends RecyclerView.ViewHolder {
 
     UserFactory factory = new UserFactory();
 
-    public UserViewHolder(RecyclerActivityView activity, View itemView) {
+    public UserViewHolder(FragmentUsersView activity, View itemView) {
         super(itemView);
 
         this.activity = activity;

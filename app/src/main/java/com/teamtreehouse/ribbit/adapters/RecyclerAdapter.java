@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.viewholders.user.UserViewHolder;
 import com.teamtreehouse.ribbit.models.User;
-import com.teamtreehouse.ribbit.models.UserFriend;
+import com.teamtreehouse.ribbit.ui.FragmentUsersView;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -19,12 +19,12 @@ import java.util.List;
 
 public abstract class RecyclerAdapter extends RecyclerView.Adapter<UserViewHolder> {
 
-    protected abstract UserViewHolder getViewHolder(RecyclerActivityView parent, View view);
+    protected abstract UserViewHolder getViewHolder(FragmentUsersView parent, View view);
 
-    private RecyclerActivityView parent;
+    private FragmentUsersView parent;
     private List<User> items;
 
-    public RecyclerAdapter(RecyclerActivityView parent) {
+    public RecyclerAdapter(FragmentUsersView parent) {
 
         this.parent = parent;
         this.items = new LinkedList<>();

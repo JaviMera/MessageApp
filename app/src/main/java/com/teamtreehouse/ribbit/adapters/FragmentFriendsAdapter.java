@@ -4,6 +4,7 @@ import android.view.View;
 
 import com.teamtreehouse.ribbit.adapters.viewholders.user.FragmentFriendsVH;
 import com.teamtreehouse.ribbit.adapters.viewholders.user.UserViewHolder;
+import com.teamtreehouse.ribbit.ui.FragmentUsersView;
 
 /**
  * Created by javie on 4/4/2017.
@@ -11,12 +12,12 @@ import com.teamtreehouse.ribbit.adapters.viewholders.user.UserViewHolder;
 
 public class FragmentFriendsAdapter extends RecyclerAdapter {
 
-    public FragmentFriendsAdapter(RecyclerActivityView parent) {
+    public FragmentFriendsAdapter(FragmentUsersView parent) {
         super(parent);
     }
 
     @Override
-    protected UserViewHolder getViewHolder(RecyclerActivityView parent, View view) {
+    protected UserViewHolder getViewHolder(FragmentUsersView parent, View view) {
 
         return new FragmentFriendsVH(parent, view);
     }

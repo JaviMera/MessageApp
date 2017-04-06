@@ -18,6 +18,8 @@ import com.teamtreehouse.ribbit.ui.callbacks.UserInsertCallback;
 import com.teamtreehouse.ribbit.ui.callbacks.UserReadCallback;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -63,7 +65,7 @@ public class MessageDB {
             });
     }
 
-    public static void insertInvite(final User currentUser, final User otherUser) {
+    public static void insertInvite(final User currentUser, final User otherUser, int status) {
 
         FirebaseDatabase
             .getInstance()
@@ -72,7 +74,7 @@ public class MessageDB {
             .child(RECIPIENTS_NODE)
             .child(otherUser.getId())
             .push()
-            .setValue(new UserRecipient(currentUser.getId(), currentUser.getUsername(), 0));
+            .setValue(new UserRecipient(currentUser.getId(), currentUser.getUsername(), status));
 
         FirebaseDatabase
             .getInstance()
@@ -81,7 +83,7 @@ public class MessageDB {
             .child(SENDERS_NODE)
             .child(currentUser.getId())
             .push()
-            .setValue(new UserSender(otherUser.getId(), otherUser.getUsername(), 0));
+            .setValue(new UserSender(otherUser.getId(), otherUser.getUsername(), status));
     }
 
     public static void readUser(final String username, final UserReadCallback userReadCallback) {
@@ -97,8 +99,8 @@ public class MessageDB {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    User user = dataSnapshot.getChildren().iterator().next().getValue(UserCurrent.class);
-                    userReadCallback.onUserRead(user);
+                    final User user = dataSnapshot.getChildren().iterator().next().getValue(UserCurrent.class);
+                    userReadCallback.onUserRead(new LinkedList<User>(){{add(user);}});
                 }
 
                 @Override
@@ -121,10 +123,13 @@ public class MessageDB {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
+                    List<User> users = new LinkedList<User>();
                     for(DataSnapshot ds : dataSnapshot.getChildren()) {
 
-                        filterUserCallback.onUserRead(ds.getValue(UserRequest.class));
+                        users.add(ds.getValue(UserRequest.class));
                     }
+
+                    filterUserCallback.onUserRead(users);
                 }
 
                 @Override

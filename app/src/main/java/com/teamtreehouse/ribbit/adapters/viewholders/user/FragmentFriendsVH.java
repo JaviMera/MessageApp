@@ -2,8 +2,8 @@ package com.teamtreehouse.ribbit.adapters.viewholders.user;
 
 import android.view.View;
 
-import com.teamtreehouse.ribbit.adapters.RecyclerActivityView;
-import com.teamtreehouse.ribbit.models.User;
+import com.teamtreehouse.ribbit.adapters.FragmentRecyclerView;
+import com.teamtreehouse.ribbit.ui.FragmentUsersView;
 
 /**
  * Created by javie on 4/4/2017.
@@ -11,7 +11,7 @@ import com.teamtreehouse.ribbit.models.User;
 
 public class FragmentFriendsVH extends UserViewHolder {
 
-    public FragmentFriendsVH(RecyclerActivityView parent, View view) {
+    public FragmentFriendsVH(FragmentUsersView parent, View view) {
         super(parent, view);
     }
 }
