@@ -6,9 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 
-import com.teamtreehouse.ribbit.R;
-import com.teamtreehouse.ribbit.ui.LoginActivity;
-
 /**
  * Created by javie on 3/24/2017.
  */

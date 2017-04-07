@@ -7,6 +7,8 @@ import android.support.test.runner.AndroidJUnit4;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.mockdata.MockUsers;
 import com.teamtreehouse.ribbit.models.purgatory.ObsoleteUser;
+import com.teamtreehouse.ribbit.ui.activities.LoginActivity;
+import com.teamtreehouse.ribbit.ui.activities.MainActivity;
 
 import org.junit.Before;
 import org.junit.Rule;

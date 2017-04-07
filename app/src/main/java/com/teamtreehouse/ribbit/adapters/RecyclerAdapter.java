@@ -6,10 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.teamtreehouse.ribbit.R;
-import com.teamtreehouse.ribbit.adapters.viewholders.RecyclerViewHolder;
-import com.teamtreehouse.ribbit.adapters.viewholders.user.UserViewHolder;
+import com.teamtreehouse.ribbit.adapters.viewholders.FragmentRecyclerVH;
 import com.teamtreehouse.ribbit.models.User;
-import com.teamtreehouse.ribbit.ui.*;
+import com.teamtreehouse.ribbit.ui.fragments.FragmentRecyclerView;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -18,9 +17,9 @@ import java.util.List;
  * Created by javie on 3/27/2017.
  */
 
-public abstract class RecyclerAdapter<T extends User, V extends FragmentRecyclerView> extends RecyclerView.Adapter<RecyclerViewHolder<T>> {
+public abstract class RecyclerAdapter<T extends User, V extends FragmentRecyclerView> extends RecyclerView.Adapter<FragmentRecyclerVH<T>> {
 
-    protected abstract RecyclerViewHolder getViewHolder(V parent, View view);
+    protected abstract FragmentRecyclerVH getViewHolder(V parent, View view);
 
     private V parent;
     private List<T> items;
@@ -32,14 +31,14 @@ public abstract class RecyclerAdapter<T extends User, V extends FragmentRecycler
     }
 
     @Override
-    public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public FragmentRecyclerVH onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item, parent, false);
         return getViewHolder(this.parent, view);
     }
 
     @Override
-    public void onBindViewHolder(RecyclerViewHolder holder, int position) {
+    public void onBindViewHolder(FragmentRecyclerVH holder, int position) {
 
         holder.bind(this.items.get(position));
     }

@@ -3,7 +3,6 @@ package com.teamtreehouse.ribbit.ui.callbacks;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
 import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.User;
@@ -15,14 +14,9 @@ import com.teamtreehouse.ribbit.models.UserFriend;
 
 public class FriendsCallback implements ChildEventListener {
 
-    private final OnFriendsListener listener;
+    private final FriendsListener listener;
 
-    public interface OnFriendsListener {
-
-        void onFriendAdded(User userFriend);
-    }
-
-    public FriendsCallback(OnFriendsListener listener) {
+    public FriendsCallback(FriendsListener listener) {
 
         this.listener = listener;
 

@@ -2,6 +2,9 @@ package com.teamtreehouse.ribbit.ui;
 
 import android.support.v7.widget.RecyclerView;
 
+import com.teamtreehouse.ribbit.ui.fragments.messages.InboxFragmentPresenter;
+import com.teamtreehouse.ribbit.ui.fragments.messages.InboxFragmentView;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
