@@ -131,13 +131,4 @@ public class FriendsFragment extends FragmentUsers<FragmentUsersPresenter, Fragm
         RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
         adapter.add(userInvite, 0);
     }
-
-    @Override
-    public void onEditClick(int position) {
-
-        RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
-        User user = adapter.getItem(position);
-
-        this.activity.editFriend(user);
-    }
 }

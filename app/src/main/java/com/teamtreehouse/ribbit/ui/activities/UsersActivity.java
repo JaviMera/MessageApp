@@ -21,7 +21,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class UsersActivity extends AppCompatActivity {
+public class UsersActivity extends ActivityView {
 
     private SearchView searchView;
 

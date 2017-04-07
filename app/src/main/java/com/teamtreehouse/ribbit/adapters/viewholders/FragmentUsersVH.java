@@ -55,14 +55,14 @@ public abstract class FragmentUsersVH extends FragmentRecyclerVH<User> {
             @Override
             public void onClick(View view) {
 
-            activity.onInviteClick(viewHolder.getPositiveButtonResponses(), getAdapterPosition());
+                activity.onInviteClick(viewHolder.getPositiveButtonResponses(), getAdapterPosition());
             }
         });
 
         editContactImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activity.onEditClick(getAdapterPosition());
+                activity.editFriend(getAdapterPosition());
             }
         });
 

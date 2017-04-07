@@ -1,5 +1,6 @@
 package com.teamtreehouse.ribbit.ui.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.RecyclerAdapter;
+import com.teamtreehouse.ribbit.ui.activities.ActivityView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,9 +29,17 @@ public abstract class FragmentRecycler<P extends FragmentRecyclerPresenter, A ex
     protected abstract int getLayout();
 
     protected P presenter;
+    protected ActivityView activity;
 
     @BindView(R.id.recycler)
     protected RecyclerView recyclerView;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        activity = (ActivityView) context;
+    }
 
     @Nullable
     @Override

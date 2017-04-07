@@ -127,6 +127,10 @@ public class FragmentSearch extends FragmentUsers<FragmentUsersPresenter,Fragmen
     @Override
     public void onFriendRemoved(User userFriend) {
 
+        RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
+        int position = adapter.getPosition(userFriend);
+
+        adapter.changeItem(new UserRequest(userFriend.getId(), userFriend.getUsername()), position);
     }
 
     public void addUsers(List<User> users){
@@ -155,10 +159,5 @@ public class FragmentSearch extends FragmentUsers<FragmentUsersPresenter,Fragmen
                 adapter.add(user);
             }
         }
-    }
-
-    @Override
-    public void onEditClick(int adapterPosition) {
-
     }
 }

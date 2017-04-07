@@ -30,7 +30,7 @@ public class PendingCallback implements ChildEventListener {
     @Override
     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-        this.listener.onChanged(dataSnapshot.getValue(UserSender.class));
+        this.listener.onInviteChanged(dataSnapshot.getValue(UserSender.class));
     }
 
     @Override

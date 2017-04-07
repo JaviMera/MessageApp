@@ -37,7 +37,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends ActivityView{
 
     public static final String TAG = MainActivity.class.getSimpleName();
 
@@ -326,12 +326,5 @@ public class MainActivity extends AppCompatActivity {
                 .getInstance()
                 .signOut();
         }
-    }
-
-    public void editFriend(User user) {
-
-        Intent intent = new Intent(MainActivity.this, EditFriendActivity.class);
-        intent.putExtra(EditFriendActivity.EDIT_FRIEND_KEY, user);
-        startActivity(intent);
     }
 }

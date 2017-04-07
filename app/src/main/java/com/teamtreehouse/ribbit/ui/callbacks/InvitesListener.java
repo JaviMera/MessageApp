@@ -9,5 +9,5 @@ import com.teamtreehouse.ribbit.models.UserInvite;
 
 public interface InvitesListener {
 
-    void onChanged(UserInvite user);
+    void onInviteChanged(UserInvite user);
 }
