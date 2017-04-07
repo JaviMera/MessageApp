@@ -1,14 +1,26 @@
 package com.teamtreehouse.ribbit.ui.fragments.friends;
 
+import android.content.Context;
+import android.content.Intent;
+
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.RecyclerAdapter;
 import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.models.UserFriend;
 import com.teamtreehouse.ribbit.models.UserInvite;
+import com.teamtreehouse.ribbit.ui.activities.MainActivity;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentUsers;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentUsersPresenter;
 
 public class FriendsFragment extends FragmentUsers<FragmentUsersPresenter, FragmentFriendsAdapter> {
+
+    private MainActivity activity;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        activity = (MainActivity)context;
+    }
 
     @Override
     public void onResume() {
@@ -106,9 +118,26 @@ public class FriendsFragment extends FragmentUsers<FragmentUsersPresenter, Fragm
     }
 
     @Override
+    public void onFriendRemoved(User userFriend) {
+
+        RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
+        int position = adapter.getPosition(userFriend);
+        adapter.removeItem(position);
+    }
+
+    @Override
     public void onInvitesAdded(User userInvite) {
 
         RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
         adapter.add(userInvite, 0);
+    }
+
+    @Override
+    public void onEditClick(int position) {
+
+        RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
+        User user = adapter.getItem(position);
+
+        this.activity.editFriend(user);
     }
 }

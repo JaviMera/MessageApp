@@ -47,7 +47,7 @@ public abstract class FragmentUsersVH extends FragmentRecyclerVH<User> {
             @Override
             public void onClick(View view) {
 
-            activity.onButtonClick(viewHolder.getNegativeButtonResponses(), getAdapterPosition());
+            activity.onInviteClick(viewHolder.getNegativeButtonResponses(), getAdapterPosition());
             }
         });
 
@@ -55,7 +55,14 @@ public abstract class FragmentUsersVH extends FragmentRecyclerVH<User> {
             @Override
             public void onClick(View view) {
 
-            activity.onButtonClick(viewHolder.getPositiveButtonResponses(), getAdapterPosition());
+            activity.onInviteClick(viewHolder.getPositiveButtonResponses(), getAdapterPosition());
+            }
+        });
+
+        editContactImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                activity.onEditClick(getAdapterPosition());
             }
         });
 

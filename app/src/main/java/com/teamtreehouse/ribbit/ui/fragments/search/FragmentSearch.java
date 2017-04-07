@@ -124,6 +124,11 @@ public class FragmentSearch extends FragmentUsers<FragmentUsersPresenter,Fragmen
         friends.put(userFriend.getId(), userFriend);
     }
 
+    @Override
+    public void onFriendRemoved(User userFriend) {
+
+    }
+
     public void addUsers(List<User> users){
 
         UserCurrent userCurrent = (UserCurrent) Auth.getInstance().getUser();
@@ -150,5 +155,10 @@ public class FragmentSearch extends FragmentUsers<FragmentUsersPresenter,Fragmen
                 adapter.add(user);
             }
         }
+    }
+
+    @Override
+    public void onEditClick(int adapterPosition) {
+
     }
 }

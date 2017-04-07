@@ -9,6 +9,7 @@ import com.teamtreehouse.ribbit.adapters.actions.ButtonAction;
 import com.teamtreehouse.ribbit.models.InviteStatus;
 import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.models.UserInvite;
+import com.teamtreehouse.ribbit.ui.activities.MainActivity;
 import com.teamtreehouse.ribbit.ui.callbacks.FriendsCallback;
 import com.teamtreehouse.ribbit.ui.callbacks.FriendsListener;
 import com.teamtreehouse.ribbit.ui.callbacks.InvitesCallback;
@@ -42,7 +43,7 @@ public abstract class FragmentUsers<P extends FragmentRecyclerPresenter,A extend
     }
 
     @Override
-    public void onButtonClick(List<ButtonAction> buttonActions, int position) {
+    public void onInviteClick(List<ButtonAction> buttonActions, int position) {
 
         RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
         User user = adapter.getItem(position);

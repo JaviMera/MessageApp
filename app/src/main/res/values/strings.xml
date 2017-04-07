@@ -58,5 +58,6 @@
     <string name="content_desc_user_checkmark">User checkmark</string>
     <string name="push_message">You have a new Ribbit message from %s!</string>
     <string name="existing_user_error_title">Can\'t create user</string>
+    <string name="delete_friend_message">Are you sure you want to delete person?</string>
 
 </resources>

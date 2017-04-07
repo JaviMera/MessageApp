@@ -16,6 +16,6 @@ public class FragmentUsersPresenter extends FragmentRecyclerPresenter<FragmentUs
 
     public void onButtonClick(List<ButtonAction> buttonActions, int position) {
 
-        view.onButtonClick(buttonActions, position);
+        view.onInviteClick(buttonActions, position);
     }
 }

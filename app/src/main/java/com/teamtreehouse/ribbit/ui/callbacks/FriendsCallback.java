@@ -37,6 +37,7 @@ public class FriendsCallback implements ChildEventListener {
     @Override
     public void onChildRemoved(DataSnapshot dataSnapshot) {
 
+        this.listener.onFriendRemoved(dataSnapshot.getValue(UserFriend.class));
     }
 
     @Override

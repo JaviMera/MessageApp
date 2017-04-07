@@ -9,4 +9,5 @@ import com.teamtreehouse.ribbit.models.User;
 public interface FriendsListener {
 
     void onFriendAdded(User userFriend);
+    void onFriendRemoved(User userFriend);
 }

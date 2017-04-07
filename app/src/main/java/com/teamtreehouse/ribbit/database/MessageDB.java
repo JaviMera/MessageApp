@@ -7,6 +7,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
+import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.models.UserCurrent;
 import com.teamtreehouse.ribbit.models.UserFriend;
@@ -254,5 +255,39 @@ public class MessageDB {
                         }
                     }
                 });
+    }
+
+    public static void deleteFriend(User currentUser, User otherUser) {
+
+        final HashMap<String, String> paths = new HashMap<>();
+        paths.put(currentUser.getId(), otherUser.getUsername());
+        paths.put(otherUser.getId(), currentUser.getUsername());
+        FirebaseDatabase
+            .getInstance()
+            .getReference()
+            .child(FRIENDS_NODE)
+            .addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    for(Map.Entry<String, String> entry : paths.entrySet()) {
+
+                        for(DataSnapshot ds : dataSnapshot.child(entry.getKey()).getChildren()){
+
+                            UserFriend f = ds.getValue(UserFriend.class);
+                            if(f.getUsername().equals(entry.getValue())) {
+
+                                ds.getRef().setValue(null);
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
     }
 }

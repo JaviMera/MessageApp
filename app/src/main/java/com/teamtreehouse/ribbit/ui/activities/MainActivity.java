@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.SectionsPagerAdapter;
 import com.teamtreehouse.ribbit.models.Auth;
+import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.models.purgatory.Message;
 import com.teamtreehouse.ribbit.models.purgatory.ObsoleteUser;
 
@@ -325,5 +326,12 @@ public class MainActivity extends AppCompatActivity {
                 .getInstance()
                 .signOut();
         }
+    }
+
+    public void editFriend(User user) {
+
+        Intent intent = new Intent(MainActivity.this, EditFriendActivity.class);
+        intent.putExtra(EditFriendActivity.EDIT_FRIEND_KEY, user);
+        startActivity(intent);
     }
 }

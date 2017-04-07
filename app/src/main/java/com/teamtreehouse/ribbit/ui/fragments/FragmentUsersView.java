@@ -10,5 +10,6 @@ import java.util.List;
 
 public interface FragmentUsersView extends FragmentRecyclerView {
 
-    void onButtonClick(List<ButtonAction> buttonActions, int position);
+    void onInviteClick(List<ButtonAction> buttonActions, int position);
+    void onEditClick(int adapterPosition);
 }
