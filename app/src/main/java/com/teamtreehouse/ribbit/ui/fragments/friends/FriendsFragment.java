@@ -9,10 +9,14 @@ import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.models.UserFriend;
 import com.teamtreehouse.ribbit.models.UserInvite;
 import com.teamtreehouse.ribbit.ui.activities.MainActivity;
+import com.teamtreehouse.ribbit.ui.activities.UsersActivity;
+import com.teamtreehouse.ribbit.ui.fragments.FragmentPager;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentUsers;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentUsersPresenter;
 
-public class FriendsFragment extends FragmentUsers<FragmentUsersPresenter, FragmentFriendsAdapter> {
+public class FriendsFragment extends FragmentUsers<FragmentUsersPresenter, FragmentFriendsAdapter>
+    implements
+        FragmentPager {
 
     private MainActivity activity;
 
@@ -130,5 +134,12 @@ public class FriendsFragment extends FragmentUsers<FragmentUsersPresenter, Fragm
 
         RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
         adapter.add(userInvite, 0);
+    }
+
+    @Override
+    public void launchActivity() {
+
+        Intent intent = new Intent(activity, UsersActivity.class);
+        startActivity(intent);
     }
 }

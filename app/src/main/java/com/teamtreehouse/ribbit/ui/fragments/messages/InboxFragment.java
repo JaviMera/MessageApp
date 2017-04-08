@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.InboxFragmentAdapter;
@@ -22,6 +23,7 @@ import com.teamtreehouse.ribbit.models.purgatory.ObsoleteUser;
 import com.teamtreehouse.ribbit.models.purgatory.Query;
 import com.teamtreehouse.ribbit.models.callbacks.FindCallback;
 import com.teamtreehouse.ribbit.ui.activities.ViewImageActivity;
+import com.teamtreehouse.ribbit.ui.fragments.FragmentPager;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentRecycler;
 import com.teamtreehouse.ribbit.utils.Resources;
 
@@ -31,8 +33,9 @@ import butterknife.BindView;
 
 public class InboxFragment extends FragmentRecycler<InboxFragmentPresenter, InboxFragmentAdapter>
     implements
-    InboxFragmentView,
-    MessageAdapter.OnRecyclerViewClick{
+        InboxFragmentView,
+        FragmentPager,
+        MessageAdapter.OnRecyclerViewClick {
 
     protected List<Message> messages;
     protected FragmentActivity parent;
@@ -205,6 +208,12 @@ public class InboxFragment extends FragmentRecycler<InboxFragmentPresenter, Inbo
                 retrieveMessages();
             }
         });
+    }
+
+    @Override
+    public void launchActivity() {
+
+        Toast.makeText(this.getContext(), "hi", Toast.LENGTH_SHORT).show();
     }
 }
 

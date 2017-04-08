@@ -9,8 +9,8 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -22,9 +22,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.SectionsPagerAdapter;
 import com.teamtreehouse.ribbit.models.Auth;
-import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.models.purgatory.Message;
 import com.teamtreehouse.ribbit.models.purgatory.ObsoleteUser;
+import com.teamtreehouse.ribbit.ui.fragments.FragmentPager;
+import com.teamtreehouse.ribbit.ui.fragments.friends.FriendsFragment;
+import com.teamtreehouse.ribbit.ui.fragments.messages.InboxFragment;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -38,6 +40,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainActivity extends ActivityView{
+
+    private static int[] fabIcons = new int[]{
+        R.mipmap.ic_message, R.mipmap.ic_add_contact
+    };
 
     public static final String TAG = MainActivity.class.getSimpleName();
 
@@ -170,8 +176,10 @@ public class MainActivity extends ActivityView{
     @BindView(R.id.pager)
     ViewPager viewPager;
 
-    @BindView(R.id.addFriendFab)
-    FloatingActionButton addFriendsFab;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+
+    private Fragment currentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,7 +192,7 @@ public class MainActivity extends ActivityView{
         getSupportActionBar().setTitle(Auth.getInstance().getUsername());
 
         viewPagerAdapter = new SectionsPagerAdapter(
-            this, getSupportFragmentManager());
+            this, getSupportFragmentManager(), new InboxFragment(), new FriendsFragment());
 
         // Set up the ViewPager with the sections adapter.
         viewPager.setAdapter(viewPagerAdapter);
@@ -202,13 +210,35 @@ public class MainActivity extends ActivityView{
                 currentTab.setIcon(viewPagerAdapter.getIcon(tab));
             }
         }
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+                fab.setImageResource(fabIcons[position]);
+                currentFragment = viewPagerAdapter.getItem(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        fab.setImageResource(fabIcons[0]);
+        this.currentFragment = this.viewPagerAdapter.getItem(0);
     }
 
-    @OnClick(R.id.addFriendFab)
+    @OnClick(R.id.fab)
     public void onAddFriendClick(View view) {
 
-        Intent intent = new Intent(MainActivity.this, UsersActivity.class);
-        startActivity(intent);
+        FragmentPager fragmentPager = (FragmentPager) this.currentFragment;
+        fragmentPager.launchActivity();
     }
 
     @Override

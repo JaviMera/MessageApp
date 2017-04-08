@@ -1,11 +1,12 @@
 package com.teamtreehouse.ribbit.adapters;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.teamtreehouse.ribbit.R;
+import com.teamtreehouse.ribbit.ui.activities.MainActivity;
+import com.teamtreehouse.ribbit.ui.fragments.FragmentPager;
 import com.teamtreehouse.ribbit.ui.fragments.friends.FriendsFragment;
 import com.teamtreehouse.ribbit.ui.fragments.messages.InboxFragment;
 
@@ -15,32 +16,25 @@ import com.teamtreehouse.ribbit.ui.fragments.messages.InboxFragment;
  */
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-    protected Context mContext;
+    protected MainActivity activity;
+    private Fragment[] fragments;
 
-    public SectionsPagerAdapter(Context context, FragmentManager fm) {
+    public SectionsPagerAdapter(MainActivity context, FragmentManager fm, Fragment... fragments) {
         super(fm);
-        mContext = context;
+        activity = context;
+
+        this.fragments = fragments;
     }
 
     @Override
     public Fragment getItem(int position) {
-        // getItem is called to instantiate the fragment for the given page.
-        // Return a DummySectionFragment (defined as a static inner class
-        // below) with the page number as its lone argument.
 
-        switch (position) {
-            case 0:
-                return new InboxFragment();
-            case 1:
-                return new FriendsFragment();
-        }
-
-        return null;
+        return this.fragments[position];
     }
 
     @Override
     public int getCount() {
-        return 2;
+        return this.fragments.length;
     }
 
     @Override
