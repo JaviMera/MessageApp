@@ -6,16 +6,23 @@ import android.view.View;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.RecyclerAdapter;
+import com.teamtreehouse.ribbit.adapters.actions.ButtonAction;
 import com.teamtreehouse.ribbit.models.Auth;
+import com.teamtreehouse.ribbit.models.InviteStatus;
 import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.models.UserCurrent;
 import com.teamtreehouse.ribbit.models.UserFriend;
 import com.teamtreehouse.ribbit.models.UserInvite;
 import com.teamtreehouse.ribbit.models.UserRequest;
+import com.teamtreehouse.ribbit.ui.callbacks.FriendsCallback;
+import com.teamtreehouse.ribbit.ui.callbacks.FriendsListener;
+import com.teamtreehouse.ribbit.ui.callbacks.InvitesCallback;
 import com.teamtreehouse.ribbit.ui.callbacks.PendingCallback;
+import com.teamtreehouse.ribbit.ui.callbacks.RecipientListener;
 import com.teamtreehouse.ribbit.ui.callbacks.SenderListener;
-import com.teamtreehouse.ribbit.ui.fragments.FragmentUsers;
+import com.teamtreehouse.ribbit.ui.fragments.FragmentRecycler;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentUsersPresenter;
+import com.teamtreehouse.ribbit.ui.fragments.FragmentUsersView;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -25,11 +32,18 @@ import java.util.List;
  * Created by javie on 4/6/2017.
  */
 
-public class FragmentSearch extends FragmentUsers<FragmentUsersPresenter,FragmentSearchAdapter>
+public class FragmentSearch
+    extends
+        FragmentRecycler<FragmentUsersPresenter,FragmentSearchAdapter>
     implements
-    SenderListener{
+        SenderListener,
+        FragmentUsersView,
+        RecipientListener,
+        FriendsListener {
 
     private PendingCallback pendingCallback;
+    private InvitesCallback invitesCallback;
+    private FriendsCallback friendsCallback;
 
     private HashMap<String, User> friends = new LinkedHashMap<>();
     private HashMap<String, User> invites = new LinkedHashMap<>();
@@ -37,24 +51,6 @@ public class FragmentSearch extends FragmentUsers<FragmentUsersPresenter,Fragmen
     public static FragmentSearch newInstance() {
 
         return new FragmentSearch();
-    }
-
-    @Override
-    protected void acceptAdapterAction(UserInvite user, int position) {
-
-        RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
-
-        // When an invitation is accepted, change the current item to a UserFriend type
-        adapter.changeItem(new UserFriend(user.getId(), user.getUsername()), position);
-    }
-
-    @Override
-    protected void rejectAdapterAction(UserInvite user, int position) {
-
-        RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
-
-        // When an invitation is rejected, change the current item to a User Request type
-        adapter.changeItem(new UserRequest(user.getId(), user.getUsername()), position);
     }
 
     @Override
@@ -78,9 +74,9 @@ public class FragmentSearch extends FragmentUsers<FragmentUsersPresenter,Fragmen
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
-        super.onViewCreated(view, savedInstanceState);
-
         pendingCallback = new PendingCallback(this);
+        invitesCallback = new InvitesCallback(this);
+        friendsCallback = new FriendsCallback(this);
     }
 
     @Override
@@ -159,5 +155,43 @@ public class FragmentSearch extends FragmentUsers<FragmentUsersPresenter,Fragmen
                 adapter.add(user);
             }
         }
+    }
+
+    @Override
+    public void onInviteChanged(UserInvite user) {
+
+        RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
+        int position = adapter.getPosition(user);
+
+        if(user.getStatus() == InviteStatus.Accepted.ordinal()) {
+
+            // When an invitation is accepted, change the current item to a UserFriend type
+            adapter.changeItem(new UserFriend(user.getId(), user.getUsername()), position);
+        }
+        else if(user.getStatus() == InviteStatus.Rejected.ordinal()) {
+
+            adapter.changeItem(new UserRequest(user.getId(), user.getUsername()), position);
+        }
+    }
+
+    @Override
+    public void onInviteClick(List<ButtonAction> buttonActions, int position) {
+
+        RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
+        User user = adapter.getItem(position);
+
+        for(ButtonAction buttonAction : buttonActions) {
+
+            buttonAction.execute(user);
+        }
+    }
+
+    @Override
+    public void editFriend(int position) {
+
+        RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
+        User user = adapter.getItem(position);
+
+        this.activity.editFriend(user);
     }
 }

@@ -17,9 +17,9 @@ import com.teamtreehouse.ribbit.ui.fragments.messages.InboxFragment;
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     protected MainActivity activity;
-    private Fragment[] fragments;
+    private FragmentPager[] fragments;
 
-    public SectionsPagerAdapter(MainActivity context, FragmentManager fm, Fragment... fragments) {
+    public SectionsPagerAdapter(MainActivity context, FragmentManager fm, FragmentPager... fragments) {
         super(fm);
         activity = context;
 
@@ -27,7 +27,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     }
 
     @Override
-    public Fragment getItem(int position) {
+    public FragmentPager getItem(int position) {
 
         return this.fragments[position];
     }

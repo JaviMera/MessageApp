@@ -179,7 +179,7 @@ public class MainActivity extends ActivityView{
     @BindView(R.id.fab)
     FloatingActionButton fab;
 
-    private Fragment currentFragment;
+    private FragmentPager currentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -237,7 +237,7 @@ public class MainActivity extends ActivityView{
     @OnClick(R.id.fab)
     public void onAddFriendClick(View view) {
 
-        FragmentPager fragmentPager = (FragmentPager) this.currentFragment;
+        FragmentPager fragmentPager = this.currentFragment;
         fragmentPager.launchActivity();
     }
 

@@ -31,10 +31,9 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class InboxFragment extends FragmentRecycler<InboxFragmentPresenter, InboxFragmentAdapter>
+public class InboxFragment extends FragmentPager<InboxFragmentPresenter, InboxFragmentAdapter>
     implements
         InboxFragmentView,
-        FragmentPager,
         MessageAdapter.OnRecyclerViewClick {
 
     protected List<Message> messages;
