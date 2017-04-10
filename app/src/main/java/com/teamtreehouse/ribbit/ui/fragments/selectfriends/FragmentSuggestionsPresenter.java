@@ -7,9 +7,9 @@ import com.teamtreehouse.ribbit.ui.fragments.FragmentRecyclerView;
  * Created by javie on 4/8/2017.
  */
 
-public class FragmentFriendsSelectPresenter extends FragmentRecyclerPresenter {
+public class FragmentSuggestionsPresenter extends FragmentRecyclerPresenter {
 
-    public FragmentFriendsSelectPresenter(FragmentRecyclerView view) {
+    public FragmentSuggestionsPresenter(FragmentRecyclerView view) {
         super(view);
     }
 }

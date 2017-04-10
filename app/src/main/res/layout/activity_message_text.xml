@@ -5,24 +5,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Select recipients"
-        android:padding="10dp"
-        android:textSize="20sp"/>
-
-    <View android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/apptheme_color"
-        android:layout_margin="10dp"/>
-
-    <FrameLayout
-        android:id="@+id/container"
+    <RelativeLayout
+        android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_margin="10dp"/>
+        android:layout_weight="1">
+
+        <FrameLayout
+            android:id="@+id/recipientsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:layout_below="@+id/recipientsContainer"
+            android:id="@+id/recipientsEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="To"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:textSize="20sp"/>
+
+        <FrameLayout
+            android:layout_below="@+id/recipientsEditText"
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

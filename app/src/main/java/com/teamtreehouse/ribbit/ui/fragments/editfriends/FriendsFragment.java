@@ -3,6 +3,8 @@ package com.teamtreehouse.ribbit.ui.fragments.editfriends;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.teamtreehouse.ribbit.R;
@@ -95,6 +97,12 @@ public class FriendsFragment extends FragmentPager<FragmentUsersPresenter, Fragm
     protected FragmentUsersPresenter createPresenter() {
 
         return new FragmentUsersPresenter(this);
+    }
+
+    @Override
+    protected RecyclerView.LayoutManager createLayoutManager() {
+
+        return new LinearLayoutManager(this.getContext());
     }
 
     @Override

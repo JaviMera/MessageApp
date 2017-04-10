@@ -1,7 +1,7 @@
 package com.teamtreehouse.ribbit.ui.fragments.selectfriends;
 
 import com.teamtreehouse.ribbit.models.User;
-import com.teamtreehouse.ribbit.models.UserSelectable;
+import com.teamtreehouse.ribbit.models.UserFriend;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentRecyclerView;
 
 import java.util.List;
@@ -12,7 +12,6 @@ import java.util.List;
 
 public interface FragmentFriendsSelectView extends FragmentRecyclerView {
 
-    void onFriendSelected(UserSelectable friend);
-    void onFriendDeselected(UserSelectable friend);
-    List<User> getRecipients();
+    void onFriendSelected(UserFriend friend);
+    void setItems(List<User> users);
 }

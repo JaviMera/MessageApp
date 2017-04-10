@@ -115,6 +115,36 @@ public class MessageDB {
             });
     }
 
+    public static void filterFriends(String currentUserId, String username, final UserReadCallback filterUserCallback){
+
+        FirebaseDatabase
+            .getInstance()
+            .getReference()
+            .child(FRIENDS_NODE)
+            .child(currentUserId)
+            .orderByChild("username")
+            .startAt(username)
+            .endAt(username+"\uf8ff")
+            .addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    List<User> users = new LinkedList<User>();
+                    for(DataSnapshot ds : dataSnapshot.getChildren()) {
+
+                        users.add(ds.getValue(UserFriend.class));
+                    }
+
+                    filterUserCallback.onUserRead(users);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+    }
+
     public static void filterUsers(final String username, final UserReadCallback filterUserCallback) {
 
         FirebaseDatabase

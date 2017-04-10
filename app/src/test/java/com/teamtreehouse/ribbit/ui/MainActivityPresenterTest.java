@@ -31,18 +31,4 @@ public class MainActivityPresenterTest {
 
         this.target = new MainActivityPresenter(this.view);
     }
-
-    @Test
-    public void setAdapter() throws Exception {
-
-        // Arrange
-        FragmentManager fragmentManager = null;
-        FragmentPager[] fragments = null;
-
-        // Act
-        this.target.setPagerAdapter(fragmentManager, fragments);
-
-        // Assert
-        Mockito.verify(this.view).setPagerAdapter(fragmentManager, fragments);
-    }
 }

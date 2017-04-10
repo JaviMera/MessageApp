@@ -2,6 +2,8 @@ package com.teamtreehouse.ribbit.ui.fragments.search;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.teamtreehouse.ribbit.R;
@@ -64,6 +66,12 @@ public class FragmentSearch
     protected FragmentUsersPresenter createPresenter() {
 
         return new FragmentUsersPresenter(this);
+    }
+
+    @Override
+    protected RecyclerView.LayoutManager createLayoutManager() {
+
+        return new LinearLayoutManager(this.getContext());
     }
 
     @Override

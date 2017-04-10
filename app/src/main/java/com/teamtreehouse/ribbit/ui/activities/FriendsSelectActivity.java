@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentTransaction;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.models.User;
-import com.teamtreehouse.ribbit.ui.fragments.selectfriends.FragmentFriendsSelect;
+import com.teamtreehouse.ribbit.ui.fragments.selectfriends.FragmentSuggestions;
 
 import butterknife.ButterKnife;
 
@@ -26,7 +26,7 @@ public class FriendsSelectActivity extends ActivityBase {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.container, FragmentFriendsSelect.newInstance());
+        fragmentTransaction.replace(R.id.container, FragmentSuggestions.newInstance());
         fragmentTransaction.commit();
     }
 

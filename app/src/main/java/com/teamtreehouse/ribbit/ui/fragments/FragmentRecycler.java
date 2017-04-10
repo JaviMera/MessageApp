@@ -27,6 +27,7 @@ public abstract class FragmentRecycler<P extends FragmentRecyclerPresenter, A ex
 
     protected abstract A createAdapter();
     protected abstract P createPresenter();
+    protected abstract RecyclerView.LayoutManager createLayoutManager();
     protected abstract int getLayout();
 
     protected P presenter;
@@ -44,7 +45,7 @@ public abstract class FragmentRecycler<P extends FragmentRecyclerPresenter, A ex
 
         presenter = createPresenter();
         presenter.setRecyclerAdapter(createAdapter());
-        presenter.setRecyclerLayout(new LinearLayoutManager(getContext()));
+        presenter.setRecyclerLayout(createLayoutManager());
         presenter.setRecyclerFixedSize(true);
 
         return view;

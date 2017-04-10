@@ -26,7 +26,7 @@ public abstract class RecyclerAdapter<T extends Item, V extends FragmentRecycler
     protected abstract int getItemLayout();
 
     private V parent;
-    private List<T> items;
+    protected List<T> items;
 
     public RecyclerAdapter(V parent) {
 
@@ -100,5 +100,11 @@ public abstract class RecyclerAdapter<T extends Item, V extends FragmentRecycler
 
         items.remove(position);
         notifyItemRemoved(position);
+    }
+
+    public void addAll(List<T> users) {
+
+        items.addAll(users);
+        notifyItemRangeInserted(0, items.size());
     }
 }

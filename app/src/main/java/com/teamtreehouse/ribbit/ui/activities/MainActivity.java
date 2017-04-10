@@ -304,7 +304,7 @@ public class MainActivity extends ActivityBase {
 
     private void navigateToLogin() {
         Intent intent = new Intent(this, LoginActivity.class);
-        // change this intent so that the user can't hit "back" and get into the inbox
+        // change this intent so that the usernameText can't hit "back" and get into the inbox
 
         // Set these flags to finish any other tasks that are related to Main Activity
         // This way when login activity is launched, there is no previous activity to go back to,

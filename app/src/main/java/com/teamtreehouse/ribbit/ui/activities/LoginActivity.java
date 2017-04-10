@@ -130,7 +130,7 @@ public class LoginActivity extends AppCompatActivity {
             });
 //        ObsoleteUser.logInInBackground(username, password, new LogInCallback() {
 //            @Override
-//            public void done(ObsoleteUser user, Exception e) {
+//            public void done(ObsoleteUser usernameText, Exception e) {
 //
 //                mProgressBar.setVisibility(View.INVISIBLE);
 //

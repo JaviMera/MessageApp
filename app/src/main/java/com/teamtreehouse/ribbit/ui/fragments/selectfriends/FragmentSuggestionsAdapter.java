@@ -5,15 +5,15 @@ import android.view.View;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.RecyclerAdapter;
 import com.teamtreehouse.ribbit.adapters.viewholders.FragmentFriendsSelectVH;
-import com.teamtreehouse.ribbit.models.UserSelectable;
+import com.teamtreehouse.ribbit.models.User;
 
 /**
  * Created by javie on 4/8/2017.
  */
 
-public class FragmentFriendsSelectAdapter extends RecyclerAdapter<UserSelectable, FragmentFriendsSelectView> {
+public class FragmentSuggestionsAdapter extends RecyclerAdapter<User, FragmentFriendsSelectView> {
 
-    public FragmentFriendsSelectAdapter(FragmentFriendsSelectView parent) {
+    public FragmentSuggestionsAdapter(FragmentFriendsSelectView parent) {
         super(parent);
     }
 
