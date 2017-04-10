@@ -113,7 +113,7 @@ public class TextMessageActivity extends MessageActivity {
         fragmentTransaction.commit();
     }
 
-    @OnClick(R.id.sendTextButton)
+    @OnClick(R.id.sendTextImage)
     public void onSendMessageClick(View view) {
 
         Message message = new Message(
