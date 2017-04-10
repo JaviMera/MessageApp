@@ -14,15 +14,15 @@ public class UserCurrent extends User {
         super(uId, email, username);
     }
 
-    public static final Creator<User> CREATOR = new Creator<User>() {
+    public static final Creator<UserCurrent> CREATOR = new Creator<UserCurrent>() {
         @Override
-        public User createFromParcel(Parcel in) {
+        public UserCurrent createFromParcel(Parcel in) {
             return new UserCurrent(in);
         }
 
         @Override
-        public User[] newArray(int size) {
-            return new User[size];
+        public UserCurrent[] newArray(int size) {
+            return new UserCurrent[size];
         }
     };
 

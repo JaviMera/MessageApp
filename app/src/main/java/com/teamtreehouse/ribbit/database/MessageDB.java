@@ -8,6 +8,7 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.teamtreehouse.ribbit.models.Auth;
+import com.teamtreehouse.ribbit.models.Message;
 import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.models.UserCurrent;
 import com.teamtreehouse.ribbit.models.UserFriend;
@@ -18,6 +19,7 @@ import com.teamtreehouse.ribbit.ui.callbacks.UpdateInviteCallback;
 import com.teamtreehouse.ribbit.ui.callbacks.UserInsertCallback;
 import com.teamtreehouse.ribbit.ui.callbacks.UserReadCallback;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,6 +37,8 @@ public class MessageDB {
     public static final String SENDERS_NODE = "senders";
     public static final String FRIENDS_NODE = "friends";
     public static final String USERNAME_PROP = "username";
+    public static final String MESSAGES_NODE = "messages";
+    public static final String TEXT_MESSAGES_NODE = "text";
 
     public static void insertUser(final User newUser, final UserInsertCallback listener) {
 
@@ -281,6 +285,35 @@ public class MessageDB {
                                 break;
                             }
                         }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+    }
+
+    public static void insertMessages(final List<User> recipients, final Message message) {
+
+        FirebaseDatabase
+            .getInstance()
+            .getReference()
+            .child(MESSAGES_NODE)
+            .child(TEXT_MESSAGES_NODE)
+            .addListenerForSingleValueEvent(new ValueEventListener() {
+
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    for(User user : recipients) {
+
+                        dataSnapshot
+                            .child(user.getId())
+                            .getRef()
+                            .push()
+                            .setValue(message);
                     }
                 }
 

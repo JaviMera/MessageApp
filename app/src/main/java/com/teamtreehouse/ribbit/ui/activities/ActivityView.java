@@ -11,10 +11,5 @@ import com.teamtreehouse.ribbit.models.User;
 
 public abstract class ActivityView extends AppCompatActivity{
 
-    public void editFriend(User user) {
-
-        Intent intent = new Intent(ActivityView.this, EditFriendActivity.class);
-        intent.putExtra(EditFriendActivity.EDIT_FRIEND_KEY, user);
-        startActivity(intent);
-    }
+    public abstract void itemSelect(User user);
 }

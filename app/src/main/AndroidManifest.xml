@@ -76,6 +76,10 @@
         </activity>
         <activity android:name=".ui.activities.EditFriendActivity" >
         </activity>
+        <activity android:name=".ui.activities.FriendsSelectActivity" >
+        </activity>
+        <activity android:name=".ui.activities.TextMessageActivity" >
+        </activity>
     </application>
 
 </manifest>

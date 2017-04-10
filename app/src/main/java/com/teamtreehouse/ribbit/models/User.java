@@ -10,7 +10,7 @@ import java.util.Comparator;
  * Created by javie on 4/4/2017.
  */
 
-public abstract class User implements Parcelable, Comparable<User> {
+public abstract class User extends Item implements Parcelable, Comparable<User> {
 
     private String uId;
     private String email;

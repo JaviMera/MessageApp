@@ -1,13 +1,14 @@
 package com.teamtreehouse.ribbit.ui.callbacks;
 
+import com.teamtreehouse.ribbit.models.Item;
 import com.teamtreehouse.ribbit.models.User;
 
 /**
  * Created by javie on 4/6/2017.
  */
 
-public interface FriendsListener {
+public interface FriendsListener<T extends Item> {
 
-    void onFriendAdded(User userFriend);
-    void onFriendRemoved(User userFriend);
+    void onFriendAdded(T userFriend);
+    void onFriendRemoved(T userFriend);
 }

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.viewholders.FragmentRecyclerVH;
+import com.teamtreehouse.ribbit.models.Item;
 import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentRecyclerView;
 
@@ -17,9 +18,12 @@ import java.util.List;
  * Created by javie on 3/27/2017.
  */
 
-public abstract class RecyclerAdapter<T extends User, V extends FragmentRecyclerView> extends RecyclerView.Adapter<FragmentRecyclerVH<T>> {
+public abstract class RecyclerAdapter<T extends Item, V extends FragmentRecyclerView>
+    extends
+        RecyclerView.Adapter<FragmentRecyclerVH<T>> {
 
     protected abstract FragmentRecyclerVH getViewHolder(V parent, View view);
+    protected abstract int getItemLayout();
 
     private V parent;
     private List<T> items;
@@ -31,9 +35,9 @@ public abstract class RecyclerAdapter<T extends User, V extends FragmentRecycler
     }
 
     @Override
-    public FragmentRecyclerVH onCreateViewHolder(ViewGroup parent, int viewType) {
+    public FragmentRecyclerVH<T> onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(getItemLayout(), parent, false);
         return getViewHolder(this.parent, view);
     }
 

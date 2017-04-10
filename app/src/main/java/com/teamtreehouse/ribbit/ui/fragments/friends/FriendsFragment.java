@@ -1,6 +1,5 @@
 package com.teamtreehouse.ribbit.ui.fragments.friends;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,14 +12,13 @@ import com.teamtreehouse.ribbit.models.InviteStatus;
 import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.models.UserFriend;
 import com.teamtreehouse.ribbit.models.UserInvite;
-import com.teamtreehouse.ribbit.ui.activities.MainActivity;
+import com.teamtreehouse.ribbit.ui.activities.ActivityView;
 import com.teamtreehouse.ribbit.ui.activities.UsersActivity;
-import com.teamtreehouse.ribbit.ui.callbacks.FriendsCallback;
+import com.teamtreehouse.ribbit.ui.callbacks.EditableFriendsCallback;
 import com.teamtreehouse.ribbit.ui.callbacks.FriendsListener;
 import com.teamtreehouse.ribbit.ui.callbacks.InvitesCallback;
 import com.teamtreehouse.ribbit.ui.callbacks.RecipientListener;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentPager;
-import com.teamtreehouse.ribbit.ui.fragments.FragmentRecycler;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentUsersPresenter;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentUsersView;
 
@@ -30,24 +28,16 @@ public class FriendsFragment extends FragmentPager<FragmentUsersPresenter, Fragm
     implements
         FragmentUsersView,
         RecipientListener,
-        FriendsListener {
+        FriendsListener<UserFriend> {
 
     private InvitesCallback invitesCallback;
-    private FriendsCallback friendsCallback;
-
-    private MainActivity activity;
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        activity = (MainActivity)context;
-    }
+    private EditableFriendsCallback editableFriendsCallback;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
         this.invitesCallback = new InvitesCallback(this);
-        this.friendsCallback = new FriendsCallback(this);
+        this.editableFriendsCallback = new EditableFriendsCallback(this);
     }
 
     @Override
@@ -110,11 +100,11 @@ public class FriendsFragment extends FragmentPager<FragmentUsersPresenter, Fragm
     @Override
     protected int getLayout() {
 
-        return R.layout.fragment_search;
+        return R.layout.fragment_recycler;
     }
 
     @Override
-    public void onFriendAdded(User userFriend) {
+    public void onFriendAdded(UserFriend userFriend) {
 
         RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
         int position = adapter.getPosition(userFriend);
@@ -128,7 +118,7 @@ public class FriendsFragment extends FragmentPager<FragmentUsersPresenter, Fragm
     }
 
     @Override
-    public void onFriendRemoved(User userFriend) {
+    public void onFriendRemoved(UserFriend userFriend) {
 
         RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
         int position = adapter.getPosition(userFriend);
@@ -147,9 +137,9 @@ public class FriendsFragment extends FragmentPager<FragmentUsersPresenter, Fragm
     }
 
     @Override
-    public void launchActivity() {
+    public void execute() {
 
-        Intent intent = new Intent(activity, UsersActivity.class);
+        Intent intent = new Intent(this.getActivity(), UsersActivity.class);
         startActivity(intent);
     }
 
@@ -173,7 +163,7 @@ public class FriendsFragment extends FragmentPager<FragmentUsersPresenter, Fragm
     @Override
     public void onInviteClick(List<ButtonAction> buttonActions, int position) {
 
-        RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
+        FragmentFriendsAdapter adapter = (FragmentFriendsAdapter) recyclerView.getAdapter();
         User user = adapter.getItem(position);
 
         for(ButtonAction buttonAction : buttonActions) {
@@ -185,9 +175,9 @@ public class FriendsFragment extends FragmentPager<FragmentUsersPresenter, Fragm
     @Override
     public void editFriend(int position) {
 
-        RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
+        FragmentFriendsAdapter adapter = (FragmentFriendsAdapter) recyclerView.getAdapter();
         User user = adapter.getItem(position);
 
-        this.activity.editFriend(user);
+        ((ActivityView)this.getActivity()).itemSelect(user);
     }
 }

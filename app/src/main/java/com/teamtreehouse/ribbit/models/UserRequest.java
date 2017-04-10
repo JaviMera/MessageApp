@@ -16,15 +16,15 @@ public class UserRequest extends User {
         super(uId, userName);
     }
 
-    public static final Creator<User> CREATOR = new Creator<User>() {
+    public static final Creator<UserRequest> CREATOR = new Creator<UserRequest>() {
         @Override
-        public User createFromParcel(Parcel in) {
+        public UserRequest createFromParcel(Parcel in) {
             return new UserRequest(in);
         }
 
         @Override
-        public User[] newArray(int size) {
-            return new User[size];
+        public UserRequest[] newArray(int size) {
+            return new UserRequest[size];
         }
     };
 

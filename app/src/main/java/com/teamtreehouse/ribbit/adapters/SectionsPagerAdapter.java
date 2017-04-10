@@ -1,14 +1,11 @@
 package com.teamtreehouse.ribbit.adapters;
 
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.ui.activities.MainActivity;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentPager;
-import com.teamtreehouse.ribbit.ui.fragments.friends.FriendsFragment;
-import com.teamtreehouse.ribbit.ui.fragments.messages.InboxFragment;
 
 /**
  * A {@link FragmentPagerAdapter} that returns a fragment corresponding to

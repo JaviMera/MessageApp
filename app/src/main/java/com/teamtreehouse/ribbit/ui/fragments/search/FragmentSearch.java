@@ -14,7 +14,8 @@ import com.teamtreehouse.ribbit.models.UserCurrent;
 import com.teamtreehouse.ribbit.models.UserFriend;
 import com.teamtreehouse.ribbit.models.UserInvite;
 import com.teamtreehouse.ribbit.models.UserRequest;
-import com.teamtreehouse.ribbit.ui.callbacks.FriendsCallback;
+import com.teamtreehouse.ribbit.ui.activities.ActivityView;
+import com.teamtreehouse.ribbit.ui.callbacks.EditableFriendsCallback;
 import com.teamtreehouse.ribbit.ui.callbacks.FriendsListener;
 import com.teamtreehouse.ribbit.ui.callbacks.InvitesCallback;
 import com.teamtreehouse.ribbit.ui.callbacks.PendingCallback;
@@ -39,11 +40,11 @@ public class FragmentSearch
         SenderListener,
         FragmentUsersView,
         RecipientListener,
-        FriendsListener {
+        FriendsListener<UserFriend> {
 
     private PendingCallback pendingCallback;
     private InvitesCallback invitesCallback;
-    private FriendsCallback friendsCallback;
+    private EditableFriendsCallback editableFriendsCallback;
 
     private HashMap<String, User> friends = new LinkedHashMap<>();
     private HashMap<String, User> invites = new LinkedHashMap<>();
@@ -68,7 +69,7 @@ public class FragmentSearch
     @Override
     protected int getLayout() {
 
-        return R.layout.fragment_search;
+        return R.layout.fragment_recycler;
     }
 
     @Override
@@ -76,7 +77,7 @@ public class FragmentSearch
 
         pendingCallback = new PendingCallback(this);
         invitesCallback = new InvitesCallback(this);
-        friendsCallback = new FriendsCallback(this);
+        editableFriendsCallback = new EditableFriendsCallback(this);
     }
 
     @Override
@@ -115,13 +116,13 @@ public class FragmentSearch
     }
 
     @Override
-    public void onFriendAdded(User userFriend) {
+    public void onFriendAdded(UserFriend userFriend) {
 
         friends.put(userFriend.getId(), userFriend);
     }
 
     @Override
-    public void onFriendRemoved(User userFriend) {
+    public void onFriendRemoved(UserFriend userFriend) {
 
         RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
         int position = adapter.getPosition(userFriend);
@@ -177,7 +178,7 @@ public class FragmentSearch
     @Override
     public void onInviteClick(List<ButtonAction> buttonActions, int position) {
 
-        RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
+        FragmentSearchAdapter adapter = (FragmentSearchAdapter) recyclerView.getAdapter();
         User user = adapter.getItem(position);
 
         for(ButtonAction buttonAction : buttonActions) {
@@ -189,9 +190,9 @@ public class FragmentSearch
     @Override
     public void editFriend(int position) {
 
-        RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
+        FragmentSearchAdapter adapter = (FragmentSearchAdapter) recyclerView.getAdapter();
         User user = adapter.getItem(position);
 
-        this.activity.editFriend(user);
+        ((ActivityView)this.getActivity()).itemSelect(user);
     }
 }

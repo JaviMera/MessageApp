@@ -9,7 +9,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -22,11 +21,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.SectionsPagerAdapter;
 import com.teamtreehouse.ribbit.models.Auth;
+import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.models.purgatory.Message;
 import com.teamtreehouse.ribbit.models.purgatory.ObsoleteUser;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentPager;
 import com.teamtreehouse.ribbit.ui.fragments.friends.FriendsFragment;
-import com.teamtreehouse.ribbit.ui.fragments.messages.InboxFragment;
+import com.teamtreehouse.ribbit.ui.fragments.inbox.InboxFragment;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -39,7 +39,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends ActivityView{
+public class MainActivity extends ActivityView {
 
     private static int[] fabIcons = new int[]{
         R.mipmap.ic_message, R.mipmap.ic_add_contact
@@ -235,10 +235,10 @@ public class MainActivity extends ActivityView{
     }
 
     @OnClick(R.id.fab)
-    public void onAddFriendClick(View view) {
+    public void onFabClick(View view) {
 
         FragmentPager fragmentPager = this.currentFragment;
-        fragmentPager.launchActivity();
+        fragmentPager.execute();
     }
 
     @Override
@@ -356,5 +356,13 @@ public class MainActivity extends ActivityView{
                 .getInstance()
                 .signOut();
         }
+    }
+
+    @Override
+    public void itemSelect(User user) {
+
+        Intent intent = new Intent(MainActivity.this, EditFriendActivity.class);
+        intent.putExtra(EditFriendActivity.EDIT_FRIEND_KEY, user);
+        startActivity(intent);
     }
 }

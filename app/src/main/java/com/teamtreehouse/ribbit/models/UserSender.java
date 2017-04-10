@@ -17,15 +17,15 @@ public class UserSender extends UserInvite {
 
     }
 
-    public static final Creator<User> CREATOR = new Creator<User>() {
+    public static final Creator<UserSender> CREATOR = new Creator<UserSender>() {
         @Override
-        public User createFromParcel(Parcel in) {
+        public UserSender createFromParcel(Parcel in) {
             return new UserSender(in);
         }
 
         @Override
-        public User[] newArray(int size) {
-            return new User[size];
+        public UserSender[] newArray(int size) {
+            return new UserSender[size];
         }
     };
 

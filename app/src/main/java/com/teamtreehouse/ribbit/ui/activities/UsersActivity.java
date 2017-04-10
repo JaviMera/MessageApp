@@ -1,5 +1,6 @@
 package com.teamtreehouse.ribbit.ui.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -83,5 +84,13 @@ public class UsersActivity extends ActivityView {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.container, FragmentSearch.newInstance());
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public void itemSelect(User user) {
+
+        Intent intent = new Intent(UsersActivity.this, EditFriendActivity.class);
+        intent.putExtra(EditFriendActivity.EDIT_FRIEND_KEY, user);
+        startActivity(intent);
     }
 }

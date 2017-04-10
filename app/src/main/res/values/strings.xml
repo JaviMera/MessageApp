@@ -59,5 +59,10 @@
     <string name="push_message">You have a new Ribbit message from %s!</string>
     <string name="existing_user_error_title">Can\'t create user</string>
     <string name="delete_friend_message">Are you sure you want to delete person?</string>
+    <string name="message_options_pictures">pictures</string>
+    <string name="message_options_capture_picture">capture picture</string>
+    <string name="message_options_capture_video">capture videos</string>
+    <string name="message_options_video">videos</string>
+    <string name="message_options_text">text message</string>
 
 </resources>

@@ -2,7 +2,9 @@ package com.teamtreehouse.ribbit.ui.fragments.search;
 
 import android.view.View;
 
+import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.RecyclerAdapter;
+import com.teamtreehouse.ribbit.models.Item;
 import com.teamtreehouse.ribbit.ui.fragments.search.FragmentSearchVH;
 import com.teamtreehouse.ribbit.adapters.viewholders.FragmentUsersVH;
 import com.teamtreehouse.ribbit.models.User;
@@ -22,5 +24,11 @@ public class FragmentSearchAdapter extends RecyclerAdapter<User, FragmentUsersVi
     protected FragmentUsersVH getViewHolder(FragmentUsersView parent, View view) {
 
         return new FragmentSearchVH(parent, view);
+    }
+
+    @Override
+    protected int getItemLayout() {
+
+        return R.layout.recycler_item;
     }
 }

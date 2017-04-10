@@ -12,6 +12,7 @@ import com.teamtreehouse.ribbit.ui.fragments.FragmentUsersView;
 public class FragmentSearchVH extends FragmentUsersVH {
 
     public FragmentSearchVH(FragmentUsersView parent, View view) {
+
         super(parent, view);
     }
 }

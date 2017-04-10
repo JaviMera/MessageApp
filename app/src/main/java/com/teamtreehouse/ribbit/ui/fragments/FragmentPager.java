@@ -12,5 +12,5 @@ public abstract class FragmentPager<P extends FragmentRecyclerPresenter,A extend
     extends
         FragmentRecycler<P,A> {
 
-    public abstract void launchActivity();
+    public abstract void execute();
 }

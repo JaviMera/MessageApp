@@ -72,8 +72,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         MessageViewHolder(View itemView) {
             super(itemView);
 
-            iconImageView = (ImageView) itemView.findViewById(R.id.messageIcon);
-            nameLabel = (TextView) itemView.findViewById(R.id.senderLabel);
+//            iconImageView = (ImageView) itemView.findViewById(R.id.messageIcon);
+            nameLabel = (TextView) itemView.findViewById(R.id.messageLabel);
             timeLabel = (TextView) itemView.findViewById(R.id.timeLabel);
         }
 

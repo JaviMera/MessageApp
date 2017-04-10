@@ -14,14 +14,14 @@ public class UserFriend extends User {
         super(uId, username);
     }
 
-    public static final Creator<User> CREATOR = new Creator<User>() {
+    public static final Creator<UserFriend> CREATOR = new Creator<UserFriend>() {
         @Override
-        public User createFromParcel(Parcel in) {
+        public UserFriend createFromParcel(Parcel in) {
             return new UserFriend(in);
         }
 
         @Override
-        public User[] newArray(int size) {
+        public UserFriend[] newArray(int size) {
             return new UserFriend[size];
         }
     };

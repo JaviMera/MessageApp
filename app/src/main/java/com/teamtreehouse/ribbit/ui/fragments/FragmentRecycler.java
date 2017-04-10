@@ -21,25 +21,20 @@ import butterknife.ButterKnife;
  * Created by javie on 4/6/2017.
  */
 
-public abstract class FragmentRecycler<P extends FragmentRecyclerPresenter, A extends RecyclerAdapter> extends Fragment
-    implements FragmentRecyclerView{
+public abstract class FragmentRecycler<P extends FragmentRecyclerPresenter, A extends RecyclerAdapter>
+    extends
+        Fragment
+    implements
+        FragmentRecyclerView{
 
     protected abstract A getAdapter();
     protected abstract P getPresenter();
     protected abstract int getLayout();
 
     protected P presenter;
-    protected ActivityView activity;
 
     @BindView(R.id.recycler)
     protected RecyclerView recyclerView;
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        activity = (ActivityView) context;
-    }
 
     @Nullable
     @Override

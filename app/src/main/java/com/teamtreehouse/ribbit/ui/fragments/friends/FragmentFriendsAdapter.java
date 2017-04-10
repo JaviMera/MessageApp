@@ -2,6 +2,7 @@ package com.teamtreehouse.ribbit.ui.fragments.friends;
 
 import android.view.View;
 
+import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.RecyclerAdapter;
 import com.teamtreehouse.ribbit.adapters.viewholders.FragmentUsersVH;
 import com.teamtreehouse.ribbit.models.User;
@@ -21,5 +22,11 @@ public class FragmentFriendsAdapter extends RecyclerAdapter<User, FragmentUsersV
     protected FragmentUsersVH getViewHolder(FragmentUsersView parent, View view) {
 
         return new FragmentFriendsVH(parent, view);
+    }
+
+    @Override
+    protected int getItemLayout() {
+
+        return R.layout.recycler_item;
     }
 }
