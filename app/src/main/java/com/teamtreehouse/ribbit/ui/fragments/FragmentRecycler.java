@@ -1,6 +1,5 @@
 package com.teamtreehouse.ribbit.ui.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,7 +11,6 @@ import android.view.ViewGroup;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.RecyclerAdapter;
-import com.teamtreehouse.ribbit.ui.activities.ActivityView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,8 +25,8 @@ public abstract class FragmentRecycler<P extends FragmentRecyclerPresenter, A ex
     implements
         FragmentRecyclerView{
 
-    protected abstract A getAdapter();
-    protected abstract P getPresenter();
+    protected abstract A createAdapter();
+    protected abstract P createPresenter();
     protected abstract int getLayout();
 
     protected P presenter;
@@ -44,8 +42,8 @@ public abstract class FragmentRecycler<P extends FragmentRecyclerPresenter, A ex
 
         ButterKnife.bind(this, view);
 
-        presenter = getPresenter();
-        presenter.setRecyclerAdapter(getAdapter());
+        presenter = createPresenter();
+        presenter.setRecyclerAdapter(createAdapter());
         presenter.setRecyclerLayout(new LinearLayoutManager(getContext()));
         presenter.setRecyclerFixedSize(true);
 
@@ -68,5 +66,10 @@ public abstract class FragmentRecycler<P extends FragmentRecyclerPresenter, A ex
     public void setRecyclerFixedSize(boolean fixedSize) {
 
         recyclerView.setHasFixedSize(fixedSize);
+    }
+
+    protected A getAdapter() {
+
+        return (A) this.recyclerView.getAdapter();
     }
 }

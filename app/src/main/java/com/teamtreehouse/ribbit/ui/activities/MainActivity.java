@@ -25,7 +25,7 @@ import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.models.purgatory.Message;
 import com.teamtreehouse.ribbit.models.purgatory.ObsoleteUser;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentPager;
-import com.teamtreehouse.ribbit.ui.fragments.friends.FriendsFragment;
+import com.teamtreehouse.ribbit.ui.fragments.editfriends.FriendsFragment;
 import com.teamtreehouse.ribbit.ui.fragments.inbox.InboxFragment;
 
 import java.io.File;
@@ -39,7 +39,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends ActivityView {
+public class MainActivity extends ActivityBase {
 
     private static int[] fabIcons = new int[]{
         R.mipmap.ic_message, R.mipmap.ic_add_contact
@@ -192,7 +192,7 @@ public class MainActivity extends ActivityView {
         getSupportActionBar().setTitle(Auth.getInstance().getUsername());
 
         viewPagerAdapter = new SectionsPagerAdapter(
-            this, getSupportFragmentManager(), new InboxFragment(), new FriendsFragment());
+                getSupportFragmentManager(), new InboxFragment(), new FriendsFragment());
 
         // Set up the ViewPager with the sections adapter.
         viewPager.setAdapter(viewPagerAdapter);

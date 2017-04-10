@@ -4,8 +4,7 @@ import android.view.View;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.RecyclerAdapter;
-import com.teamtreehouse.ribbit.models.Item;
-import com.teamtreehouse.ribbit.ui.fragments.search.FragmentSearchVH;
+import com.teamtreehouse.ribbit.adapters.viewholders.FragmentSearchVH;
 import com.teamtreehouse.ribbit.adapters.viewholders.FragmentUsersVH;
 import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentUsersView;

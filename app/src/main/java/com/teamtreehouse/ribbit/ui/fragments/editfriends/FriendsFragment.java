@@ -1,4 +1,4 @@
-package com.teamtreehouse.ribbit.ui.fragments.friends;
+package com.teamtreehouse.ribbit.ui.fragments.editfriends;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +12,7 @@ import com.teamtreehouse.ribbit.models.InviteStatus;
 import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.models.UserFriend;
 import com.teamtreehouse.ribbit.models.UserInvite;
-import com.teamtreehouse.ribbit.ui.activities.ActivityView;
+import com.teamtreehouse.ribbit.ui.activities.ActivityBase;
 import com.teamtreehouse.ribbit.ui.activities.UsersActivity;
 import com.teamtreehouse.ribbit.ui.callbacks.EditableFriendsCallback;
 import com.teamtreehouse.ribbit.ui.callbacks.FriendsListener;
@@ -66,11 +66,11 @@ public class FriendsFragment extends FragmentPager<FragmentUsersPresenter, Fragm
 //                        usernames[i] = user.getUsername();
 //                        i++;
 //                    }
-//                    if (mGridView.getAdapter() == null) {
+//                    if (mGridView.createAdapter() == null) {
 //                        ObseleteUserAdapter adapter = new ObseleteUserAdapter(getActivity(), mFriends);
 //                        mGridView.setAdapter(adapter);
 //                    } else {
-//                        ((ObseleteUserAdapter) mGridView.getAdapter()).refill(mFriends);
+//                        ((ObseleteUserAdapter) mGridView.createAdapter()).refill(mFriends);
 //                    }
 //                } else {
 //                    Log.e(TAG, e.getMessage());
@@ -86,13 +86,13 @@ public class FriendsFragment extends FragmentPager<FragmentUsersPresenter, Fragm
     }
 
     @Override
-    protected FragmentFriendsAdapter getAdapter() {
+    protected FragmentFriendsAdapter createAdapter() {
 
         return new FragmentFriendsAdapter(this);
     }
 
     @Override
-    protected FragmentUsersPresenter getPresenter() {
+    protected FragmentUsersPresenter createPresenter() {
 
         return new FragmentUsersPresenter(this);
     }
@@ -106,7 +106,7 @@ public class FriendsFragment extends FragmentPager<FragmentUsersPresenter, Fragm
     @Override
     public void onFriendAdded(UserFriend userFriend) {
 
-        RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
+        RecyclerAdapter adapter = getAdapter();
         int position = adapter.getPosition(userFriend);
 
         if(position > -1) {
@@ -120,7 +120,7 @@ public class FriendsFragment extends FragmentPager<FragmentUsersPresenter, Fragm
     @Override
     public void onFriendRemoved(UserFriend userFriend) {
 
-        RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
+        RecyclerAdapter adapter = getAdapter();
         int position = adapter.getPosition(userFriend);
 
         if(position == -1)
@@ -132,7 +132,7 @@ public class FriendsFragment extends FragmentPager<FragmentUsersPresenter, Fragm
     @Override
     public void onInvitesAdded(User userInvite) {
 
-        RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
+        RecyclerAdapter adapter = getAdapter();
         adapter.add(userInvite, 0);
     }
 
@@ -146,7 +146,7 @@ public class FriendsFragment extends FragmentPager<FragmentUsersPresenter, Fragm
     @Override
     public void onInviteChanged(UserInvite user) {
 
-        RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
+        RecyclerAdapter adapter = getAdapter();
         int position = adapter.getPosition(user);
 
         if(user.getStatus() == InviteStatus.Accepted.ordinal()) {
@@ -175,9 +175,9 @@ public class FriendsFragment extends FragmentPager<FragmentUsersPresenter, Fragm
     @Override
     public void editFriend(int position) {
 
-        FragmentFriendsAdapter adapter = (FragmentFriendsAdapter) recyclerView.getAdapter();
+        FragmentFriendsAdapter adapter = getAdapter();
         User user = adapter.getItem(position);
 
-        ((ActivityView)this.getActivity()).itemSelect(user);
+        ((ActivityBase)this.getActivity()).itemSelect(user);
     }
 }

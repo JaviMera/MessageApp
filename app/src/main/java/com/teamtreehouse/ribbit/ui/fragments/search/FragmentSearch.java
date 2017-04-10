@@ -14,7 +14,7 @@ import com.teamtreehouse.ribbit.models.UserCurrent;
 import com.teamtreehouse.ribbit.models.UserFriend;
 import com.teamtreehouse.ribbit.models.UserInvite;
 import com.teamtreehouse.ribbit.models.UserRequest;
-import com.teamtreehouse.ribbit.ui.activities.ActivityView;
+import com.teamtreehouse.ribbit.ui.activities.ActivityBase;
 import com.teamtreehouse.ribbit.ui.callbacks.EditableFriendsCallback;
 import com.teamtreehouse.ribbit.ui.callbacks.FriendsListener;
 import com.teamtreehouse.ribbit.ui.callbacks.InvitesCallback;
@@ -55,13 +55,13 @@ public class FragmentSearch
     }
 
     @Override
-    protected FragmentSearchAdapter getAdapter() {
+    protected FragmentSearchAdapter createAdapter() {
 
         return new FragmentSearchAdapter(this);
     }
 
     @Override
-    protected FragmentUsersPresenter getPresenter() {
+    protected FragmentUsersPresenter createPresenter() {
 
         return new FragmentUsersPresenter(this);
     }
@@ -85,7 +85,7 @@ public class FragmentSearch
 
         invites.put(user.getId(), user);
 
-        RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
+        RecyclerAdapter adapter = getAdapter();
         int position = adapter.getPosition(user);
 
         if(position == -1)
@@ -105,7 +105,7 @@ public class FragmentSearch
 
         // When the current user sends an invite, check if the receiver of this invite
         // also happens to be looking for the sender user.
-        RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
+        RecyclerAdapter adapter = getAdapter();
         if(adapter.contains(userInvite)) {
 
             // If so, then update their screen by displaying the sender user as a User Invite type,
@@ -124,7 +124,7 @@ public class FragmentSearch
     @Override
     public void onFriendRemoved(UserFriend userFriend) {
 
-        RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
+        RecyclerAdapter adapter = getAdapter();
         int position = adapter.getPosition(userFriend);
 
         adapter.changeItem(new UserRequest(userFriend.getId(), userFriend.getUsername()), position);
@@ -133,7 +133,7 @@ public class FragmentSearch
     public void addUsers(List<User> users){
 
         UserCurrent userCurrent = (UserCurrent) Auth.getInstance().getUser();
-        RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
+        RecyclerAdapter adapter = getAdapter();
 
         // For every new letter the user types in, clear the recycler to show the newest search result
         adapter.clear();
@@ -161,7 +161,7 @@ public class FragmentSearch
     @Override
     public void onInviteChanged(UserInvite user) {
 
-        RecyclerAdapter adapter = (RecyclerAdapter) recyclerView.getAdapter();
+        RecyclerAdapter adapter = getAdapter();
         int position = adapter.getPosition(user);
 
         if(user.getStatus() == InviteStatus.Accepted.ordinal()) {
@@ -178,7 +178,7 @@ public class FragmentSearch
     @Override
     public void onInviteClick(List<ButtonAction> buttonActions, int position) {
 
-        FragmentSearchAdapter adapter = (FragmentSearchAdapter) recyclerView.getAdapter();
+        FragmentSearchAdapter adapter = getAdapter();
         User user = adapter.getItem(position);
 
         for(ButtonAction buttonAction : buttonActions) {
@@ -190,9 +190,9 @@ public class FragmentSearch
     @Override
     public void editFriend(int position) {
 
-        FragmentSearchAdapter adapter = (FragmentSearchAdapter) recyclerView.getAdapter();
+        FragmentSearchAdapter adapter = getAdapter();
         User user = adapter.getItem(position);
 
-        ((ActivityView)this.getActivity()).itemSelect(user);
+        ((ActivityBase)this.getActivity()).itemSelect(user);
     }
 }

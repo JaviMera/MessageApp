@@ -8,7 +8,7 @@ import com.teamtreehouse.ribbit.ui.fragments.FragmentRecyclerPresenter;
 
 public class InboxFragmentPresenter extends FragmentRecyclerPresenter<InboxFragmentView> {
 
-    InboxFragmentPresenter(InboxFragmentView view) {
+    public InboxFragmentPresenter(InboxFragmentView view) {
         super(view);
     }
 

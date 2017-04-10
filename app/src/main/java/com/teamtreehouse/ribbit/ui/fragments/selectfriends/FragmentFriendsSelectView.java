@@ -1,7 +1,8 @@
-package com.teamtreehouse.ribbit.ui.fragments;
+package com.teamtreehouse.ribbit.ui.fragments.selectfriends;
 
 import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.models.UserSelectable;
+import com.teamtreehouse.ribbit.ui.fragments.FragmentRecyclerView;
 
 import java.util.List;
 

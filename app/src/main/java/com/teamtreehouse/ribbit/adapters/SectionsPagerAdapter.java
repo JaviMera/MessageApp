@@ -13,13 +13,10 @@ import com.teamtreehouse.ribbit.ui.fragments.FragmentPager;
  */
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-    protected MainActivity activity;
     private FragmentPager[] fragments;
 
-    public SectionsPagerAdapter(MainActivity context, FragmentManager fm, FragmentPager... fragments) {
+    public SectionsPagerAdapter(FragmentManager fm, FragmentPager... fragments) {
         super(fm);
-        activity = context;
-
         this.fragments = fragments;
     }
 

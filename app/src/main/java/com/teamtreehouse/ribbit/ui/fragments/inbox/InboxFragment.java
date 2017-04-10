@@ -56,13 +56,13 @@ public class InboxFragment extends FragmentPager<InboxFragmentPresenter, InboxFr
     }
 
     @Override
-    protected InboxFragmentAdapter getAdapter() {
+    protected InboxFragmentAdapter createAdapter() {
 
         return new InboxFragmentAdapter(this);
     }
 
     @Override
-    protected InboxFragmentPresenter getPresenter() {
+    protected InboxFragmentPresenter createPresenter() {
 
         return new InboxFragmentPresenter(this);
     }
@@ -115,7 +115,7 @@ public class InboxFragment extends FragmentPager<InboxFragmentPresenter, InboxFr
 //                if (e == null) {
 //                    // We found messages!
 //                    InboxFragment.this.messages = messages;
-//                    MessageAdapter adapter = (MessageAdapter) recyclerView.getAdapter();
+//                    MessageAdapter adapter = (MessageAdapter) recyclerView.createAdapter();
 //
 //                    String[] usernames = new String[InboxFragment.this.messages.size()];
 //                    int i = 0;
@@ -205,7 +205,7 @@ public class InboxFragment extends FragmentPager<InboxFragmentPresenter, InboxFr
     @Override
     public void onReceived(Message msg) {
 
-        InboxFragmentAdapter adapter = (InboxFragmentAdapter) this.recyclerView.getAdapter();
+        InboxFragmentAdapter adapter = getAdapter();
         adapter.add(msg);
     }
 }

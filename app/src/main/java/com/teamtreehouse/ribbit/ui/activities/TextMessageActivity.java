@@ -12,8 +12,8 @@ import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.Message;
 import com.teamtreehouse.ribbit.models.User;
-import com.teamtreehouse.ribbit.ui.fragments.FragmentFriendsSelect;
-import com.teamtreehouse.ribbit.ui.fragments.FragmentFriendsSelectView;
+import com.teamtreehouse.ribbit.ui.fragments.selectfriends.FragmentFriendsSelect;
+import com.teamtreehouse.ribbit.ui.fragments.selectfriends.FragmentFriendsSelectView;
 
 import java.util.Date;
 import java.util.List;
@@ -26,7 +26,7 @@ import butterknife.OnClick;
  * Created by javie on 4/9/2017.
  */
 
-public class TextMessageActivity extends ActivityView {
+public class TextMessageActivity extends ActivityBase {
 
     public static final String FRAGMENT_TAG = "fragment";
 

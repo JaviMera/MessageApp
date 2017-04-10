@@ -15,17 +15,17 @@ public abstract class FragmentRecyclerPresenter<T extends FragmentRecyclerView> 
         this.view = view;
     }
 
-    void setRecyclerAdapter(RecyclerView.Adapter adapter) {
+    public void setRecyclerAdapter(RecyclerView.Adapter adapter) {
 
         this.view.setRecyclerAdapter(adapter);
     }
 
-    void setRecyclerLayout(RecyclerView.LayoutManager layoutManager) {
+    public void setRecyclerLayout(RecyclerView.LayoutManager layoutManager) {
 
         this.view.setRecyclerLayout(layoutManager);
     }
 
-    void setRecyclerFixedSize(boolean fixedSize) {
+    public void setRecyclerFixedSize(boolean fixedSize) {
 
         this.view.setRecyclerFixedSize(fixedSize);
     }

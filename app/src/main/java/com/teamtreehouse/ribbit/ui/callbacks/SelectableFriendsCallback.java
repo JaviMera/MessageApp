@@ -2,7 +2,6 @@ package com.teamtreehouse.ribbit.ui.callbacks;
 
 import com.google.firebase.database.DataSnapshot;
 import com.teamtreehouse.ribbit.models.UserSelectable;
-import com.teamtreehouse.ribbit.ui.fragments.FragmentFriendsSelect;
 
 /**
  * Created by javie on 4/9/2017.

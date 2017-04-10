@@ -1,11 +1,10 @@
-package com.teamtreehouse.ribbit.ui.fragments;
+package com.teamtreehouse.ribbit.ui.fragments.selectfriends;
 
 import android.view.View;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.RecyclerAdapter;
-import com.teamtreehouse.ribbit.adapters.viewholders.FragmentRecyclerVH;
-import com.teamtreehouse.ribbit.models.User;
+import com.teamtreehouse.ribbit.adapters.viewholders.FragmentFriendsSelectVH;
 import com.teamtreehouse.ribbit.models.UserSelectable;
 
 /**

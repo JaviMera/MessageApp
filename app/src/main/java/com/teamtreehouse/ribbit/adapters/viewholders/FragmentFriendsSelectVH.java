@@ -1,14 +1,13 @@
-package com.teamtreehouse.ribbit.ui.fragments;
+package com.teamtreehouse.ribbit.adapters.viewholders;
 
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.teamtreehouse.ribbit.R;
-import com.teamtreehouse.ribbit.adapters.viewholders.FragmentRecyclerVH;
 import com.teamtreehouse.ribbit.models.UserSelectable;
+import com.teamtreehouse.ribbit.ui.fragments.selectfriends.FragmentFriendsSelectView;
 
 /**
  * Created by javie on 4/8/2017.

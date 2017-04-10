@@ -1,4 +1,4 @@
-package com.teamtreehouse.ribbit.ui.fragments.search;
+package com.teamtreehouse.ribbit.adapters.viewholders;
 
 import android.view.View;
 

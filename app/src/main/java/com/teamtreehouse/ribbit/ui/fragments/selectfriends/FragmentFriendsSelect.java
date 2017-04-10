@@ -1,19 +1,15 @@
-package com.teamtreehouse.ribbit.ui.fragments;
+package com.teamtreehouse.ribbit.ui.fragments.selectfriends;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
-import android.widget.Toast;
 
 import com.teamtreehouse.ribbit.R;
-import com.teamtreehouse.ribbit.adapters.RecyclerAdapter;
 import com.teamtreehouse.ribbit.models.User;
-import com.teamtreehouse.ribbit.models.UserFriend;
 import com.teamtreehouse.ribbit.models.UserSelectable;
-import com.teamtreehouse.ribbit.ui.callbacks.EditableFriendsCallback;
 import com.teamtreehouse.ribbit.ui.callbacks.FriendsListener;
 import com.teamtreehouse.ribbit.ui.callbacks.SelectableFriendsCallback;
+import com.teamtreehouse.ribbit.ui.fragments.FragmentRecycler;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -44,13 +40,13 @@ public class FragmentFriendsSelect
     }
 
     @Override
-    protected FragmentFriendsSelectAdapter getAdapter() {
+    protected FragmentFriendsSelectAdapter createAdapter() {
 
         return new FragmentFriendsSelectAdapter(this);
     }
 
     @Override
-    protected FragmentFriendsSelectPresenter getPresenter() {
+    protected FragmentFriendsSelectPresenter createPresenter() {
 
         return new FragmentFriendsSelectPresenter(this);
     }
@@ -64,7 +60,7 @@ public class FragmentFriendsSelect
     @Override
     public void onFriendAdded(UserSelectable userFriend) {
 
-        FragmentFriendsSelectAdapter adapter = (FragmentFriendsSelectAdapter) this.recyclerView.getAdapter();
+        FragmentFriendsSelectAdapter adapter = getAdapter();
         adapter.add(userFriend);
     }
 
