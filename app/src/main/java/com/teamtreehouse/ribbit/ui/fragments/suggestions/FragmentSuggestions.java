@@ -1,4 +1,4 @@
-package com.teamtreehouse.ribbit.ui.fragments.selectfriends;
+package com.teamtreehouse.ribbit.ui.fragments.suggestions;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;

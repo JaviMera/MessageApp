@@ -5,7 +5,7 @@ import android.widget.TextView;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.models.UserFriend;
-import com.teamtreehouse.ribbit.ui.fragments.selectfriends.FragmentSuggestionsView;
+import com.teamtreehouse.ribbit.ui.fragments.suggestions.FragmentSuggestionsView;
 
 /**
  * Created by javie on 4/8/2017.

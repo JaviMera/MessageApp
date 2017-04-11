@@ -1,4 +1,4 @@
-package com.teamtreehouse.ribbit.ui.fragments.editfriends;
+package com.teamtreehouse.ribbit.ui.fragments.friends;
 
 import android.view.View;
 

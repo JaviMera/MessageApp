@@ -21,8 +21,8 @@ import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.ui.callbacks.UserReadCallback;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentRecipient;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentRecipientsView;
-import com.teamtreehouse.ribbit.ui.fragments.selectfriends.FragmentSuggestions;
-import com.teamtreehouse.ribbit.ui.fragments.selectfriends.FragmentSuggestionsView;
+import com.teamtreehouse.ribbit.ui.fragments.suggestions.FragmentSuggestions;
+import com.teamtreehouse.ribbit.ui.fragments.suggestions.FragmentSuggestionsView;
 
 import java.util.Date;
 import java.util.LinkedList;

@@ -25,7 +25,7 @@ import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.models.purgatory.Message;
 import com.teamtreehouse.ribbit.models.purgatory.ObsoleteUser;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentPager;
-import com.teamtreehouse.ribbit.ui.fragments.editfriends.FriendsFragment;
+import com.teamtreehouse.ribbit.ui.fragments.friends.FriendsFragment;
 import com.teamtreehouse.ribbit.ui.fragments.inbox.FragmentMessages;
 
 import java.io.File;

@@ -1,4 +1,4 @@
-package com.teamtreehouse.ribbit.ui.fragments.selectfriends;
+package com.teamtreehouse.ribbit.ui.fragments.suggestions;
 
 import com.teamtreehouse.ribbit.ui.fragments.FragmentRecyclerPresenter;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentRecyclerView;

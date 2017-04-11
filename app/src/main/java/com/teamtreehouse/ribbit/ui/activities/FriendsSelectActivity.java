@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentTransaction;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.models.User;
-import com.teamtreehouse.ribbit.ui.fragments.selectfriends.FragmentSuggestions;
+import com.teamtreehouse.ribbit.ui.fragments.suggestions.FragmentSuggestions;
 
 import butterknife.ButterKnife;
 
