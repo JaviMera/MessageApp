@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.InboxFragmentAdapter;
 import com.teamtreehouse.ribbit.dialogs.MessageOptionDialog;
+import com.teamtreehouse.ribbit.models.Item;
 import com.teamtreehouse.ribbit.models.Message;
 import com.teamtreehouse.ribbit.ui.activities.ActivityBase;
 import com.teamtreehouse.ribbit.ui.callbacks.TextMessagesCallback;
@@ -27,7 +28,7 @@ import butterknife.BindView;
 
 public class FragmentMessages extends FragmentPager<ActivityBase, FragmentMessagesPresenter, InboxFragmentAdapter>
     implements
-        FragmentMessagesView,
+        FragmentMessagesView<Message>,
         TextMessagesCallback.MessageRecipient {
 
     private TextMessagesCallback messagesCallback;
@@ -198,6 +199,11 @@ public class FragmentMessages extends FragmentPager<ActivityBase, FragmentMessag
 
         InboxFragmentAdapter adapter = getAdapter();
         adapter.add(msg);
+    }
+
+    @Override
+    public void whyYouNoWorkMethod(Message item) {
+
     }
 }
 
