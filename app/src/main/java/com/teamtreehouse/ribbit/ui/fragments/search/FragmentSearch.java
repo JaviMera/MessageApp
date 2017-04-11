@@ -37,7 +37,7 @@ import java.util.List;
 
 public class FragmentSearch
     extends
-        FragmentRecycler<FragmentUsersPresenter,FragmentSearchAdapter>
+        FragmentRecycler<ActivityBase, FragmentUsersPresenter,FragmentSearchAdapter>
     implements
         SenderListener,
         FragmentUsersView,
@@ -193,14 +193,5 @@ public class FragmentSearch
 
             buttonAction.execute(user);
         }
-    }
-
-    @Override
-    public void editFriend(int position) {
-
-        FragmentSearchAdapter adapter = getAdapter();
-        User user = adapter.getItem(position);
-
-        ((ActivityBase)this.getActivity()).itemSelect(user);
     }
 }

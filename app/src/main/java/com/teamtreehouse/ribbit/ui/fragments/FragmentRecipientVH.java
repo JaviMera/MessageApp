@@ -12,16 +12,14 @@ import com.teamtreehouse.ribbit.models.User;
  * Created by javie on 4/10/2017.
  */
 
-public class FragmentRecipientVH extends FragmentRecyclerVH<User> {
+public class FragmentRecipientVH extends FragmentRecyclerVH<FragmentRecipientsView, User> {
 
-    private FragmentRecipientsView parent;
     TextView usernameText;
     ImageView recipientDeleteImage;
 
     public FragmentRecipientVH(FragmentRecipientsView parent, View view) {
-        super(view);
+        super(parent, view);
 
-        this.parent = parent;
         usernameText = (TextView) itemView.findViewById(R.id.userNameText);
         recipientDeleteImage = (ImageView) itemView.findViewById(R.id.deleteImage);
     }
@@ -33,7 +31,7 @@ public class FragmentRecipientVH extends FragmentRecyclerVH<User> {
             @Override
             public void onClick(View view) {
 
-                parent.onFriendRemoved(getAdapterPosition());
+                fragment.onFriendRemoved(getAdapterPosition());
             }
         });
         usernameText.setText(userFriend.getUsername());

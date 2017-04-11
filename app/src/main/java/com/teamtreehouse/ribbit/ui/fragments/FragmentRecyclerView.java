@@ -14,4 +14,5 @@ public interface FragmentRecyclerView {
     void setRecyclerAdapter(RecyclerView.Adapter adapter);
     void setRecyclerLayout(RecyclerView.LayoutManager layoutManager);
     void setRecyclerFixedSize(boolean fixedSize);
+    void onItemSelected(User user);
 }

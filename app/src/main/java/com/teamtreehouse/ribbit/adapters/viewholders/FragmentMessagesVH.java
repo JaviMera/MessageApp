@@ -5,21 +5,21 @@ import android.widget.TextView;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.models.Message;
-import com.teamtreehouse.ribbit.ui.fragments.inbox.InboxFragmentView;
+import com.teamtreehouse.ribbit.ui.fragments.inbox.FragmentMessagesView;
 import com.teamtreehouse.ribbit.utils.MessageUtils;
 
 /**
  * Created by javie on 4/6/2017.
  */
 
-public class FragmentMessagesVH extends FragmentRecyclerVH<Message> {
+public class FragmentMessagesVH extends FragmentRecyclerVH<FragmentMessagesView, Message> {
 
     private TextView messageTextView;
     private TextView dateTextView;
 
-    public FragmentMessagesVH(InboxFragmentView parent, View view) {
+    public FragmentMessagesVH(FragmentMessagesView parent, View view) {
 
-        super(view);
+        super(parent, view);
 
         this.messageTextView = (TextView) view.findViewById(R.id.messageLabel);
         this.dateTextView = (TextView) view.findViewById(R.id.timeLabel);

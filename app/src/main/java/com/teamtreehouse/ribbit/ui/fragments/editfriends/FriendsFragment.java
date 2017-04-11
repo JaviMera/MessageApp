@@ -26,7 +26,7 @@ import com.teamtreehouse.ribbit.ui.fragments.FragmentUsersView;
 
 import java.util.List;
 
-public class FriendsFragment extends FragmentPager<FragmentUsersPresenter, FragmentFriendsAdapter>
+public class FriendsFragment extends FragmentPager<ActivityBase, FragmentUsersPresenter, FragmentFriendsAdapter>
     implements
         FragmentUsersView,
         RecipientListener,
@@ -178,14 +178,5 @@ public class FriendsFragment extends FragmentPager<FragmentUsersPresenter, Fragm
 
             buttonAction.execute(user);
         }
-    }
-
-    @Override
-    public void editFriend(int position) {
-
-        FragmentFriendsAdapter adapter = getAdapter();
-        User user = adapter.getItem(position);
-
-        ((ActivityBase)this.getActivity()).itemSelect(user);
     }
 }

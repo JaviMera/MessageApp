@@ -5,22 +5,19 @@ import android.widget.TextView;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.models.UserFriend;
-import com.teamtreehouse.ribbit.ui.fragments.selectfriends.FragmentFriendsSelectView;
+import com.teamtreehouse.ribbit.ui.fragments.selectfriends.FragmentSuggestionsView;
 
 /**
  * Created by javie on 4/8/2017.
  */
 
-public class FragmentFriendsSelectVH extends FragmentRecyclerVH<UserFriend> {
-
-    private FragmentFriendsSelectView parent;
+public class FragmentSuggestionsVH extends FragmentRecyclerVH<FragmentSuggestionsView,UserFriend> {
 
     private TextView usernameTextView;
 
-    public FragmentFriendsSelectVH(FragmentFriendsSelectView parent, View itemView) {
-        super(itemView);
+    public FragmentSuggestionsVH(FragmentSuggestionsView parent, View itemView) {
+        super(parent, itemView);
 
-        this.parent = parent;
         this.usernameTextView = (TextView) itemView.findViewById(R.id.usernameTextView);
     }
 
@@ -31,7 +28,7 @@ public class FragmentFriendsSelectVH extends FragmentRecyclerVH<UserFriend> {
             @Override
             public void onClick(View view) {
 
-                parent.onFriendSelected(friend);
+                fragment.onItemSelected(friend);
             }
         });
 

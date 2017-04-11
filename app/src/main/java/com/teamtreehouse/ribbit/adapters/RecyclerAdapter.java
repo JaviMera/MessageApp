@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.viewholders.FragmentRecyclerVH;
 import com.teamtreehouse.ribbit.models.Item;
 import com.teamtreehouse.ribbit.models.User;
@@ -18,24 +17,24 @@ import java.util.List;
  * Created by javie on 3/27/2017.
  */
 
-public abstract class RecyclerAdapter<T extends Item, V extends FragmentRecyclerView>
+public abstract class RecyclerAdapter<TItem extends Item, TView extends FragmentRecyclerView>
     extends
-        RecyclerView.Adapter<FragmentRecyclerVH<T>> {
+        RecyclerView.Adapter<FragmentRecyclerVH<TView, TItem>> {
 
-    protected abstract FragmentRecyclerVH getViewHolder(V parent, View view);
+    protected TView parent;
+    protected abstract FragmentRecyclerVH getViewHolder(TView parent, View view);
     protected abstract int getItemLayout();
 
-    private V parent;
-    protected List<T> items;
+    protected List<TItem> items;
 
-    public RecyclerAdapter(V parent) {
+    public RecyclerAdapter(TView parent) {
 
         this.parent = parent;
         this.items = new LinkedList<>();
     }
 
     @Override
-    public FragmentRecyclerVH<T> onCreateViewHolder(ViewGroup parent, int viewType) {
+    public FragmentRecyclerVH<TView, TItem> onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(parent.getContext()).inflate(getItemLayout(), parent, false);
         return getViewHolder(this.parent, view);
@@ -60,12 +59,12 @@ public abstract class RecyclerAdapter<T extends Item, V extends FragmentRecycler
         notifyItemRangeRemoved(0, size);
     }
 
-    public T getItem(int position) {
+    public TItem getItem(int position) {
 
         return items.get(position);
     }
 
-    public void changeItem(T item, int position) {
+    public void changeItem(TItem item, int position) {
 
         if(item != null) {
 
@@ -84,13 +83,13 @@ public abstract class RecyclerAdapter<T extends Item, V extends FragmentRecycler
         return this.items.contains(user);
     }
 
-    public void add(T item, int i) {
+    public void add(TItem item, int i) {
 
         items.add(i, item);
         notifyItemInserted(i);
     }
 
-    public void add(T item) {
+    public void add(TItem item) {
 
         items.add(item);
         notifyItemInserted(items.size() - 1);
@@ -102,7 +101,7 @@ public abstract class RecyclerAdapter<T extends Item, V extends FragmentRecycler
         notifyItemRemoved(position);
     }
 
-    public void addAll(List<T> users) {
+    public void addAll(List<TItem> users) {
 
         items.addAll(users);
         notifyItemRangeInserted(0, items.size());

@@ -22,11 +22,9 @@ import com.teamtreehouse.ribbit.ui.activities.MessageActivity;
 
 public class FragmentRecipient
     extends
-        FragmentRecycler<FragmentRecipientsPresenter, FragmentRecipientsAdapter>
+        FragmentRecycler<MessageActivity, FragmentRecipientsPresenter, FragmentRecipientsAdapter>
     implements
         FragmentRecipientsView {
-
-    private MessageActivity parent;
 
     @Override
     public void onAttach(Context context) {

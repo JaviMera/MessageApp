@@ -6,21 +6,20 @@ import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.viewholders.FragmentMessagesVH;
 import com.teamtreehouse.ribbit.adapters.viewholders.FragmentRecyclerVH;
 import com.teamtreehouse.ribbit.models.Message;
-import com.teamtreehouse.ribbit.models.User;
-import com.teamtreehouse.ribbit.ui.fragments.inbox.InboxFragmentView;
+import com.teamtreehouse.ribbit.ui.fragments.inbox.FragmentMessagesView;
 
 /**
  * Created by javie on 4/6/2017.
  */
 
-public class InboxFragmentAdapter extends RecyclerAdapter<Message, InboxFragmentView>{
+public class InboxFragmentAdapter extends RecyclerAdapter<Message, FragmentMessagesView>{
 
-    public InboxFragmentAdapter(InboxFragmentView parent) {
+    public InboxFragmentAdapter(FragmentMessagesView parent) {
         super(parent);
     }
 
     @Override
-    protected FragmentRecyclerVH getViewHolder(InboxFragmentView parent, View view) {
+    protected FragmentRecyclerVH getViewHolder(FragmentMessagesView parent, View view) {
 
         return new FragmentMessagesVH(parent, view);
     }

@@ -1,9 +1,10 @@
 package com.teamtreehouse.ribbit.ui.fragments;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,8 @@ import android.view.ViewGroup;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.RecyclerAdapter;
+import com.teamtreehouse.ribbit.models.User;
+import com.teamtreehouse.ribbit.ui.activities.ActivityBase;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -19,21 +22,29 @@ import butterknife.ButterKnife;
  * Created by javie on 4/6/2017.
  */
 
-public abstract class FragmentRecycler<P extends FragmentRecyclerPresenter, A extends RecyclerAdapter>
+public abstract class FragmentRecycler<TActivity extends ActivityBase, TPresenter extends FragmentRecyclerPresenter, TAdapter extends RecyclerAdapter>
     extends
         Fragment
     implements
         FragmentRecyclerView{
 
-    protected abstract A createAdapter();
-    protected abstract P createPresenter();
+    protected abstract TAdapter createAdapter();
+    protected abstract TPresenter createPresenter();
     protected abstract RecyclerView.LayoutManager createLayoutManager();
     protected abstract int getLayout();
 
-    protected P presenter;
+    protected TPresenter presenter;
+    protected TActivity parent;
 
     @BindView(R.id.recycler)
     protected RecyclerView recyclerView;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        this.parent = (TActivity) context;
+    }
 
     @Nullable
     @Override
@@ -69,8 +80,14 @@ public abstract class FragmentRecycler<P extends FragmentRecyclerPresenter, A ex
         recyclerView.setHasFixedSize(fixedSize);
     }
 
-    protected A getAdapter() {
+    protected TAdapter getAdapter() {
 
-        return (A) this.recyclerView.getAdapter();
+        return (TAdapter) this.recyclerView.getAdapter();
+    }
+
+    @Override
+    public void onItemSelected(User friend) {
+
+        parent.itemSelect(friend);
     }
 }

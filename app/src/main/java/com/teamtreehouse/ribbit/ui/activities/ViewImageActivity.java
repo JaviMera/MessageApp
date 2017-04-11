@@ -18,7 +18,7 @@ import java.util.TimerTask;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-// TODO add tool bar to view image activity layout
+// TODO add tool bar to view image fragment layout
 public class ViewImageActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
@@ -55,7 +55,7 @@ public class ViewImageActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 // This ID represents the Home or Up button. In the case of this
-                // activity, the Up button is shown. Use NavUtils to allow users
+                // fragment, the Up button is shown. Use NavUtils to allow users
                 // to navigate up one level in the application structure. For
                 // more details, see the Navigation pattern on Android Design:
                 //

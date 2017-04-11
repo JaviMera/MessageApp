@@ -1,8 +1,6 @@
 package com.teamtreehouse.ribbit.ui.fragments.inbox;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -16,15 +14,9 @@ import android.widget.TextView;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.InboxFragmentAdapter;
-import com.teamtreehouse.ribbit.adapters.MessageAdapter;
 import com.teamtreehouse.ribbit.dialogs.MessageOptionDialog;
 import com.teamtreehouse.ribbit.models.Message;
-import com.teamtreehouse.ribbit.models.purgatory.MessageFile;
-import com.teamtreehouse.ribbit.models.purgatory.ObsoleteUser;
-import com.teamtreehouse.ribbit.models.purgatory.Query;
-import com.teamtreehouse.ribbit.models.callbacks.FindCallback;
-import com.teamtreehouse.ribbit.ui.activities.FriendsSelectActivity;
-import com.teamtreehouse.ribbit.ui.activities.ViewImageActivity;
+import com.teamtreehouse.ribbit.ui.activities.ActivityBase;
 import com.teamtreehouse.ribbit.ui.callbacks.TextMessagesCallback;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentPager;
 import com.teamtreehouse.ribbit.utils.Resources;
@@ -33,15 +25,14 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class InboxFragment extends FragmentPager<InboxFragmentPresenter, InboxFragmentAdapter>
+public class FragmentMessages extends FragmentPager<ActivityBase, FragmentMessagesPresenter, InboxFragmentAdapter>
     implements
-        InboxFragmentView,
+        FragmentMessagesView,
         TextMessagesCallback.MessageRecipient {
 
     private TextMessagesCallback messagesCallback;
 
     protected List<Message> messages;
-    protected FragmentActivity parent;
 
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
@@ -50,22 +41,15 @@ public class InboxFragment extends FragmentPager<InboxFragmentPresenter, InboxFr
     TextView textView;
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        this.parent = (FragmentActivity) context;
-    }
-
-    @Override
     protected InboxFragmentAdapter createAdapter() {
 
         return new InboxFragmentAdapter(this);
     }
 
     @Override
-    protected InboxFragmentPresenter createPresenter() {
+    protected FragmentMessagesPresenter createPresenter() {
 
-        return new InboxFragmentPresenter(this);
+        return new FragmentMessagesPresenter(this);
     }
 
     @Override
@@ -121,17 +105,17 @@ public class InboxFragment extends FragmentPager<InboxFragmentPresenter, InboxFr
 //
 //                if (e == null) {
 //                    // We found messages!
-//                    InboxFragment.this.messages = messages;
+//                    FragmentMessages.this.messages = messages;
 //                    MessageAdapter adapter = (MessageAdapter) recyclerView.createAdapter();
 //
-//                    String[] usernames = new String[InboxFragment.this.messages.size()];
+//                    String[] usernames = new String[FragmentMessages.this.messages.size()];
 //                    int i = 0;
-//                    for (Message message : InboxFragment.this.messages) {
+//                    for (Message message : FragmentMessages.this.messages) {
 //                        usernames[i] = message.getString(Message.KEY_SENDER_NAME);
 //                        i++;
 //                    }
 //
-//                    adapter.addMessages(InboxFragment.this.messages);
+//                    adapter.addMessages(FragmentMessages.this.messages);
 //
 //                    presenter.setEmptyTextViewVisibility(false);
 //                }

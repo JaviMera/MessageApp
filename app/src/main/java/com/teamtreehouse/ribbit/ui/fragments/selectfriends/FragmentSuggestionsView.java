@@ -10,8 +10,7 @@ import java.util.List;
  * Created by javie on 4/8/2017.
  */
 
-public interface FragmentFriendsSelectView extends FragmentRecyclerView {
+public interface FragmentSuggestionsView extends FragmentRecyclerView {
 
-    void onFriendSelected(UserFriend friend);
     void setItems(List<User> users);
 }

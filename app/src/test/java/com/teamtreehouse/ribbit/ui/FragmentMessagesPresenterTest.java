@@ -2,8 +2,8 @@ package com.teamtreehouse.ribbit.ui;
 
 import android.support.v7.widget.RecyclerView;
 
-import com.teamtreehouse.ribbit.ui.fragments.inbox.InboxFragmentPresenter;
-import com.teamtreehouse.ribbit.ui.fragments.inbox.InboxFragmentView;
+import com.teamtreehouse.ribbit.ui.fragments.inbox.FragmentMessagesView;
+import com.teamtreehouse.ribbit.ui.fragments.inbox.FragmentMessagesPresenter;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -16,17 +16,17 @@ import org.mockito.runners.MockitoJUnitRunner;
  * Created by javie on 3/25/2017.
  */
 @RunWith(MockitoJUnitRunner.class)
-public class InboxFragmentPresenterTest {
+public class FragmentMessagesPresenterTest {
 
-    private InboxFragmentPresenter target;
+    private FragmentMessagesPresenter target;
 
     @Mock
-    public InboxFragmentView view;
+    public FragmentMessagesView view;
 
     @Before
     public void setUp() throws Exception {
 
-        target = new InboxFragmentPresenter(view);
+        target = new FragmentMessagesPresenter(view);
     }
 
     @Test

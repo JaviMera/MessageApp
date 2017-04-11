@@ -26,7 +26,7 @@ import com.teamtreehouse.ribbit.models.purgatory.Message;
 import com.teamtreehouse.ribbit.models.purgatory.ObsoleteUser;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentPager;
 import com.teamtreehouse.ribbit.ui.fragments.editfriends.FriendsFragment;
-import com.teamtreehouse.ribbit.ui.fragments.inbox.InboxFragment;
+import com.teamtreehouse.ribbit.ui.fragments.inbox.FragmentMessages;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -192,7 +192,7 @@ public class MainActivity extends ActivityBase {
         getSupportActionBar().setTitle(Auth.getInstance().getUsername());
 
         viewPagerAdapter = new SectionsPagerAdapter(
-                getSupportFragmentManager(), new InboxFragment(), new FriendsFragment());
+                getSupportFragmentManager(), new FragmentMessages(), new FriendsFragment());
 
         // Set up the ViewPager with the sections adapter.
         viewPager.setAdapter(viewPagerAdapter);
@@ -237,8 +237,7 @@ public class MainActivity extends ActivityBase {
     @OnClick(R.id.fab)
     public void onFabClick(View view) {
 
-        FragmentPager fragmentPager = this.currentFragment;
-        fragmentPager.execute();
+        this.currentFragment.execute();
     }
 
     @Override
@@ -307,7 +306,7 @@ public class MainActivity extends ActivityBase {
         // change this intent so that the usernameText can't hit "back" and get into the inbox
 
         // Set these flags to finish any other tasks that are related to Main Activity
-        // This way when login activity is launched, there is no previous activity to go back to,
+        // This way when login fragment is launched, there is no previous fragment to go back to,
         // and this exiting the app by pressing the back button.
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

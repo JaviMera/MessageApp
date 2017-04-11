@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.models.User;
-import com.teamtreehouse.ribbit.models.UserFriend;
 import com.teamtreehouse.ribbit.ui.activities.ActivityBase;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentRecycler;
 
@@ -17,9 +16,9 @@ import java.util.List;
 
 public class FragmentSuggestions
     extends
-        FragmentRecycler<FragmentSuggestionsPresenter, FragmentSuggestionsAdapter>
+        FragmentRecycler<ActivityBase, FragmentSuggestionsPresenter, FragmentSuggestionsAdapter>
     implements
-        FragmentFriendsSelectView {
+        FragmentSuggestionsView {
 
     public static FragmentSuggestions newInstance() {
 
@@ -48,12 +47,6 @@ public class FragmentSuggestions
     protected int getLayout() {
 
         return R.layout.text_message_fragment;
-    }
-
-    @Override
-    public void onFriendSelected(UserFriend friend) {
-
-        ((ActivityBase)this.getActivity()).itemSelect(friend);
     }
 
     @Override

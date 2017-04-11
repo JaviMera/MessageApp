@@ -15,9 +15,8 @@ import com.teamtreehouse.ribbit.ui.fragments.FragmentUsersView;
  * Created by javie on 4/3/2017.
  */
 
-public abstract class FragmentUsersVH extends FragmentRecyclerVH<User> {
-    
-    protected FragmentUsersView activity;
+public abstract class FragmentUsersVH extends FragmentRecyclerVH<FragmentUsersView, User> {
+
     protected TextView userEmailTextView;
     protected Button negativeButtonView;
     protected Button positiveButtonView;
@@ -25,10 +24,9 @@ public abstract class FragmentUsersVH extends FragmentRecyclerVH<User> {
 
     UserFactory factory = new UserFactory();
 
-    public FragmentUsersVH(FragmentUsersView activity, View itemView) {
-        super(itemView);
+    public FragmentUsersVH(FragmentUsersView fragment, View itemView) {
+        super(fragment, itemView);
 
-        this.activity = activity;
         userEmailTextView = (TextView) itemView.findViewById(R.id.userEmailTextView);
         negativeButtonView = (Button) itemView.findViewById(R.id.negativeButtonView);
         positiveButtonView = (Button) itemView.findViewById(R.id.positiveButtonView);
@@ -47,7 +45,7 @@ public abstract class FragmentUsersVH extends FragmentRecyclerVH<User> {
             @Override
             public void onClick(View view) {
 
-            activity.onInviteClick(viewHolder.getNegativeButtonResponses(), getAdapterPosition());
+            fragment.onInviteClick(viewHolder.getNegativeButtonResponses(), getAdapterPosition());
             }
         });
 
@@ -55,14 +53,14 @@ public abstract class FragmentUsersVH extends FragmentRecyclerVH<User> {
             @Override
             public void onClick(View view) {
 
-                activity.onInviteClick(viewHolder.getPositiveButtonResponses(), getAdapterPosition());
+            fragment.onInviteClick(viewHolder.getPositiveButtonResponses(), getAdapterPosition());
             }
         });
 
         editContactImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activity.editFriend(getAdapterPosition());
+            fragment.onItemSelected(user);
             }
         });
 

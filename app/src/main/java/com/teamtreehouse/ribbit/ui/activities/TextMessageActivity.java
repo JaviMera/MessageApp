@@ -22,7 +22,7 @@ import com.teamtreehouse.ribbit.ui.callbacks.UserReadCallback;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentRecipient;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentRecipientsView;
 import com.teamtreehouse.ribbit.ui.fragments.selectfriends.FragmentSuggestions;
-import com.teamtreehouse.ribbit.ui.fragments.selectfriends.FragmentFriendsSelectView;
+import com.teamtreehouse.ribbit.ui.fragments.selectfriends.FragmentSuggestionsView;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -68,7 +68,7 @@ public class TextMessageActivity extends MessageActivity {
 
                 String input = String.valueOf(charSequence);
 
-                final FragmentFriendsSelectView fragment = (FragmentFriendsSelectView)
+                final FragmentSuggestionsView fragment = (FragmentSuggestionsView)
                         getSupportFragmentManager().findFragmentByTag(SUGGESTIONS_TAG);
 
                 if (input.isEmpty()) {
