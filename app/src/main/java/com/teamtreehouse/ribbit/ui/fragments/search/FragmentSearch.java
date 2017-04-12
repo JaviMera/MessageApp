@@ -17,9 +17,8 @@ import com.teamtreehouse.ribbit.models.UserCurrent;
 import com.teamtreehouse.ribbit.models.UserFriend;
 import com.teamtreehouse.ribbit.models.UserInvite;
 import com.teamtreehouse.ribbit.models.UserRequest;
-import com.teamtreehouse.ribbit.ui.activities.ActivityBase;
+import com.teamtreehouse.ribbit.ui.activities.ActivityView;
 import com.teamtreehouse.ribbit.ui.activities.EditFriendActivity;
-import com.teamtreehouse.ribbit.ui.activities.UsersActivity;
 import com.teamtreehouse.ribbit.ui.callbacks.EditableFriendsCallback;
 import com.teamtreehouse.ribbit.ui.callbacks.FriendsListener;
 import com.teamtreehouse.ribbit.ui.callbacks.InvitesCallback;
@@ -40,7 +39,7 @@ import java.util.List;
 
 public class FragmentSearch
     extends
-        FragmentRecycler<ActivityBase, FragmentUsersPresenter,FragmentSearchAdapter>
+        FragmentRecycler<ActivityView, FragmentUsersPresenter,FragmentSearchAdapter>
     implements
         SenderListener,
         FragmentUsersView,
@@ -201,7 +200,7 @@ public class FragmentSearch
     @Override
     public void onItemSelected(User user) {
 
-        Intent intent = new Intent(this.parent, EditFriendActivity.class);
+        Intent intent = new Intent(this.getActivity(), EditFriendActivity.class);
         intent.putExtra(EditFriendActivity.EDIT_FRIEND_KEY, user);
         this.parent.itemSelect(intent);
     }

@@ -14,7 +14,7 @@ import com.teamtreehouse.ribbit.models.InviteStatus;
 import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.models.UserFriend;
 import com.teamtreehouse.ribbit.models.UserInvite;
-import com.teamtreehouse.ribbit.ui.activities.ActivityBase;
+import com.teamtreehouse.ribbit.ui.activities.ActivityView;
 import com.teamtreehouse.ribbit.ui.activities.EditFriendActivity;
 import com.teamtreehouse.ribbit.ui.activities.UsersActivity;
 import com.teamtreehouse.ribbit.ui.callbacks.EditableFriendsCallback;
@@ -27,7 +27,7 @@ import com.teamtreehouse.ribbit.ui.fragments.FragmentUsersView;
 
 import java.util.List;
 
-public class FriendsFragment extends FragmentPager<ActivityBase, FragmentUsersPresenter, FragmentFriendsAdapter>
+public class FriendsFragment extends FragmentPager<ActivityView, FragmentUsersPresenter, FragmentFriendsAdapter>
     implements
         FragmentUsersView,
         RecipientListener,

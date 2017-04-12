@@ -1,19 +1,15 @@
 package com.teamtreehouse.ribbit.ui.activities;
 
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.ScaleAnimation;
-import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -41,7 +37,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class TextMessageActivity extends MessageActivity {
+public class TextMessageActivity extends AppCompatActivity implements MessageActivityView {
 
     public static final String SUGGESTIONS_TAG = "suggestions";
     private static final String RECIPIENTS_TAG = "recipients";
@@ -153,8 +149,6 @@ public class TextMessageActivity extends MessageActivity {
 
         this.sendImageView.setAnimation(Animations.scaleUp(this));
         this.sendImageView.setVisibility(View.VISIBLE);
-        this.messageEditText.setAnimation(Animations.rightTranslate(this));
-        this.messageEditText.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -162,6 +156,18 @@ public class TextMessageActivity extends MessageActivity {
 
         this.sendImageView.setAnimation(Animations.scaleDown(this));
         this.sendImageView.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void showInputEditText() {
+
+        this.messageEditText.setAnimation(Animations.rightTranslate(this));
+        this.messageEditText.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideInputEditText() {
+
         this.messageEditText.setAnimation(Animations.leftTranslate(this));
         this.messageEditText.setVisibility(View.INVISIBLE);
     }

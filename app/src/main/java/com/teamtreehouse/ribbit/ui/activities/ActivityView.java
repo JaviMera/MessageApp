@@ -9,7 +9,7 @@ import com.teamtreehouse.ribbit.models.User;
  * Created by javie on 4/7/2017.
  */
 
-public abstract class ActivityBase extends AppCompatActivity{
+public interface ActivityView {
 
-    public abstract void itemSelect(Intent intent);
+    void itemSelect(Intent intent);
 }

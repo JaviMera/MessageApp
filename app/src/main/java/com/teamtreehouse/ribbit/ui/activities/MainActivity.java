@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -35,7 +36,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends ActivityBase {
+public class MainActivity extends AppCompatActivity implements ActivityView {
 
     private static int[] fabIcons = new int[]{
         R.mipmap.ic_message, R.mipmap.ic_add_contact

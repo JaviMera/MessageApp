@@ -1,7 +1,6 @@
 package com.teamtreehouse.ribbit.ui.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,7 +14,7 @@ import android.view.ViewGroup;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.FragmentRecipientsAdapter;
 import com.teamtreehouse.ribbit.models.User;
-import com.teamtreehouse.ribbit.ui.activities.MessageActivity;
+import com.teamtreehouse.ribbit.ui.activities.MessageActivityView;
 
 /**
  * Created by javie on 4/10/2017.
@@ -23,7 +22,7 @@ import com.teamtreehouse.ribbit.ui.activities.MessageActivity;
 
 public class FragmentRecipient
     extends
-        FragmentRecycler<MessageActivity, FragmentRecipientsPresenter, FragmentRecipientsAdapter>
+        FragmentRecycler<MessageActivityView, FragmentRecipientsPresenter, FragmentRecipientsAdapter>
     implements
         FragmentRecipientsView {
 
@@ -31,7 +30,7 @@ public class FragmentRecipient
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        this.parent = (MessageActivity) context;
+        this.parent = (MessageActivityView) context;
     }
 
     @Nullable
@@ -73,6 +72,7 @@ public class FragmentRecipient
 
             this.recyclerView.setVisibility(View.VISIBLE);
             this.parent.showSendButton();
+            this.parent.showInputEditText();
         }
 
         adapter.add(user);
@@ -89,6 +89,7 @@ public class FragmentRecipient
 
             this.recyclerView.setVisibility(View.GONE);
             this.parent.hideSendButton();
+            this.parent.hideInputEditText();
         }
     }
 

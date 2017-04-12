@@ -1,5 +1,6 @@
 package com.teamtreehouse.ribbit.ui.fragments.messages;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -15,7 +16,7 @@ import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.InboxFragmentAdapter;
 import com.teamtreehouse.ribbit.dialogs.MessageOptionDialog;
 import com.teamtreehouse.ribbit.models.Message;
-import com.teamtreehouse.ribbit.ui.activities.ActivityBase;
+import com.teamtreehouse.ribbit.ui.activities.ActivityView;
 import com.teamtreehouse.ribbit.ui.activities.ViewTextMessageActivity;
 import com.teamtreehouse.ribbit.ui.callbacks.MessageRecipient;
 import com.teamtreehouse.ribbit.ui.callbacks.TextMessagesCallback;
@@ -26,7 +27,7 @@ import butterknife.BindView;
 
 public class FragmentMessages
     extends
-        FragmentPager<ActivityBase, FragmentMessagesPresenter, InboxFragmentAdapter>
+        FragmentPager<ActivityView, FragmentMessagesPresenter, InboxFragmentAdapter>
     implements
         FragmentMessagesView,
         MessageRecipient {
@@ -188,7 +189,7 @@ public class FragmentMessages
     @Override
     public void onItemSelected(Message message) {
 
-        Intent intent = new Intent(this.parent, ViewTextMessageActivity.class);
+        Intent intent = new Intent(this.getActivity(), ViewTextMessageActivity.class);
         intent.putExtra("message", message);
         startActivity(intent);
     }
@@ -197,7 +198,7 @@ public class FragmentMessages
     public void execute() {
 
         MessageOptionDialog dialog = new MessageOptionDialog();
-        dialog.show(this.parent.getSupportFragmentManager(), "messages_dialog");
+        dialog.show(this.getActivity().getSupportFragmentManager(), "messages_dialog");
     }
 
     @Override

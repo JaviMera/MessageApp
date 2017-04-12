@@ -6,7 +6,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.models.User;
-import com.teamtreehouse.ribbit.ui.activities.ActivityBase;
+import com.teamtreehouse.ribbit.ui.activities.ActivityView;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentRecycler;
 
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.List;
 
 public class FragmentSuggestions
     extends
-        FragmentRecycler<ActivityBase, FragmentSuggestionsPresenter, FragmentSuggestionsAdapter>
+        FragmentRecycler<ActivityView, FragmentSuggestionsPresenter, FragmentSuggestionsAdapter>
     implements
         FragmentSuggestionsView {
 

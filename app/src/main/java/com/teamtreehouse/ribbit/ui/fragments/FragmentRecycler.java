@@ -1,6 +1,5 @@
 package com.teamtreehouse.ribbit.ui.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,8 +11,7 @@ import android.view.ViewGroup;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.RecyclerAdapter;
-import com.teamtreehouse.ribbit.models.User;
-import com.teamtreehouse.ribbit.ui.activities.ActivityBase;
+import com.teamtreehouse.ribbit.ui.activities.ActivityView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,7 +20,7 @@ import butterknife.ButterKnife;
  * Created by javie on 4/6/2017.
  */
 
-public abstract class FragmentRecycler<TActivity extends ActivityBase, TPresenter extends FragmentRecyclerPresenter, TAdapter extends RecyclerAdapter>
+public abstract class FragmentRecycler<TActivity extends ActivityView, TPresenter extends FragmentRecyclerPresenter, TAdapter extends RecyclerAdapter>
     extends
         Fragment
     implements
