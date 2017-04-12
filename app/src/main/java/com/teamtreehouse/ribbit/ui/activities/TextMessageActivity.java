@@ -30,6 +30,7 @@ import com.teamtreehouse.ribbit.ui.fragments.FragmentRecipient;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentRecipientsView;
 import com.teamtreehouse.ribbit.ui.fragments.suggestions.FragmentSuggestions;
 import com.teamtreehouse.ribbit.ui.fragments.suggestions.FragmentSuggestionsView;
+import com.teamtreehouse.ribbit.utils.Animations;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -150,18 +151,18 @@ public class TextMessageActivity extends MessageActivity {
     @Override
     public void showSendButton() {
 
-        this.sendImageView.setAnimation(AnimationUtils.loadAnimation(this, R.anim.scale_up));
+        this.sendImageView.setAnimation(Animations.scaleUp(this));
         this.sendImageView.setVisibility(View.VISIBLE);
-        this.messageEditText.setAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_right));
+        this.messageEditText.setAnimation(Animations.rightTranslate(this));
         this.messageEditText.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideSendButton() {
 
-        this.sendImageView.setAnimation(AnimationUtils.loadAnimation(this, R.anim.scale_down));
+        this.sendImageView.setAnimation(Animations.scaleDown(this));
         this.sendImageView.setVisibility(View.INVISIBLE);
-        this.messageEditText.setAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_left));
+        this.messageEditText.setAnimation(Animations.leftTranslate(this));
         this.messageEditText.setVisibility(View.INVISIBLE);
     }
 
