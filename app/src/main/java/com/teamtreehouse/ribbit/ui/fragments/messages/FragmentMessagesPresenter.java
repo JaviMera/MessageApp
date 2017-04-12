@@ -1,4 +1,4 @@
-package com.teamtreehouse.ribbit.ui.fragments.inbox;
+package com.teamtreehouse.ribbit.ui.fragments.messages;
 
 import com.teamtreehouse.ribbit.ui.fragments.FragmentRecyclerPresenter;
 

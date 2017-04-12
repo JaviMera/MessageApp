@@ -18,7 +18,7 @@ import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.dialogs.DialogFragmentError;
 import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.User;
-import com.teamtreehouse.ribbit.ui.callbacks.UserReadCallback;
+import com.teamtreehouse.ribbit.database.UserReadCallback;
 
 import java.util.List;
 

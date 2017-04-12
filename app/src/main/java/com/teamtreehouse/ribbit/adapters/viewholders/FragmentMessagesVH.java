@@ -5,7 +5,7 @@ import android.widget.TextView;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.models.Message;
-import com.teamtreehouse.ribbit.ui.fragments.inbox.FragmentMessagesView;
+import com.teamtreehouse.ribbit.ui.fragments.messages.FragmentMessagesView;
 import com.teamtreehouse.ribbit.utils.MessageUtils;
 
 /**

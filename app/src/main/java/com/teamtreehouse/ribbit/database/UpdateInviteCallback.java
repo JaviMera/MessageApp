@@ -1,4 +1,4 @@
-package com.teamtreehouse.ribbit.ui.callbacks;
+package com.teamtreehouse.ribbit.database;
 
 /**
  * Created by javie on 4/5/2017.

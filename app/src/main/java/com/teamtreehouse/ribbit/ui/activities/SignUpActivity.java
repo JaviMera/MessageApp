@@ -22,7 +22,7 @@ import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.dialogs.DialogFragmentError;
 import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.models.UserCurrent;
-import com.teamtreehouse.ribbit.ui.callbacks.UserInsertCallback;
+import com.teamtreehouse.ribbit.database.UserInsertCallback;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

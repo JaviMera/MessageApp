@@ -1,4 +1,4 @@
-package com.teamtreehouse.ribbit.ui.callbacks;
+package com.teamtreehouse.ribbit.database;
 
 import com.teamtreehouse.ribbit.models.User;
 

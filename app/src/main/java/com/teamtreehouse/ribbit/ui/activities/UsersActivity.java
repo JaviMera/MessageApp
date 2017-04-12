@@ -12,7 +12,7 @@ import android.view.MenuItem;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.models.User;
-import com.teamtreehouse.ribbit.ui.callbacks.UserReadCallback;
+import com.teamtreehouse.ribbit.database.UserReadCallback;
 import com.teamtreehouse.ribbit.ui.fragments.search.FragmentSearch;
 
 import java.util.LinkedList;

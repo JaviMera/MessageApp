@@ -21,19 +21,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.SectionsPagerAdapter;
 import com.teamtreehouse.ribbit.models.Auth;
-import com.teamtreehouse.ribbit.models.Item;
-import com.teamtreehouse.ribbit.models.Message;
-import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.models.purgatory.ObsoleteUser;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentPager;
 import com.teamtreehouse.ribbit.ui.fragments.friends.FriendsFragment;
-import com.teamtreehouse.ribbit.ui.fragments.inbox.FragmentMessages;
-import com.teamtreehouse.ribbit.ui.fragments.inbox.FragmentMessagesView;
+import com.teamtreehouse.ribbit.ui.fragments.messages.FragmentMessages;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 

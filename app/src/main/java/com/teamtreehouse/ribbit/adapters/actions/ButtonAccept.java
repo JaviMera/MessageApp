@@ -4,7 +4,7 @@ import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.InviteStatus;
 import com.teamtreehouse.ribbit.models.User;
-import com.teamtreehouse.ribbit.ui.callbacks.UpdateInviteCallback;
+import com.teamtreehouse.ribbit.database.UpdateInviteCallback;
 
 /**
  * Created by javie on 4/1/2017.

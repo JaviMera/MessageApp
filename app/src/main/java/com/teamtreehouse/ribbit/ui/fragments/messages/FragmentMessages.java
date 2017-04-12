@@ -1,4 +1,4 @@
-package com.teamtreehouse.ribbit.ui.fragments.inbox;
+package com.teamtreehouse.ribbit.ui.fragments.messages;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,12 +17,10 @@ import com.teamtreehouse.ribbit.dialogs.MessageOptionDialog;
 import com.teamtreehouse.ribbit.models.Message;
 import com.teamtreehouse.ribbit.ui.activities.ActivityBase;
 import com.teamtreehouse.ribbit.ui.activities.ViewTextMessageActivity;
+import com.teamtreehouse.ribbit.ui.callbacks.MessageRecipient;
 import com.teamtreehouse.ribbit.ui.callbacks.TextMessagesCallback;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentPager;
 import com.teamtreehouse.ribbit.utils.Resources;
-
-import java.util.HashMap;
-import java.util.List;
 
 import butterknife.BindView;
 
@@ -31,7 +29,7 @@ public class FragmentMessages
         FragmentPager<ActivityBase, FragmentMessagesPresenter, InboxFragmentAdapter>
     implements
         FragmentMessagesView,
-        TextMessagesCallback.MessageRecipient {
+        MessageRecipient {
 
     private TextMessagesCallback messagesCallback;
 
@@ -203,14 +201,14 @@ public class FragmentMessages
     }
 
     @Override
-    public void onReceived(Message msg) {
+    public void onMessageAdded(Message msg) {
 
         InboxFragmentAdapter adapter = getAdapter();
         adapter.add(msg);
     }
 
     @Override
-    public void onRemoved(Message message) {
+    public void onMessageRemoved(Message message) {
 
         InboxFragmentAdapter adapter = getAdapter();
         int position = adapter.getPosition(message);

@@ -6,7 +6,7 @@ import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.viewholders.FragmentMessagesVH;
 import com.teamtreehouse.ribbit.adapters.viewholders.FragmentRecyclerVH;
 import com.teamtreehouse.ribbit.models.Message;
-import com.teamtreehouse.ribbit.ui.fragments.inbox.FragmentMessagesView;
+import com.teamtreehouse.ribbit.ui.fragments.messages.FragmentMessagesView;
 
 /**
  * Created by javie on 4/6/2017.

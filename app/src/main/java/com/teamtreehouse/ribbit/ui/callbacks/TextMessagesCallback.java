@@ -15,12 +15,6 @@ public class TextMessagesCallback implements ChildEventListener {
 
     private final MessageRecipient listener;
 
-    public interface MessageRecipient {
-
-        void onReceived(Message msg);
-        void onRemoved(Message message);
-    }
-
     public TextMessagesCallback(MessageRecipient listener) {
 
         this.listener = listener;
@@ -37,7 +31,7 @@ public class TextMessagesCallback implements ChildEventListener {
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-        this.listener.onReceived(dataSnapshot.getValue(Message.class));
+        this.listener.onMessageAdded(dataSnapshot.getValue(Message.class));
     }
 
     @Override
@@ -48,7 +42,7 @@ public class TextMessagesCallback implements ChildEventListener {
     @Override
     public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-        this.listener.onRemoved(dataSnapshot.getValue(Message.class));
+        this.listener.onMessageRemoved(dataSnapshot.getValue(Message.class));
     }
 
     @Override

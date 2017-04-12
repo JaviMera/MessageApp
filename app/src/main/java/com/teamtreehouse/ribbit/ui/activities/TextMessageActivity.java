@@ -19,7 +19,7 @@ import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.Message;
 import com.teamtreehouse.ribbit.models.User;
-import com.teamtreehouse.ribbit.ui.callbacks.UserReadCallback;
+import com.teamtreehouse.ribbit.database.UserReadCallback;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentRecipient;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentRecipientsView;
 import com.teamtreehouse.ribbit.ui.fragments.suggestions.FragmentSuggestions;

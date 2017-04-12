@@ -3,6 +3,8 @@ package com.teamtreehouse.ribbit.ui.fragments;
 import android.support.v7.widget.RecyclerView;
 
 import com.teamtreehouse.ribbit.adapters.MessageAdapter;
+import com.teamtreehouse.ribbit.models.Item;
+import com.teamtreehouse.ribbit.models.Message;
 import com.teamtreehouse.ribbit.models.User;
 
 /**
