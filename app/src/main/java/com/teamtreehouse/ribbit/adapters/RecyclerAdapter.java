@@ -73,7 +73,7 @@ public abstract class RecyclerAdapter<TItem extends Item, TView extends Fragment
         }
     }
 
-    public int getPosition(User userFriend) {
+    public int getPosition(TItem userFriend) {
 
         return items.indexOf(userFriend);
     }

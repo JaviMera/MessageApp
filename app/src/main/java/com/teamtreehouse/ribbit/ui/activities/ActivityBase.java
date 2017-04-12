@@ -11,5 +11,5 @@ import com.teamtreehouse.ribbit.models.User;
 
 public abstract class ActivityBase extends AppCompatActivity{
 
-    public abstract void itemSelect(User user);
+    public abstract void itemSelect(Intent intent);
 }

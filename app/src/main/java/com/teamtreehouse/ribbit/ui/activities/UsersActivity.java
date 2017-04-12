@@ -86,10 +86,8 @@ public class UsersActivity extends ActivityBase {
     }
 
     @Override
-    public void itemSelect(User user) {
+    public void itemSelect(Intent intent) {
 
-        Intent intent = new Intent(UsersActivity.this, EditFriendActivity.class);
-        intent.putExtra(EditFriendActivity.EDIT_FRIEND_KEY, user);
         startActivity(intent);
     }
 }

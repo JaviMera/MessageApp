@@ -26,8 +26,15 @@ public class FragmentMessagesVH extends FragmentRecyclerVH<FragmentMessagesView,
     }
 
     @Override
-    public void bind(Message message) {
+    public void bind(final Message message) {
 
+        this.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                fragment.onItemSelected(message);
+            }
+        });
         this.messageTextView.setText(message.getText());
         this.dateTextView.setText(MessageUtils.getTimeAgo(message.getDate()));
     }

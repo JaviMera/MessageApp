@@ -1,5 +1,6 @@
 package com.teamtreehouse.ribbit.ui.fragments.suggestions;
 
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -55,5 +56,13 @@ public class FragmentSuggestions
         FragmentSuggestionsAdapter adapter = getAdapter();
         adapter.clear();
         adapter.addAll(users);
+    }
+
+    @Override
+    public void onItemSelected(User item) {
+
+        Intent intent = new Intent();
+        intent.putExtra("user", item);
+        this.parent.itemSelect(intent);
     }
 }

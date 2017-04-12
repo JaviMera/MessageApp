@@ -12,4 +12,5 @@ import java.util.List;
 public interface FragmentSuggestionsView extends FragmentRecyclerView {
 
     void setItems(List<User> users);
+    void onItemSelected(User item);
 }

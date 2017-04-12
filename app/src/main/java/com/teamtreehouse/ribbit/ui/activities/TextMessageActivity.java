@@ -1,6 +1,7 @@
 package com.teamtreehouse.ribbit.ui.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -27,6 +28,7 @@ import com.teamtreehouse.ribbit.ui.fragments.suggestions.FragmentSuggestionsView
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -117,6 +119,7 @@ public class TextMessageActivity extends MessageActivity {
     public void onSendMessageClick(View view) {
 
         Message message = new Message(
+            UUID.randomUUID().toString(),
             Auth.getInstance().getUsername(),
             messageEditText.getText().toString(),
             new Date().getTime()
@@ -128,7 +131,15 @@ public class TextMessageActivity extends MessageActivity {
     }
 
     @Override
-    public void itemSelect(User user) {
+    public void itemRemoved(int position) {
+
+        this.recipients.remove(position);
+    }
+
+    @Override
+    public void itemSelect(Intent intent) {
+
+        User user = intent.getParcelableExtra("user");
 
         this.recipients.add(user);
         this.recipientsEditText.setText("");
@@ -138,11 +149,5 @@ public class TextMessageActivity extends MessageActivity {
 
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(rootLayout.getWindowToken(), 0);
-    }
-
-    @Override
-    public void itemRemoved(int position) {
-
-        this.recipients.remove(position);
     }
 }

@@ -1,5 +1,6 @@
 package com.teamtreehouse.ribbit.ui.fragments.search;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +18,8 @@ import com.teamtreehouse.ribbit.models.UserFriend;
 import com.teamtreehouse.ribbit.models.UserInvite;
 import com.teamtreehouse.ribbit.models.UserRequest;
 import com.teamtreehouse.ribbit.ui.activities.ActivityBase;
+import com.teamtreehouse.ribbit.ui.activities.EditFriendActivity;
+import com.teamtreehouse.ribbit.ui.activities.UsersActivity;
 import com.teamtreehouse.ribbit.ui.callbacks.EditableFriendsCallback;
 import com.teamtreehouse.ribbit.ui.callbacks.FriendsListener;
 import com.teamtreehouse.ribbit.ui.callbacks.InvitesCallback;
@@ -193,5 +196,13 @@ public class FragmentSearch
 
             buttonAction.execute(user);
         }
+    }
+
+    @Override
+    public void onItemSelected(User user) {
+
+        Intent intent = new Intent(this.parent, EditFriendActivity.class);
+        intent.putExtra(EditFriendActivity.EDIT_FRIEND_KEY, user);
+        this.parent.itemSelect(intent);
     }
 }

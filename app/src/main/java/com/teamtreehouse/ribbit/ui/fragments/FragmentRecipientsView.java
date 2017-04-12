@@ -12,4 +12,5 @@ public interface FragmentRecipientsView extends FragmentRecyclerView{
 
     void onFriendAdded(User user);
     void onFriendRemoved(int adapterPosition);
+    void onItemSelected(User user);
 }

@@ -84,10 +84,4 @@ public abstract class FragmentRecycler<TActivity extends ActivityBase, TPresente
 
         return (TAdapter) this.recyclerView.getAdapter();
     }
-
-    @Override
-    public void onItemSelected(User friend) {
-
-        parent.itemSelect(friend);
-    }
 }

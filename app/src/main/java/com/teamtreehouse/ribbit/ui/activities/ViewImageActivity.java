@@ -39,6 +39,10 @@ public class ViewImageActivity extends AppCompatActivity {
 
         Uri imageUri = getIntent().getData();
 
+        if(imageUri == null) {
+            return;
+        }
+
         Picasso.with(this).load(imageUri.toString()).into(imageView);
 
         Timer timer = new Timer();

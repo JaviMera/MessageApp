@@ -15,6 +15,7 @@ import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.models.UserFriend;
 import com.teamtreehouse.ribbit.models.UserInvite;
 import com.teamtreehouse.ribbit.ui.activities.ActivityBase;
+import com.teamtreehouse.ribbit.ui.activities.EditFriendActivity;
 import com.teamtreehouse.ribbit.ui.activities.UsersActivity;
 import com.teamtreehouse.ribbit.ui.callbacks.EditableFriendsCallback;
 import com.teamtreehouse.ribbit.ui.callbacks.FriendsListener;
@@ -178,5 +179,13 @@ public class FriendsFragment extends FragmentPager<ActivityBase, FragmentUsersPr
 
             buttonAction.execute(user);
         }
+    }
+
+    @Override
+    public void onItemSelected(User user) {
+
+        Intent intent = new Intent(this.getActivity(), EditFriendActivity.class);
+        intent.putExtra("user", user);
+        this.parent.itemSelect(intent);
     }
 }

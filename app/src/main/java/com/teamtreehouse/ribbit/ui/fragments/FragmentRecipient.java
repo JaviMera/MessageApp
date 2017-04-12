@@ -1,6 +1,7 @@
 package com.teamtreehouse.ribbit.ui.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -86,6 +87,14 @@ public class FragmentRecipient
 
             this.recyclerView.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void onItemSelected(User user) {
+
+        Intent intent = new Intent();
+        intent.putExtra("user", user);
+        this.parent.itemSelect(intent);
     }
 
     public static Fragment newInstance() {

@@ -34,7 +34,7 @@ import butterknife.ButterKnife;
 
 public class EditFriendActivity extends AppCompatActivity implements DialogInterface.OnClickListener {
 
-    public static final String EDIT_FRIEND_KEY = "friend";
+    public static final String EDIT_FRIEND_KEY = "user";
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;

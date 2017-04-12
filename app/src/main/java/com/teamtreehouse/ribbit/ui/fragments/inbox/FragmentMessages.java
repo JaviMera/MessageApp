@@ -1,8 +1,7 @@
 package com.teamtreehouse.ribbit.ui.fragments.inbox;
 
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,25 +14,26 @@ import android.widget.TextView;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.InboxFragmentAdapter;
 import com.teamtreehouse.ribbit.dialogs.MessageOptionDialog;
-import com.teamtreehouse.ribbit.models.Item;
 import com.teamtreehouse.ribbit.models.Message;
 import com.teamtreehouse.ribbit.ui.activities.ActivityBase;
+import com.teamtreehouse.ribbit.ui.activities.ViewTextMessageActivity;
 import com.teamtreehouse.ribbit.ui.callbacks.TextMessagesCallback;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentPager;
 import com.teamtreehouse.ribbit.utils.Resources;
 
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
 
-public class FragmentMessages extends FragmentPager<ActivityBase, FragmentMessagesPresenter, InboxFragmentAdapter>
+public class FragmentMessages
+    extends
+        FragmentPager<ActivityBase, FragmentMessagesPresenter, InboxFragmentAdapter>
     implements
-        FragmentMessagesView<Message>,
+        FragmentMessagesView,
         TextMessagesCallback.MessageRecipient {
 
     private TextMessagesCallback messagesCallback;
-
-    protected List<Message> messages;
 
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
@@ -188,6 +188,14 @@ public class FragmentMessages extends FragmentPager<ActivityBase, FragmentMessag
     }
 
     @Override
+    public void onItemSelected(Message message) {
+
+        Intent intent = new Intent(this.parent, ViewTextMessageActivity.class);
+        intent.putExtra("message", message);
+        startActivity(intent);
+    }
+
+    @Override
     public void execute() {
 
         MessageOptionDialog dialog = new MessageOptionDialog();
@@ -202,8 +210,11 @@ public class FragmentMessages extends FragmentPager<ActivityBase, FragmentMessag
     }
 
     @Override
-    public void whyYouNoWorkMethod(Message item) {
+    public void onRemoved(Message message) {
 
+        InboxFragmentAdapter adapter = getAdapter();
+        int position = adapter.getPosition(message);
+        adapter.removeItem(position);
     }
 }
 

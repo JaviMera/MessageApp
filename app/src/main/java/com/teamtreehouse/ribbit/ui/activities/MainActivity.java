@@ -21,12 +21,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.SectionsPagerAdapter;
 import com.teamtreehouse.ribbit.models.Auth;
+import com.teamtreehouse.ribbit.models.Item;
+import com.teamtreehouse.ribbit.models.Message;
 import com.teamtreehouse.ribbit.models.User;
-import com.teamtreehouse.ribbit.models.purgatory.Message;
 import com.teamtreehouse.ribbit.models.purgatory.ObsoleteUser;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentPager;
 import com.teamtreehouse.ribbit.ui.fragments.friends.FriendsFragment;
 import com.teamtreehouse.ribbit.ui.fragments.inbox.FragmentMessages;
+import com.teamtreehouse.ribbit.ui.fragments.inbox.FragmentMessagesView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -244,61 +246,62 @@ public class MainActivity extends ActivityBase {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK) {
-            if (requestCode == PICK_PHOTO_REQUEST || requestCode == PICK_VIDEO_REQUEST) {
-                if (data == null) {
-                    Toast.makeText(this, getString(R.string.general_error), Toast.LENGTH_LONG).show();
-                } else {
-                    mMediaUri = data.getData();
-                }
-
-                Log.i(TAG, "Media URI: " + mMediaUri);
-                if (requestCode == PICK_VIDEO_REQUEST) {
-                    // make sure the file is less than 10 MB
-                    int fileSize = 0;
-                    InputStream inputStream = null;
-
-                    try {
-                        inputStream = getContentResolver().openInputStream(mMediaUri);
-                        fileSize = inputStream.available();
-                    } catch (FileNotFoundException e) {
-                        Toast.makeText(this, R.string.error_opening_file, Toast.LENGTH_LONG).show();
-                        return;
-                    } catch (IOException e) {
-                        Toast.makeText(this, R.string.error_opening_file, Toast.LENGTH_LONG).show();
-                        return;
-                    } finally {
-                        try {
-                            inputStream.close();
-                        } catch (IOException e) { /* Intentionally blank */ }
-                    }
-
-                    if (fileSize >= FILE_SIZE_LIMIT) {
-                        Toast.makeText(this, R.string.error_file_size_too_large, Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                }
-            } else {
-                Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                mediaScanIntent.setData(mMediaUri);
-                sendBroadcast(mediaScanIntent);
-            }
-
-            Intent recipientsIntent = new Intent(this, RecipientsActivity.class);
-            recipientsIntent.setData(mMediaUri);
-
-            String fileType;
-            if (requestCode == PICK_PHOTO_REQUEST || requestCode == TAKE_PHOTO_REQUEST) {
-                fileType = Message.TYPE_IMAGE;
-            } else {
-                fileType = Message.TYPE_VIDEO;
-            }
-
-            recipientsIntent.putExtra(Message.KEY_FILE_TYPE, fileType);
-            startActivity(recipientsIntent);
-        } else if (resultCode != RESULT_CANCELED) {
-            Toast.makeText(this, R.string.general_error, Toast.LENGTH_LONG).show();
-        }
+//        else if (resultCode == RESULT_OK) {
+//
+//            if (requestCode == PICK_PHOTO_REQUEST || requestCode == PICK_VIDEO_REQUEST) {
+//                if (data == null) {
+//                    Toast.makeText(this, getString(R.string.general_error), Toast.LENGTH_LONG).show();
+//                } else {
+//                    mMediaUri = data.getData();
+//                }
+//
+//                Log.i(TAG, "Media URI: " + mMediaUri);
+//                if (requestCode == PICK_VIDEO_REQUEST) {
+//                    // make sure the file is less than 10 MB
+//                    int fileSize = 0;
+//                    InputStream inputStream = null;
+//
+//                    try {
+//                        inputStream = getContentResolver().openInputStream(mMediaUri);
+//                        fileSize = inputStream.available();
+//                    } catch (FileNotFoundException e) {
+//                        Toast.makeText(this, R.string.error_opening_file, Toast.LENGTH_LONG).show();
+//                        return;
+//                    } catch (IOException e) {
+//                        Toast.makeText(this, R.string.error_opening_file, Toast.LENGTH_LONG).show();
+//                        return;
+//                    } finally {
+//                        try {
+//                            inputStream.close();
+//                        } catch (IOException e) { /* Intentionally blank */ }
+//                    }
+//
+//                    if (fileSize >= FILE_SIZE_LIMIT) {
+//                        Toast.makeText(this, R.string.error_file_size_too_large, Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//                }
+//            } else {
+//                Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+//                mediaScanIntent.setData(mMediaUri);
+//                sendBroadcast(mediaScanIntent);
+//            }
+//
+//            Intent recipientsIntent = new Intent(this, RecipientsActivity.class);
+//            recipientsIntent.setData(mMediaUri);
+//
+//            String fileType;
+//            if (requestCode == PICK_PHOTO_REQUEST || requestCode == TAKE_PHOTO_REQUEST) {
+//                fileType = Message.TYPE_IMAGE;
+//            } else {
+//                fileType = Message.TYPE_VIDEO;
+//            }
+//
+//            recipientsIntent.putExtra(Message.KEY_FILE_TYPE, fileType);
+//            startActivity(recipientsIntent);
+//        } else if (resultCode != RESULT_CANCELED) {
+//            Toast.makeText(this, R.string.general_error, Toast.LENGTH_LONG).show();
+//        }
     }
 
     private void navigateToLogin() {
@@ -358,10 +361,10 @@ public class MainActivity extends ActivityBase {
     }
 
     @Override
-    public void itemSelect(User user) {
+    public void itemSelect(Intent intent) {
 
-        Intent intent = new Intent(MainActivity.this, EditFriendActivity.class);
-        intent.putExtra(EditFriendActivity.EDIT_FRIEND_KEY, user);
-        startActivity(intent);
+        startActivityForResult(intent, 1000);
     }
+
+
 }
