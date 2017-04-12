@@ -70,7 +70,9 @@ public class FragmentRecipient
         FragmentRecipientsAdapter adapter = getAdapter();
 
         if(adapter.getItemCount() == 0) {
+
             this.recyclerView.setVisibility(View.VISIBLE);
+            this.parent.showSendButton();
         }
 
         adapter.add(user);
@@ -81,20 +83,18 @@ public class FragmentRecipient
 
         FragmentRecipientsAdapter adapter = getAdapter();
         adapter.removeItem(adapterPosition);
-        this.parent.itemRemoved(adapterPosition);
+        this.parent.recipientRemoved(adapterPosition);
 
         if(adapter.getItemCount() == 0) {
 
             this.recyclerView.setVisibility(View.GONE);
+            this.parent.hideSendButton();
         }
     }
 
     @Override
     public void onItemSelected(User user) {
 
-        Intent intent = new Intent();
-        intent.putExtra("user", user);
-        this.parent.itemSelect(intent);
     }
 
     public static Fragment newInstance() {

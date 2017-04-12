@@ -1,5 +1,6 @@
 package com.teamtreehouse.ribbit.ui.activities;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,8 +10,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.ScaleAnimation;
+import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -48,6 +54,9 @@ public class TextMessageActivity extends MessageActivity {
     @BindView(R.id.textInput)
     EditText messageEditText;
 
+    @BindView(R.id.sendTextImage)
+    ImageView sendImageView;
+
     private List<User> recipients;
 
     @Override
@@ -58,6 +67,8 @@ public class TextMessageActivity extends MessageActivity {
         this.recipients = new LinkedList<>();
 
         ButterKnife.bind(this);
+        this.sendImageView.setVisibility(View.INVISIBLE);
+        this.messageEditText.setVisibility(View.INVISIBLE);
 
         recipientsEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -131,9 +142,27 @@ public class TextMessageActivity extends MessageActivity {
     }
 
     @Override
-    public void itemRemoved(int position) {
+    public void recipientRemoved(int position) {
 
         this.recipients.remove(position);
+    }
+
+    @Override
+    public void showSendButton() {
+
+        this.sendImageView.setAnimation(AnimationUtils.loadAnimation(this, R.anim.scale_up));
+        this.sendImageView.setVisibility(View.VISIBLE);
+        this.messageEditText.setAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_right));
+        this.messageEditText.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideSendButton() {
+
+        this.sendImageView.setAnimation(AnimationUtils.loadAnimation(this, R.anim.scale_down));
+        this.sendImageView.setVisibility(View.INVISIBLE);
+        this.messageEditText.setAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_left));
+        this.messageEditText.setVisibility(View.INVISIBLE);
     }
 
     @Override

@@ -7,5 +7,7 @@ import com.teamtreehouse.ribbit.models.User;
  */
 public abstract class MessageActivity extends ActivityBase {
 
-    public abstract void itemRemoved(int position);
+    public abstract void recipientRemoved(int position);
+    public abstract void showSendButton();
+    public abstract void hideSendButton();
 }
