@@ -1,5 +1,6 @@
 package com.teamtreehouse.ribbit.ui.fragments.messages;
 
+import com.teamtreehouse.ribbit.models.Message;
 import com.teamtreehouse.ribbit.models.TextMessage;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentRecyclerView;
 
@@ -12,5 +13,5 @@ public interface FragmentMessagesView extends FragmentRecyclerView {
     void setEmptyTextViewVisibility(boolean visible);
     void setRefresherColors(int[] colors);
     void setRefresherListener();
-    void onItemSelected(TextMessage message);
+    void onItemSelected(Message message);
 }

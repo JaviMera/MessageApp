@@ -24,6 +24,7 @@ import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.InboxFragmentAdapter;
 import com.teamtreehouse.ribbit.dialogs.MessageOptionDialog;
 import com.teamtreehouse.ribbit.models.ImageMessage;
+import com.teamtreehouse.ribbit.models.Message;
 import com.teamtreehouse.ribbit.models.TextMessage;
 import com.teamtreehouse.ribbit.ui.activities.ActivityView;
 import com.teamtreehouse.ribbit.ui.activities.MainActivity;
@@ -58,7 +59,6 @@ public class FragmentMessages
 
     @BindView(R.id.emptyMessagesTextView)
     TextView textView;
-    private ImageMessage imageMessage;
 
     @Override
     protected InboxFragmentAdapter createAdapter() {
@@ -101,7 +101,6 @@ public class FragmentMessages
 
         this.messagesCallback = new TextMessagesCallback(this);
         this.imageMessagesCallback = new ImageMessagesCallback(this);
-//        retrieveMessages();
     }
 
     @Override
@@ -208,11 +207,25 @@ public class FragmentMessages
     }
 
     @Override
-    public void onItemSelected(TextMessage message) {
+    public void onItemSelected(Message message) {
 
-        Intent intent = new Intent(this.getActivity(), ViewTextMessageActivity.class);
-        intent.putExtra("message", message);
-        startActivity(intent);
+        if(message instanceof TextMessage) {
+
+            Intent intent = new Intent(this.getActivity(), ViewTextMessageActivity.class);
+            intent.putExtra("message", message);
+            startActivity(intent);
+        }
+        else if(message instanceof ImageMessage) {
+
+            int permission = ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            if (permission != PackageManager.PERMISSION_GRANTED) {
+
+                ((MainActivity)this.parent).requestPermissions();
+                return;
+            }
+
+            this.viewImageActivity((ImageMessage) message);
+        }
     }
 
     @Override
@@ -238,24 +251,25 @@ public class FragmentMessages
     }
 
     @Override
-    public void onMessageAdded(final ImageMessage message) {
+    public void onMessageAdded(ImageMessage message) {
 
-        this.imageMessage = message;
-        int permission = ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-
-            ((MainActivity)this.parent).requestPermissions();
-            return;
-        }
-
-        this.viewImageActivity();
+        InboxFragmentAdapter adapter = getAdapter();
+        adapter.add(message);
     }
 
-    public void viewImageActivity() {
+    @Override
+    public void onMessageRemoved(ImageMessage message) {
+
+        InboxFragmentAdapter adapter = getAdapter();
+        int position = adapter.getPosition(message);
+        adapter.removeItem(position);
+    }
+
+    public void viewImageActivity(final ImageMessage imageMessage) {
 
         FirebaseStorage
             .getInstance()
-            .getReferenceFromUrl(this.imageMessage.getUrl())
+            .getReferenceFromUrl(imageMessage.getUrl())
             .getBytes(1024 * 1024 * 10)
             .addOnSuccessListener(new OnSuccessListener<byte[]>() {
                 @Override

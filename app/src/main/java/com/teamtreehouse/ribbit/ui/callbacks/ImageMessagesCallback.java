@@ -20,7 +20,9 @@ public class ImageMessagesCallback implements ChildEventListener{
     public interface ImageMessageListener {
 
         void onMessageAdded(ImageMessage message);
+        void onMessageRemoved(ImageMessage message);
     }
+
     public ImageMessagesCallback(ImageMessageListener listener) {
 
         this.listener = listener;
@@ -32,6 +34,7 @@ public class ImageMessagesCallback implements ChildEventListener{
             .child(Auth.getInstance().getId())
             .addChildEventListener(this);
     }
+
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
@@ -46,6 +49,7 @@ public class ImageMessagesCallback implements ChildEventListener{
     @Override
     public void onChildRemoved(DataSnapshot dataSnapshot) {
 
+        this.listener.onMessageRemoved(dataSnapshot.getValue(ImageMessage.class));
     }
 
     @Override

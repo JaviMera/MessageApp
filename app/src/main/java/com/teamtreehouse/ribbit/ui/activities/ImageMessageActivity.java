@@ -36,8 +36,10 @@ import com.teamtreehouse.ribbit.ui.fragments.suggestions.FragmentSuggestions;
 import com.teamtreehouse.ribbit.ui.fragments.suggestions.FragmentSuggestionsView;
 import com.teamtreehouse.ribbit.utils.Animations;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -179,7 +181,9 @@ public class ImageMessageActivity extends AppCompatActivity implements MessageAc
                         String url = taskSnapshot.getMetadata().getDownloadUrl().toString();
                         String sender = Auth.getInstance().getUsername();
                         String path = taskSnapshot.getMetadata().getPath();
-                        ImageMessage message = new ImageMessage(url, path, sender);
+                        ImageMessage message = new ImageMessage(
+                                UUID.randomUUID().toString(),
+                                url, path, sender, new Date().getTime());
 
                         FirebaseDatabase
                             .getInstance()
@@ -200,17 +204,6 @@ public class ImageMessageActivity extends AppCompatActivity implements MessageAc
                     }
                 });
         }
-
-//        TextMessage message = new TextMessage(
-//            UUID.randomUUID().toString(),
-//            Auth.getInstance().getUsername(),
-//            messageEditText.getText().toString(),
-//            new Date().getTime()
-//        );
-//
-//        MessageDB.insertMessages(this.recipients, message);
-//        Toast.makeText(this, "TextMessage sent", Toast.LENGTH_SHORT).show();
-//        finish();
     }
 
     @Override

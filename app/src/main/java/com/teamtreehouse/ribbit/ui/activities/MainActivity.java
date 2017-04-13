@@ -398,9 +398,6 @@ public class MainActivity extends AppCompatActivity implements ActivityView {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED
                         && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-
-                    FragmentMessages fragmentMessages = (FragmentMessages) this.viewPagerAdapter.getItem(0);
-                    fragmentMessages.viewImageActivity();
                 }
 
                 break;

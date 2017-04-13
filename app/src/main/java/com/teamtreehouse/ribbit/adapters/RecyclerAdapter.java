@@ -73,9 +73,9 @@ public abstract class RecyclerAdapter<TItem extends Item, TView extends Fragment
         }
     }
 
-    public int getPosition(TItem userFriend) {
+    public int getPosition(TItem item) {
 
-        return items.indexOf(userFriend);
+        return items.indexOf(item);
     }
 
     public boolean contains(User user) {

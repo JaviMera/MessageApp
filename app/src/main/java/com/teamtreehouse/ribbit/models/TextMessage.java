@@ -9,31 +9,22 @@ import android.os.Parcelable;
 
 public class TextMessage extends Message {
 
-    private String id;
-    private String username;
     private String text;
-    private long date;
 
-    public TextMessage(){}
-
-    public String getId() {
-
-        return this.id;
+    public TextMessage(){
+        super("", "",0);
     }
 
     public TextMessage(String id, String username, String text, long date) {
 
-        this.id = id;
-        this.username = username;
+        super(id, username, date);
         this.text = text;
-        this.date = date;
     }
 
     protected TextMessage(Parcel in) {
-        this.id = in.readString();
-        username = in.readString();
-        text = in.readString();
-        date = in.readLong();
+        super(in);
+
+        this.text = in.readString();
     }
 
     public static final Creator<TextMessage> CREATOR = new Creator<TextMessage>() {
@@ -52,15 +43,6 @@ public class TextMessage extends Message {
         return text;
     }
 
-    public long getDate() {
-        return date;
-    }
-
-    public String getUsername() {
-
-        return this.username;
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -69,30 +51,8 @@ public class TextMessage extends Message {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
 
-        parcel.writeString(this.id);
-        parcel.writeString(username);
+        super.writeToParcel(parcel,i);
+
         parcel.writeString(text);
-        parcel.writeLong(date);
     }
-
-    @Override
-    public int hashCode() {
-
-        final int prime = 31;
-        return prime + this.id.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-
-        if(obj == this)
-            return true;
-
-        if(!(obj instanceof TextMessage))
-            return false;
-
-        TextMessage other = (TextMessage) obj;
-        return this.id.equals(other.getId());
-    }
-
 }
