@@ -2,13 +2,18 @@ package com.teamtreehouse.ribbit.ui.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -16,18 +21,25 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.database.MessageDB;
+import com.teamtreehouse.ribbit.database.UserReadCallback;
 import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.Message;
 import com.teamtreehouse.ribbit.models.User;
-import com.teamtreehouse.ribbit.database.UserReadCallback;
+import com.teamtreehouse.ribbit.ui.fragments.ViewImageFragment;
 import com.teamtreehouse.ribbit.ui.fragments.recipients.FragmentRecipient;
 import com.teamtreehouse.ribbit.ui.fragments.recipients.FragmentRecipientsView;
 import com.teamtreehouse.ribbit.ui.fragments.suggestions.FragmentSuggestions;
 import com.teamtreehouse.ribbit.ui.fragments.suggestions.FragmentSuggestionsView;
 import com.teamtreehouse.ribbit.utils.Animations;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,7 +49,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class TextMessageActivity extends AppCompatActivity implements MessageActivityView {
+// TODO add tool bar to view image fragment layout
+public class ImageMessageActivity extends AppCompatActivity implements MessageActivityView{
 
     public static final String SUGGESTIONS_TAG = "suggestions";
     private static final String RECIPIENTS_TAG = "recipients";
@@ -54,18 +67,20 @@ public class TextMessageActivity extends AppCompatActivity implements MessageAct
     @BindView(R.id.sendTextImage)
     ImageView sendImageView;
 
+    @BindView(R.id.imageView)
+    ImageView pictureView;
+
     private List<User> recipients;
+    private Uri pictureUri;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_message_text);
+        setContentView(R.layout.activity_image_message);
 
         this.recipients = new LinkedList<>();
 
         ButterKnife.bind(this);
-        this.sendImageView.setVisibility(View.INVISIBLE);
-        this.messageEditText.setVisibility(View.INVISIBLE);
 
         recipientsEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -116,26 +131,72 @@ public class TextMessageActivity extends AppCompatActivity implements MessageAct
             }
         });
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.recipientsContainer, FragmentRecipient.newInstance(), RECIPIENTS_TAG);
-        fragmentTransaction.replace(R.id.container, FragmentSuggestions.newInstance(), SUGGESTIONS_TAG);
-        fragmentTransaction.commit();
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.recipientsContainer, FragmentRecipient.newInstance(), RECIPIENTS_TAG);
+        transaction.replace(R.id.container, FragmentSuggestions.newInstance(), SUGGESTIONS_TAG);
+        transaction.commit();
+
+        pictureUri = getIntent().getParcelableExtra("picture");
+        Picasso.with(this).load(pictureUri).into(this.pictureView);
+//        transaction.replace(R.id.container, ViewImageFragment.newInstance(uri));
+//        transaction.commit();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // This ID represents the Home or Up button. In the case of this
+                // fragment, the Up button is shown. Use NavUtils to allow users
+                // to navigate up one level in the application structure. For
+                // more details, see the Navigation pattern on Android Design:
+                //
+                // http://developer.android.com/design/patterns/navigation.html#up-vs-back
+                //
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @OnClick(R.id.sendTextImage)
     public void onSendMessageClick(View view) {
 
-        Message message = new Message(
-            UUID.randomUUID().toString(),
-            Auth.getInstance().getUsername(),
-            messageEditText.getText().toString(),
-            new Date().getTime()
-        );
+        for(User user : recipients) {
 
-        MessageDB.insertMessages(this.recipients, message);
-        Toast.makeText(this, "Message sent", Toast.LENGTH_SHORT).show();
-        finish();
+            FirebaseStorage
+                .getInstance()
+                .getReference()
+                .child("images")
+                .child(user.getId())
+                .child(pictureUri.getLastPathSegment())
+                .putFile(pictureUri)
+                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                    }
+                })
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                        Toast.makeText(ImageMessageActivity.this, "Uploaded!", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                });
+        }
+
+//        Message message = new Message(
+//            UUID.randomUUID().toString(),
+//            Auth.getInstance().getUsername(),
+//            messageEditText.getText().toString(),
+//            new Date().getTime()
+//        );
+//
+//        MessageDB.insertMessages(this.recipients, message);
+//        Toast.makeText(this, "Message sent", Toast.LENGTH_SHORT).show();
+//        finish();
     }
 
     @Override

@@ -61,7 +61,7 @@
                 android:value="com.teamtreehouse.ribbit.ui.activities.MainActivity" />
         </activity>
         <activity
-            android:name="com.teamtreehouse.ribbit.ui.activities.ViewImageActivity"
+            android:name="com.teamtreehouse.ribbit.ui.activities.ImageMessageActivity"
             android:label="@string/title_activity_view_image"
             android:parentActivityName="com.teamtreehouse.ribbit.ui.activities.MainActivity"
             android:screenOrientation="portrait" >

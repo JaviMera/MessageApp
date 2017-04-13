@@ -5,9 +5,8 @@ import android.view.View;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.viewholders.FragmentRecyclerVH;
 import com.teamtreehouse.ribbit.models.User;
-import com.teamtreehouse.ribbit.ui.fragments.FragmentRecipient;
-import com.teamtreehouse.ribbit.ui.fragments.FragmentRecipientVH;
-import com.teamtreehouse.ribbit.ui.fragments.FragmentRecipientsView;
+import com.teamtreehouse.ribbit.ui.fragments.recipients.FragmentRecipientVH;
+import com.teamtreehouse.ribbit.ui.fragments.recipients.FragmentRecipientsView;
 
 /**
  * Created by javie on 4/10/2017.

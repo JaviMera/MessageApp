@@ -239,7 +239,14 @@ public class MainActivity extends AppCompatActivity implements ActivityView {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == PICK_PHOTO_REQUEST) {
+
+            Uri uri = data.getData();
+            Intent intent = new Intent(MainActivity.this, ImageMessageActivity.class);
+            intent.putExtra("picture", uri);
+            startActivity(intent);
+        }
 
 //        else if (resultCode == RESULT_OK) {
 //

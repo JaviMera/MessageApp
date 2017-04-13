@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.teamtreehouse.ribbit.R;
+import com.teamtreehouse.ribbit.ui.activities.MainActivity;
 import com.teamtreehouse.ribbit.ui.activities.TextMessageActivity;
 
 import butterknife.ButterKnife;
@@ -51,8 +52,14 @@ public class MessageOptionDialog extends DialogFragment {
 
             case R.id.textLayout:
 
-                Intent intent = new Intent(getActivity(), TextMessageActivity.class);
-                startActivity(intent);
+                Intent messageIntent = new Intent(getActivity(), TextMessageActivity.class);
+                startActivity(messageIntent);
+                break;
+
+            case R.id.picturesLayout:
+                Intent choosePhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                choosePhotoIntent.setType("image/*");
+                getActivity().startActivityForResult(choosePhotoIntent, MainActivity.PICK_PHOTO_REQUEST);
                 break;
         }
 

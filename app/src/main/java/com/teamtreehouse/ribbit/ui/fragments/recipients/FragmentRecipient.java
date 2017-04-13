@@ -1,4 +1,4 @@
-package com.teamtreehouse.ribbit.ui.fragments;
+package com.teamtreehouse.ribbit.ui.fragments.recipients;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -15,6 +15,7 @@ import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.FragmentRecipientsAdapter;
 import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.ui.activities.MessageActivityView;
+import com.teamtreehouse.ribbit.ui.fragments.FragmentRecycler;
 
 /**
  * Created by javie on 4/10/2017.

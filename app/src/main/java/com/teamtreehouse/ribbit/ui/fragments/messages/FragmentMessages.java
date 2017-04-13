@@ -136,7 +136,7 @@ public class FragmentMessages
 //
 //        if (messageType.equals(Message.TYPE_IMAGE)) {
 //            // view the image
-//            Intent intent = new Intent(getActivity(), ViewImageActivity.class);
+//            Intent intent = new Intent(getActivity(), ImageMessageActivity.class);
 //            intent.setData(fileUri);
 //            startActivity(intent);
 //        } else {

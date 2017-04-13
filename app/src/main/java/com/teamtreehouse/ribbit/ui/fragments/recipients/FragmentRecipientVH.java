@@ -1,4 +1,4 @@
-package com.teamtreehouse.ribbit.ui.fragments;
+package com.teamtreehouse.ribbit.ui.fragments.recipients;
 
 import android.view.View;
 import android.widget.ImageView;
