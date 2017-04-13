@@ -2,15 +2,12 @@ package com.teamtreehouse.ribbit.ui.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
@@ -22,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.UploadTask;
@@ -30,20 +28,16 @@ import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.database.UserReadCallback;
 import com.teamtreehouse.ribbit.models.Auth;
-import com.teamtreehouse.ribbit.models.Message;
+import com.teamtreehouse.ribbit.models.ImageMessage;
 import com.teamtreehouse.ribbit.models.User;
-import com.teamtreehouse.ribbit.ui.fragments.ViewImageFragment;
 import com.teamtreehouse.ribbit.ui.fragments.recipients.FragmentRecipient;
 import com.teamtreehouse.ribbit.ui.fragments.recipients.FragmentRecipientsView;
 import com.teamtreehouse.ribbit.ui.fragments.suggestions.FragmentSuggestions;
 import com.teamtreehouse.ribbit.ui.fragments.suggestions.FragmentSuggestionsView;
 import com.teamtreehouse.ribbit.utils.Animations;
 
-import java.io.IOException;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -163,7 +157,7 @@ public class ImageMessageActivity extends AppCompatActivity implements MessageAc
     @OnClick(R.id.sendTextImage)
     public void onSendMessageClick(View view) {
 
-        for(User user : recipients) {
+        for(final User user : recipients) {
 
             FirebaseStorage
                 .getInstance()
@@ -179,15 +173,35 @@ public class ImageMessageActivity extends AppCompatActivity implements MessageAc
                 })
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
+                    @SuppressWarnings("VisibleForTests")
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                        Toast.makeText(ImageMessageActivity.this, "Uploaded!", Toast.LENGTH_SHORT).show();
-                        finish();
+                        String url = taskSnapshot.getMetadata().getDownloadUrl().toString();
+                        String sender = Auth.getInstance().getUsername();
+                        String path = taskSnapshot.getMetadata().getPath();
+                        ImageMessage message = new ImageMessage(url, path, sender);
+
+                        FirebaseDatabase
+                            .getInstance()
+                            .getReference()
+                            .child("messages")
+                            .child("images")
+                            .child(user.getId())
+                            .push()
+                            .setValue((message))
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+
+                                    Toast.makeText(ImageMessageActivity.this, "Uploaded Image!", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                }
+                            });
                     }
                 });
         }
 
-//        Message message = new Message(
+//        TextMessage message = new TextMessage(
 //            UUID.randomUUID().toString(),
 //            Auth.getInstance().getUsername(),
 //            messageEditText.getText().toString(),
@@ -195,7 +209,7 @@ public class ImageMessageActivity extends AppCompatActivity implements MessageAc
 //        );
 //
 //        MessageDB.insertMessages(this.recipients, message);
-//        Toast.makeText(this, "Message sent", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "TextMessage sent", Toast.LENGTH_SHORT).show();
 //        finish();
     }
 

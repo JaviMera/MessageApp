@@ -77,8 +77,19 @@
         <activity android:name=".ui.activities.EditFriendActivity" >
         </activity>
         <activity android:name=".ui.activities.TextMessageActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.teamtreehouse.ribbit.ui.activities.MainActivity" />
         </activity>
         <activity android:name=".ui.activities.ViewTextMessageActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.teamtreehouse.ribbit.ui.activities.MainActivity" />
+        </activity>
+        <activity android:name=".ui.activities.ViewImageMessageActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.teamtreehouse.ribbit.ui.activities.MainActivity" />
         </activity>
     </application>
 

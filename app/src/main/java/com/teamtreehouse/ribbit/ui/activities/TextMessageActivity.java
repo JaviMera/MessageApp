@@ -19,7 +19,7 @@ import android.widget.Toast;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.models.Auth;
-import com.teamtreehouse.ribbit.models.Message;
+import com.teamtreehouse.ribbit.models.TextMessage;
 import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.database.UserReadCallback;
 import com.teamtreehouse.ribbit.ui.fragments.recipients.FragmentRecipient;
@@ -126,7 +126,7 @@ public class TextMessageActivity extends AppCompatActivity implements MessageAct
     @OnClick(R.id.sendTextImage)
     public void onSendMessageClick(View view) {
 
-        Message message = new Message(
+        TextMessage message = new TextMessage(
             UUID.randomUUID().toString(),
             Auth.getInstance().getUsername(),
             messageEditText.getText().toString(),
@@ -134,7 +134,7 @@ public class TextMessageActivity extends AppCompatActivity implements MessageAct
         );
 
         MessageDB.insertMessages(this.recipients, message);
-        Toast.makeText(this, "Message sent", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "TextMessage sent", Toast.LENGTH_SHORT).show();
         finish();
     }
 

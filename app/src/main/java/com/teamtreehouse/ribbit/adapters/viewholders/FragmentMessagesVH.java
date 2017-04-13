@@ -4,7 +4,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.teamtreehouse.ribbit.R;
-import com.teamtreehouse.ribbit.models.Message;
+import com.teamtreehouse.ribbit.models.TextMessage;
 import com.teamtreehouse.ribbit.ui.fragments.messages.FragmentMessagesView;
 import com.teamtreehouse.ribbit.utils.MessageUtils;
 
@@ -12,7 +12,7 @@ import com.teamtreehouse.ribbit.utils.MessageUtils;
  * Created by javie on 4/6/2017.
  */
 
-public class FragmentMessagesVH extends FragmentRecyclerVH<FragmentMessagesView, Message> {
+public class FragmentMessagesVH extends FragmentRecyclerVH<FragmentMessagesView, TextMessage> {
 
     private TextView messageTextView;
     private TextView dateTextView;
@@ -26,7 +26,7 @@ public class FragmentMessagesVH extends FragmentRecyclerVH<FragmentMessagesView,
     }
 
     @Override
-    public void bind(final Message message) {
+    public void bind(final TextMessage message) {
 
         this.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

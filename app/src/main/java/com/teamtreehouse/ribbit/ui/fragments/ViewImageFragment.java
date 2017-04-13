@@ -1,6 +1,5 @@
 package com.teamtreehouse.ribbit.ui.fragments;
 
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -39,7 +38,7 @@ public class ViewImageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.view_photo_fragment, container, false);
+        View view = inflater.inflate(R.layout.view_image_fragment, container, false);
 
         ButterKnife.bind(this, view);
 

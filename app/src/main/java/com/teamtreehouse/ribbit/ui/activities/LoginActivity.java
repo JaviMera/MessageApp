@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
@@ -39,6 +40,9 @@ public class LoginActivity extends AppCompatActivity {
 
     @BindView(R.id.passwordField)
     protected EditText mPassword;
+
+    @BindView(R.id.loginButton)
+    Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

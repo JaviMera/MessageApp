@@ -7,7 +7,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
-import com.teamtreehouse.ribbit.models.Message;
+import com.teamtreehouse.ribbit.models.TextMessage;
 import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.models.UserCurrent;
 import com.teamtreehouse.ribbit.models.UserFriend;
@@ -320,7 +320,7 @@ public class MessageDB {
             });
     }
 
-    public static void insertMessages(final List<User> recipients, final Message message) {
+    public static void insertMessages(final List<User> recipients, final TextMessage message) {
 
         FirebaseDatabase
             .getInstance()

@@ -1,8 +1,14 @@
 package com.teamtreehouse.ribbit.ui.fragments.messages;
 
-import android.content.Context;
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,16 +18,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.InboxFragmentAdapter;
 import com.teamtreehouse.ribbit.dialogs.MessageOptionDialog;
-import com.teamtreehouse.ribbit.models.Message;
+import com.teamtreehouse.ribbit.models.ImageMessage;
+import com.teamtreehouse.ribbit.models.TextMessage;
 import com.teamtreehouse.ribbit.ui.activities.ActivityView;
-import com.teamtreehouse.ribbit.ui.activities.ViewTextMessageActivity;
+import com.teamtreehouse.ribbit.ui.activities.MainActivity;
+import com.teamtreehouse.ribbit.ui.activities.ViewImageMessageActivity;
+import com.teamtreehouse.ribbit.ui.callbacks.ImageMessagesCallback;
 import com.teamtreehouse.ribbit.ui.callbacks.MessageRecipient;
 import com.teamtreehouse.ribbit.ui.callbacks.TextMessagesCallback;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentPager;
+import com.teamtreehouse.ribbit.ui.activities.ViewTextMessageActivity;
 import com.teamtreehouse.ribbit.utils.Resources;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import butterknife.BindView;
 
@@ -30,15 +47,18 @@ public class FragmentMessages
         FragmentPager<ActivityView, FragmentMessagesPresenter, InboxFragmentAdapter>
     implements
         FragmentMessagesView,
-        MessageRecipient {
+        MessageRecipient,
+        ImageMessagesCallback.ImageMessageListener{
 
     private TextMessagesCallback messagesCallback;
+    private ImageMessagesCallback imageMessagesCallback;
 
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
 
     @BindView(R.id.emptyMessagesTextView)
     TextView textView;
+    private ImageMessage imageMessage;
 
     @Override
     protected InboxFragmentAdapter createAdapter() {
@@ -80,6 +100,7 @@ public class FragmentMessages
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
         this.messagesCallback = new TextMessagesCallback(this);
+        this.imageMessagesCallback = new ImageMessagesCallback(this);
 //        retrieveMessages();
     }
 
@@ -91,12 +112,12 @@ public class FragmentMessages
     }
 
 //    private void retrieveMessages() {
-//        Query<Message> query = Message.getQuery();
-//        query.whereEqualTo(Message.KEY_RECIPIENT_IDS, ObsoleteUser.getCurrentUser().getObjectId());
-//        query.addDescendingOrder(Message.KEY_CREATED_AT);
-//        query.findInBackground(new FindCallback<Message>() {
+//        Query<TextMessage> query = TextMessage.getQuery();
+//        query.whereEqualTo(TextMessage.KEY_RECIPIENT_IDS, ObsoleteUser.getCurrentUser().getObjectId());
+//        query.addDescendingOrder(TextMessage.KEY_CREATED_AT);
+//        query.findInBackground(new FindCallback<TextMessage>() {
 //            @Override
-//            public void done(List<Message> messages, Exception e) {
+//            public void done(List<TextMessage> messages, Exception e) {
 ////                getActivity().setProgressBarIndeterminateVisibility(false);
 //
 //                if (swipeRefreshLayout.isRefreshing()) {
@@ -110,8 +131,8 @@ public class FragmentMessages
 //
 //                    String[] usernames = new String[FragmentMessages.this.messages.size()];
 //                    int i = 0;
-//                    for (Message message : FragmentMessages.this.messages) {
-//                        usernames[i] = message.getString(Message.KEY_SENDER_NAME);
+//                    for (TextMessage message : FragmentMessages.this.messages) {
+//                        usernames[i] = message.getString(TextMessage.KEY_SENDER_NAME);
 //                        i++;
 //                    }
 //
@@ -128,13 +149,13 @@ public class FragmentMessages
 //    }
 
 //    @Override
-//    public void onItemSingleClick(Message message) {
+//    public void onItemSingleClick(TextMessage message) {
 //
-//        String messageType = message.getString(Message.KEY_FILE_TYPE);
-//        MessageFile file = message.getFile(Message.KEY_FILE);
+//        String messageType = message.getString(TextMessage.KEY_FILE_TYPE);
+//        MessageFile file = message.getFile(TextMessage.KEY_FILE);
 //        Uri fileUri = file.getUri();
 //
-//        if (messageType.equals(Message.TYPE_IMAGE)) {
+//        if (messageType.equals(TextMessage.TYPE_IMAGE)) {
 //            // view the image
 //            Intent intent = new Intent(getActivity(), ImageMessageActivity.class);
 //            intent.setData(fileUri);
@@ -147,7 +168,7 @@ public class FragmentMessages
 //        }
 //
 //        // Delete it!
-//        List<String> ids = message.getList(Message.KEY_RECIPIENT_IDS);
+//        List<String> ids = message.getList(TextMessage.KEY_RECIPIENT_IDS);
 //
 //        if (ids.size() == 1) {
 //            // last recipient - delete the whole thing!
@@ -187,7 +208,7 @@ public class FragmentMessages
     }
 
     @Override
-    public void onItemSelected(Message message) {
+    public void onItemSelected(TextMessage message) {
 
         Intent intent = new Intent(this.getActivity(), ViewTextMessageActivity.class);
         intent.putExtra("message", message);
@@ -202,18 +223,80 @@ public class FragmentMessages
     }
 
     @Override
-    public void onMessageAdded(Message msg) {
+    public void onMessageAdded(TextMessage msg) {
 
         InboxFragmentAdapter adapter = getAdapter();
         adapter.add(msg);
     }
 
     @Override
-    public void onMessageRemoved(Message message) {
+    public void onMessageRemoved(TextMessage message) {
 
         InboxFragmentAdapter adapter = getAdapter();
         int position = adapter.getPosition(message);
         adapter.removeItem(position);
+    }
+
+    @Override
+    public void onMessageAdded(final ImageMessage message) {
+
+        this.imageMessage = message;
+        int permission = ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+
+            ((MainActivity)this.parent).requestPermissions();
+            return;
+        }
+
+        this.viewImageActivity();
+    }
+
+    public void viewImageActivity() {
+
+        FirebaseStorage
+            .getInstance()
+            .getReferenceFromUrl(this.imageMessage.getUrl())
+            .getBytes(1024 * 1024 * 10)
+            .addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+
+                    if(Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+
+                        String[] splitPath = imageMessage.getPath().split("/");
+                        String fileName = splitPath[splitPath.length - 1];
+                        File storage = Environment.getExternalStorageDirectory();
+                        File dir = new File(storage + "/" + Environment.DIRECTORY_PICTURES);
+                        if(!dir.exists()) {
+
+                            dir.mkdir();
+                        }
+
+                        File pictureFile = new File(dir.getPath(), fileName + ".png");
+                        try {
+
+                            FileOutputStream outputStream = new FileOutputStream(pictureFile);
+                            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+                            outputStream.close();
+
+                        }
+                        catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                        catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        Intent intent = new Intent(getActivity(), ViewImageMessageActivity.class);
+                        intent.putExtra("message", imageMessage);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("uri", Uri.fromFile(pictureFile).toString());
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                    }
+                }
+            });
     }
 }
 
