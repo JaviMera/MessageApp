@@ -27,18 +27,35 @@
             android:layout_marginTop="10dp"
             android:textSize="20sp"/>
 
-        <FrameLayout
-            android:layout_below="@+id/recipientsEditText"
-            android:id="@+id/container"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"/>
+            android:layout_below="@+id/recipientsEditText">
+
+            <FrameLayout
+                android:id="@+id/messageContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"/>
+
+            <FrameLayout
+                android:id="@+id/suggestionsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_centerInParent="true"/>
+
+        </RelativeLayout>
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/sendLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_margin="10dp">
 
         <EditText
@@ -57,4 +74,13 @@
             android:src="@mipmap/ic_send"
             android:scaleType="fitCenter"/>
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        style="@android:style/Widget.Holo.ProgressBar.Horizontal"
+        />
 </LinearLayout>

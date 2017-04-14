@@ -1,5 +1,6 @@
 package com.teamtreehouse.ribbit.ui.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,7 @@ import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.Item;
 import com.teamtreehouse.ribbit.models.Message;
 import com.teamtreehouse.ribbit.models.TextMessage;
+import com.teamtreehouse.ribbit.ui.activities.ViewMessageActivity;
 
 import java.util.HashMap;
 
@@ -35,6 +37,8 @@ public class ViewTextFragment extends Fragment implements ViewMessageFragment{
     @BindView(R.id.messageTextView)
     TextView messageTextView;
 
+    private ViewMessageActivity parent;
+
     public static ViewTextFragment newInstance(TextMessage message) {
 
         ViewTextFragment fragment = new ViewTextFragment();
@@ -43,6 +47,12 @@ public class ViewTextFragment extends Fragment implements ViewMessageFragment{
         fragment.setArguments(bundle);
 
         return fragment;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.parent = (ViewMessageActivity) context;
     }
 
     @Nullable
@@ -55,6 +65,8 @@ public class ViewTextFragment extends Fragment implements ViewMessageFragment{
 
         friendMessage = getArguments().getParcelable("message");
         messageTextView.setText(friendMessage.getText());
+        parent.hideProgress();
+        parent.start();
 
         return view;
     }

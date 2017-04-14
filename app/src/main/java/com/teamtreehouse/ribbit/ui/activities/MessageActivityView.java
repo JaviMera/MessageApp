@@ -10,4 +10,6 @@ public interface MessageActivityView extends ActivityView {
     void hideSendButton();
     void showInputEditText();
     void hideInputEditText();
+    void showProgress();
+    void hideProgress();
 }

@@ -1,18 +1,21 @@
 package com.teamtreehouse.ribbit.dialogs;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.teamtreehouse.ribbit.R;
+import com.teamtreehouse.ribbit.models.Message;
 import com.teamtreehouse.ribbit.ui.activities.MainActivity;
+import com.teamtreehouse.ribbit.ui.activities.MessageActivity;
 import com.teamtreehouse.ribbit.ui.activities.TextMessageActivity;
 
 import butterknife.ButterKnife;
@@ -57,9 +60,7 @@ public class MessageOptionDialog extends DialogFragment {
                 break;
 
             case R.id.picturesLayout:
-                Intent choosePhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                choosePhotoIntent.setType("image/*");
-                getActivity().startActivityForResult(choosePhotoIntent, MainActivity.PICK_PHOTO_REQUEST);
+                ((MainActivity)getActivity()).launchGalleryActicity();
                 break;
         }
 

@@ -3,12 +3,14 @@ package com.teamtreehouse.ribbit.ui.fragments;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,10 +49,8 @@ public class ViewImageMessageFragment extends Fragment implements ViewMessageFra
     @BindView(R.id.imageView)
     ImageView image;
 
-    @BindView(R.id.progressBar)
-    ProgressBar progressBar;
-
     private ImageMessage message;
+
     private ViewMessageActivity parent;
 
     public static ViewImageMessageFragment newInstance(ImageMessage message, Bundle bundle) {
@@ -75,9 +75,9 @@ public class ViewImageMessageFragment extends Fragment implements ViewMessageFra
         View view = inflater.inflate(R.layout.view_image_fragment, container, false);
 
         ButterKnife.bind(this, view);
-        progressBar.setVisibility(View.VISIBLE);
-
         message = getArguments().getParcelable("message");
+
+        ((ViewMessageActivity)getActivity()).showProgress();
 
         FirebaseStorage
             .getInstance()
@@ -87,9 +87,9 @@ public class ViewImageMessageFragment extends Fragment implements ViewMessageFra
                 @Override
                 public void onSuccess(byte[] bytes) {
 
-                    progressBar.setVisibility(View.INVISIBLE);
                     Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                     image.setImageBitmap(bitmap);
+                    ((ViewMessageActivity)getActivity()).hideProgress();
                     parent.start();
                 }
             })
@@ -116,7 +116,6 @@ public class ViewImageMessageFragment extends Fragment implements ViewMessageFra
             .addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
-                    Toast.makeText(getActivity(), "Deleted", Toast.LENGTH_SHORT).show();
                 }
             });
 

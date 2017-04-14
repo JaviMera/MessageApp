@@ -2,7 +2,9 @@ package com.teamtreehouse.ribbit.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.Log;
 
 import com.teamtreehouse.ribbit.models.purgatory.Message;
@@ -96,5 +98,18 @@ public class FileHelper {
         }
 
         return fileName;
+    }
+
+    public static Uri resizeUri(Context context, Uri originalUri) {
+
+        byte[] data = FileHelper.getByteArrayFromFile(context, originalUri);
+        byte[] newData = FileHelper.reduceImageForUpload(data);
+
+        Bitmap bitmap = BitmapFactory.decodeByteArray(newData, 0, newData.length);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "temp", null);
+
+        return Uri.parse(path);
     }
 }

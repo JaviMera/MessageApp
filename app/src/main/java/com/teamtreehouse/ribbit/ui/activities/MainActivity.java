@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -29,7 +30,8 @@ import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.purgatory.ObsoleteUser;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentPager;
 import com.teamtreehouse.ribbit.ui.fragments.friends.FriendsFragment;
-import com.teamtreehouse.ribbit.ui.fragments.messages.FragmentMessages;
+import com.teamtreehouse.ribbit.ui.fragments.inbox.FragmentInbox;
+import com.teamtreehouse.ribbit.utils.FileHelper;
 
 import java.io.File;
 import java.io.IOException;
@@ -199,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements ActivityView {
         getSupportActionBar().setTitle(Auth.getInstance().getUsername());
 
         viewPagerAdapter = new SectionsPagerAdapter(
-                getSupportFragmentManager(), new FragmentMessages(), new FriendsFragment());
+                getSupportFragmentManager(), new FragmentInbox(), new FriendsFragment());
 
         // Set up the ViewPager with the sections adapter.
         viewPager.setAdapter(viewPagerAdapter);
@@ -254,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements ActivityView {
 
             Uri uri = data.getData();
             Intent intent = new Intent(MainActivity.this, ImageMessageActivity.class);
-            intent.putExtra("picture", uri);
+            intent.putExtra("uri", uri);
             startActivity(intent);
         }
 
@@ -378,12 +380,12 @@ public class MainActivity extends AppCompatActivity implements ActivityView {
         startActivityForResult(intent, 1000);
     }
 
-    public void requestPermissions() {
+    public void requestPermissions(String... permissions) {
 
         // We don't have permission so prompt the user
         ActivityCompat.requestPermissions(
                 this,
-                PERMISSIONS_STORAGE,
+                permissions,
                 REQUEST_EXTERNAL_STORAGE
         );
     }
@@ -400,7 +402,23 @@ public class MainActivity extends AppCompatActivity implements ActivityView {
                         && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 }
 
+                launchGalleryActicity();
+
                 break;
         }
+    }
+
+    public void launchGalleryActicity() {
+
+        if(ContextCompat.checkSelfPermission(
+            this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+
+            requestPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
+            return;
+        }
+
+        Intent choosePhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        choosePhotoIntent.setType("image/*");
+        startActivityForResult(choosePhotoIntent, MainActivity.PICK_PHOTO_REQUEST);
     }
 }

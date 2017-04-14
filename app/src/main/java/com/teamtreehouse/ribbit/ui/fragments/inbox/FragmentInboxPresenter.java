@@ -1,4 +1,4 @@
-package com.teamtreehouse.ribbit.ui.fragments.messages;
+package com.teamtreehouse.ribbit.ui.fragments.inbox;
 
 import com.teamtreehouse.ribbit.ui.fragments.FragmentRecyclerPresenter;
 
@@ -6,9 +6,9 @@ import com.teamtreehouse.ribbit.ui.fragments.FragmentRecyclerPresenter;
  * Created by javie on 3/25/2017.
  */
 
-public class FragmentMessagesPresenter extends FragmentRecyclerPresenter<FragmentMessagesView> {
+public class FragmentInboxPresenter extends FragmentRecyclerPresenter<FragmentInboxView> {
 
-    public FragmentMessagesPresenter(FragmentMessagesView view) {
+    public FragmentInboxPresenter(FragmentInboxView view) {
         super(view);
     }
 

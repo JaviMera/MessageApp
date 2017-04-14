@@ -1,13 +1,9 @@
-package com.teamtreehouse.ribbit.ui.fragments.messages;
+package com.teamtreehouse.ribbit.ui.fragments.inbox;
 
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
@@ -18,8 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.InboxFragmentAdapter;
 import com.teamtreehouse.ribbit.dialogs.MessageOptionDialog;
@@ -36,18 +30,13 @@ import com.teamtreehouse.ribbit.ui.fragments.FragmentPager;
 import com.teamtreehouse.ribbit.ui.activities.ViewTextMessageActivity;
 import com.teamtreehouse.ribbit.utils.Resources;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
 import butterknife.BindView;
 
-public class FragmentMessages
+public class FragmentInbox
     extends
-        FragmentPager<ActivityView, FragmentMessagesPresenter, InboxFragmentAdapter>
+        FragmentPager<ActivityView, FragmentInboxPresenter, InboxFragmentAdapter>
     implements
-        FragmentMessagesView,
+        FragmentInboxView,
         MessageRecipient,
         ImageMessagesCallback.ImageMessageListener{
 
@@ -67,9 +56,9 @@ public class FragmentMessages
     }
 
     @Override
-    protected FragmentMessagesPresenter createPresenter() {
+    protected FragmentInboxPresenter createPresenter() {
 
-        return new FragmentMessagesPresenter(this);
+        return new FragmentInboxPresenter(this);
     }
 
     @Override
@@ -125,17 +114,17 @@ public class FragmentMessages
 //
 //                if (e == null) {
 //                    // We found messages!
-//                    FragmentMessages.this.messages = messages;
+//                    FragmentInbox.this.messages = messages;
 //                    MessageAdapter adapter = (MessageAdapter) recyclerView.createAdapter();
 //
-//                    String[] usernames = new String[FragmentMessages.this.messages.size()];
+//                    String[] usernames = new String[FragmentInbox.this.messages.size()];
 //                    int i = 0;
-//                    for (TextMessage message : FragmentMessages.this.messages) {
+//                    for (TextMessage message : FragmentInbox.this.messages) {
 //                        usernames[i] = message.getString(TextMessage.KEY_SENDER_NAME);
 //                        i++;
 //                    }
 //
-//                    adapter.addMessages(FragmentMessages.this.messages);
+//                    adapter.addMessages(FragmentInbox.this.messages);
 //
 //                    presenter.setEmptyTextViewVisibility(false);
 //                }
@@ -217,14 +206,16 @@ public class FragmentMessages
         }
         else if(message instanceof ImageMessage) {
 
-            int permission = ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            if (permission != PackageManager.PERMISSION_GRANTED) {
+//            int permission = ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+//            if (permission != PackageManager.PERMISSION_GRANTED) {
+//
+//                ((MainActivity)this.parent).requestPermissions();
+//                return;
+//            }
 
-                ((MainActivity)this.parent).requestPermissions();
-                return;
-            }
-
-            this.viewImageActivity((ImageMessage) message);
+            Intent intent = new Intent(getActivity(), ViewImageMessageActivity.class);
+            intent.putExtra("message", message);
+            startActivity(intent);
         }
     }
 
@@ -264,19 +255,4 @@ public class FragmentMessages
         int position = adapter.getPosition(message);
         adapter.removeItem(position);
     }
-
-    public void viewImageActivity(final ImageMessage imageMessage) {
-
-        Intent intent = new Intent(getActivity(), ViewImageMessageActivity.class);
-        intent.putExtra("message", imageMessage);
-        startActivity(intent);
-    }
 }
-
-
-
-
-
-
-
-
