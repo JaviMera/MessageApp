@@ -215,14 +215,14 @@ public class ImageMessageActivity extends AppCompatActivity implements MessageAc
     @Override
     public void showSendButton() {
 
-        this.sendImageView.setAnimation(Animations.scaleUp(this));
+        this.sendImageView.setAnimation(Animations.scaleUpHalfPivot(this));
         this.sendImageView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideSendButton() {
 
-        this.sendImageView.setAnimation(Animations.scaleDown(this));
+        this.sendImageView.setAnimation(Animations.scaleDownHalfPivot(this));
         this.sendImageView.setVisibility(View.INVISIBLE);
     }
 

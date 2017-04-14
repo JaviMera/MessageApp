@@ -267,50 +267,9 @@ public class FragmentMessages
 
     public void viewImageActivity(final ImageMessage imageMessage) {
 
-        FirebaseStorage
-            .getInstance()
-            .getReferenceFromUrl(imageMessage.getUrl())
-            .getBytes(1024 * 1024 * 10)
-            .addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                @Override
-                public void onSuccess(byte[] bytes) {
-
-                    if(Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-
-                        String[] splitPath = imageMessage.getPath().split("/");
-                        String fileName = splitPath[splitPath.length - 1];
-                        File storage = Environment.getExternalStorageDirectory();
-                        File dir = new File(storage + "/" + Environment.DIRECTORY_PICTURES);
-                        if(!dir.exists()) {
-
-                            dir.mkdir();
-                        }
-
-                        File pictureFile = new File(dir.getPath(), fileName + ".png");
-                        try {
-
-                            FileOutputStream outputStream = new FileOutputStream(pictureFile);
-                            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-                            outputStream.close();
-
-                        }
-                        catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                        catch (IOException e) {
-                            e.printStackTrace();
-                        }
-
-                        Intent intent = new Intent(getActivity(), ViewImageMessageActivity.class);
-                        intent.putExtra("message", imageMessage);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("uri", Uri.fromFile(pictureFile).toString());
-                        intent.putExtras(bundle);
-                        startActivity(intent);
-                    }
-                }
-            });
+        Intent intent = new Intent(getActivity(), ViewImageMessageActivity.class);
+        intent.putExtra("message", imageMessage);
+        startActivity(intent);
     }
 }
 

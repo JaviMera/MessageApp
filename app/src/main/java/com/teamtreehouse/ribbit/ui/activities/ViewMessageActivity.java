@@ -35,6 +35,9 @@ public abstract class ViewMessageActivity<TMessage extends Message> extends AppC
     @BindView(R.id.progressBar)
     ContentLoadingProgressBar progressBar;
 
+    private CountDownTimer timer;
+    private ObjectAnimator anim;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,11 +53,11 @@ public abstract class ViewMessageActivity<TMessage extends Message> extends AppC
         transaction.commit();
 
         progressBar.setProgress(1000);
-        ObjectAnimator anim = ObjectAnimator.ofInt(progressBar, "progress", progressBar.getProgress(), 0);
+        anim = ObjectAnimator.ofInt(progressBar, "progress", progressBar.getProgress(), 0);
         anim.setDuration(10000);
         anim.setInterpolator(new LinearInterpolator());
 
-        CountDownTimer timer = new CountDownTimer(10 * 1000, 900) {
+        timer = new CountDownTimer(10 * 1000, 900) {
 
             @Override
             public void onTick(long l) {
@@ -77,12 +80,32 @@ public abstract class ViewMessageActivity<TMessage extends Message> extends AppC
                     .findFragmentById(R.id.container);
 
                 fragment.onFinish();
+                exit();
             }
         };
+    }
 
-        timer.start();
+    @Override
+    public void onBackPressed() {
+
+        ViewMessageFragment fragment = (ViewMessageFragment) getSupportFragmentManager()
+            .findFragmentById(R.id.container);
+
+        fragment.onFinish();
+
+        super.onBackPressed();
+    }
+
+    public void start() {
+
         anim.start();
+        timer.start();
     }
 
     protected abstract Fragment getFragment(TMessage message, Bundle bundle);
+
+    public void exit() {
+
+        finish();
+    }
 }
