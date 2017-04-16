@@ -201,7 +201,7 @@ public class FragmentInbox
         if(message instanceof TextMessage) {
 
             Intent intent = new Intent(this.getActivity(), ViewTextMessageActivity.class);
-            intent.putExtra("message", message);
+            intent.putExtra(Message.KEY, message);
             startActivity(intent);
         }
         else if(message instanceof ImageMessage) {
@@ -214,7 +214,7 @@ public class FragmentInbox
 //            }
 
             Intent intent = new Intent(getActivity(), ViewImageMessageActivity.class);
-            intent.putExtra("message", message);
+            intent.putExtra(Message.KEY, message);
             startActivity(intent);
         }
     }

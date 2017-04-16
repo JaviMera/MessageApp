@@ -17,7 +17,7 @@ public class MessageStorage {
 
     public static final String IMAGES_NODE = "images";
 
-    public static void insertPicture(String userId, Uri uri, final InsertStorageCallback callback) {
+    public static void insertPicture(String userId, Uri uri, final ImageInsertCallback callback) {
 
         FirebaseStorage
             .getInstance()
@@ -47,6 +47,29 @@ public class MessageStorage {
                 public void onFailure(@NonNull Exception e) {
 
                     callback.onFailure();
+                }
+            });
+    }
+
+    public static void deletePicture(String path, final DeletePictureCallback callback) {
+
+        FirebaseStorage
+            .getInstance()
+            .getReference()
+            .child(path)
+            .delete()
+            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+
+                    callback.onSuccess();
+                }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                    callback.onFailure(e.getMessage());
                 }
             });
     }

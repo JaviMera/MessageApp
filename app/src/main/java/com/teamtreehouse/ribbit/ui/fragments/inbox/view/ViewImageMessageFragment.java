@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -20,8 +21,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.teamtreehouse.ribbit.R;
+import com.teamtreehouse.ribbit.database.DeletePictureCallback;
+import com.teamtreehouse.ribbit.database.MessageDB;
+import com.teamtreehouse.ribbit.database.MessageStorage;
 import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.ImageMessage;
+import com.teamtreehouse.ribbit.models.Message;
 import com.teamtreehouse.ribbit.ui.activities.ViewMessageActivity;
 
 import java.util.HashMap;
@@ -33,28 +38,22 @@ import butterknife.ButterKnife;
  * Created by javie on 4/13/2017.
  */
 
-public class ViewImageMessageFragment extends Fragment implements ViewMessageFragment {
+public class ViewImageMessageFragment extends ViewFragmentMessage implements ViewMessageFragment {
+
+    public static final int MAX_IMAGE_MEMORY = 1024 * 1024 * 10;
 
     @BindView(R.id.imageView)
     ImageView image;
 
     private ImageMessage message;
 
-    private ViewMessageActivity parent;
-
     public static ViewImageMessageFragment newInstance(ImageMessage message, Bundle bundle) {
 
         ViewImageMessageFragment fragment = new ViewImageMessageFragment();
-        bundle.putParcelable("message", message);
+        bundle.putParcelable(Message.KEY, message);
         fragment.setArguments(bundle);
 
         return fragment;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        this.parent = (ViewMessageActivity) context;
     }
 
     @Nullable
@@ -64,21 +63,23 @@ public class ViewImageMessageFragment extends Fragment implements ViewMessageFra
         View view = inflater.inflate(R.layout.view_image_fragment, container, false);
 
         ButterKnife.bind(this, view);
-        message = getArguments().getParcelable("message");
+        message = getArguments().getParcelable(Message.KEY);
 
-        ((ViewMessageActivity)getActivity()).showProgress();
+        parent.setProgressbarVisibility(View.VISIBLE);
+        parent.setCardViewVisibility(View.GONE);
 
         FirebaseStorage
             .getInstance()
             .getReferenceFromUrl(message.getUrl())
-            .getBytes(1024 * 1024 * 10)
+            .getBytes(MAX_IMAGE_MEMORY)
             .addOnSuccessListener(new OnSuccessListener<byte[]>() {
                 @Override
                 public void onSuccess(byte[] bytes) {
 
                     Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                     image.setImageBitmap(bitmap);
-                    ((ViewMessageActivity)getActivity()).hideProgress();
+                    parent.setProgressbarVisibility(View.GONE);
+                    parent.setCardViewVisibility(View.VISIBLE);
                     parent.start();
                 }
             })
@@ -86,7 +87,7 @@ public class ViewImageMessageFragment extends Fragment implements ViewMessageFra
             @Override
             public void onFailure(@NonNull Exception e) {
 
-                parent.exit();
+                parent.finish();
             }
         });
 
@@ -97,43 +98,31 @@ public class ViewImageMessageFragment extends Fragment implements ViewMessageFra
     public void onFinish() {
 
         // Delete the image from storage reference
-        FirebaseStorage
-            .getInstance()
-            .getReference()
-            .child(message.getPath())
-            .delete()
-            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                }
-            });
+        MessageStorage.deletePicture(message.getPath(), new DeletePictureCallback() {
+            @Override
+            public void onSuccess() {
 
-        // Delete image info from database reference
-        FirebaseDatabase
-            .getInstance()
-            .getReference()
-            .child("messages")
-            .child("images")
-            .child(Auth.getInstance().getId())
-            .addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+                MessageDB.deleteImageMessage(message, new DeletePictureCallback() {
 
-                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    @Override
+                    public void onSuccess() {
 
-                        HashMap<String, String> currentMessage = (HashMap<String, String>) ds.getValue();
-                        if (currentMessage.get("path").equals(message.getPath())) {
-
-                            ds.getRef().setValue(null);
-                            break;
-                        }
+                        Toast.makeText(parent, "Message Viewed!", Toast.LENGTH_SHORT).show();
                     }
-                }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
+                    @Override
+                    public void onFailure(String message) {
 
-                }
-            });
+                        Toast.makeText(parent, message, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(String message) {
+
+                Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

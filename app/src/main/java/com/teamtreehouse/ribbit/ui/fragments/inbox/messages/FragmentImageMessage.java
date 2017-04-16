@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.teamtreehouse.ribbit.R;
+import com.teamtreehouse.ribbit.models.ImageMessage;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,7 +32,7 @@ public class FragmentImageMessage
 
         FragmentImageMessage fragmentImageMessage = new FragmentImageMessage();
         Bundle bundle = new Bundle();
-        bundle.putParcelable("uri", uri);
+        bundle.putParcelable(ImageMessage.KEY, uri);
         fragmentImageMessage.setArguments(bundle);
 
         return fragmentImageMessage;
@@ -50,7 +51,7 @@ public class FragmentImageMessage
 
         Toast.makeText(getActivity(), "Converting picture...", Toast.LENGTH_SHORT).show();
 
-        this.value = getArguments().getParcelable("uri");
+        this.value = getArguments().getParcelable(ImageMessage.KEY);
         new PictureTask(this).execute(this.value);
         return view;
     }

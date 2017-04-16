@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -15,7 +16,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.teamtreehouse.ribbit.R;
+import com.teamtreehouse.ribbit.database.DeleteTextCallback;
+import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.models.Auth;
+import com.teamtreehouse.ribbit.models.Message;
 import com.teamtreehouse.ribbit.models.TextMessage;
 import com.teamtreehouse.ribbit.ui.activities.ViewMessageActivity;
 
@@ -28,29 +32,21 @@ import butterknife.ButterKnife;
  * Created by javie on 4/13/2017.
  */
 
-public class ViewTextFragment extends Fragment implements ViewMessageFragment {
+public class ViewTextFragment extends ViewFragmentMessage implements ViewMessageFragment {
 
     private TextMessage friendMessage;
 
     @BindView(R.id.messageTextView)
     TextView messageTextView;
 
-    private ViewMessageActivity parent;
-
     public static ViewTextFragment newInstance(TextMessage message) {
 
         ViewTextFragment fragment = new ViewTextFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelable("message", message);
+        bundle.putParcelable(Message.KEY, message);
         fragment.setArguments(bundle);
 
         return fragment;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        this.parent = (ViewMessageActivity) context;
     }
 
     @Nullable
@@ -61,10 +57,16 @@ public class ViewTextFragment extends Fragment implements ViewMessageFragment {
 
         ButterKnife.bind(this, view);
 
-        friendMessage = getArguments().getParcelable("message");
+        friendMessage = getArguments().getParcelable(Message.KEY);
         messageTextView.setText(friendMessage.getText());
-        parent.hideProgress();
-        parent.start();
+
+        // Because a text message will not be performing any network data when open
+        // we don't need to worry about showing the progress bar while something loads
+        this.parent.setProgressbarVisibility(View.GONE);
+        this.parent.setCardViewVisibility(View.VISIBLE);
+
+        // Start the timer as soon as the activity comes to the foreground
+        this.parent.start();
 
         return view;
     }
@@ -72,39 +74,17 @@ public class ViewTextFragment extends Fragment implements ViewMessageFragment {
     @Override
     public void onFinish() {
 
-        FirebaseDatabase
-            .getInstance()
-            .getReference()
-            .child("messages")
-            .child("text")
-            .child(Auth.getInstance().getId())
-            .runTransaction(new Transaction.Handler() {
-                @Override
-                public Transaction.Result doTransaction(MutableData mutableData) {
+        MessageDB.deleteTextMessage(this.friendMessage.getId(), new DeleteTextCallback() {
+            @Override
+            public void onSuccess() {
 
-                    for(MutableData md : mutableData.getChildren()) {
-
-                        HashMap<String, String> map = (HashMap<String, String>) md.getValue();
-
-                        if(map.get("id").equals(friendMessage.getId())) {
-
-                            md.setValue(null);
-                            return Transaction.success(mutableData);
-                        }
-                    }
-
-                    return null;
-                }
-
-                @Override
-                public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
-
-                    if(databaseError == null) {
-
-                    }
-
-                }
             }
-        );
+
+            @Override
+            public void onFailure(String message) {
+
+                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

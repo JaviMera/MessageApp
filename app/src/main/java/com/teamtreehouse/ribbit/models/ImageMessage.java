@@ -10,6 +10,8 @@ import com.google.firebase.storage.UploadTask;
 
 public class ImageMessage extends Message{
 
+    public static final String KEY = "uri";
+
     private String url;
     private String path;
 

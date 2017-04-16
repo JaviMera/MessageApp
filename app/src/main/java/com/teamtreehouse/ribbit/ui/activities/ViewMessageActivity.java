@@ -5,20 +5,17 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
-import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.teamtreehouse.ribbit.R;
-import com.teamtreehouse.ribbit.models.Message;
+import com.teamtreehouse.ribbit.ui.activities.messages.view.MessageTimer;
+import com.teamtreehouse.ribbit.ui.activities.messages.view.TimerListener;
 import com.teamtreehouse.ribbit.ui.fragments.inbox.view.ViewMessageFragment;
 
 import butterknife.BindView;
@@ -28,8 +25,14 @@ import butterknife.ButterKnife;
  * Created by javie on 4/11/2017.
  */
 
-public abstract class ViewMessageActivity<TMessage extends Message> extends AppCompatActivity {
+public abstract class ViewMessageActivity
+    extends
+        AppCompatActivity
+    implements ViewMessageActivityView, TimerListener {
 
+    public static final int PROGRESS_MAX = 1000;
+    public static final int PROGRESS_ANIM_DURATION = 10000;
+    public static final int TICK_INTERVAL = 1000;
     @BindView(R.id.clockTextView)
     TextView clockTextView;
 
@@ -57,90 +60,58 @@ public abstract class ViewMessageActivity<TMessage extends Message> extends AppC
                 PorterDuff.Mode.SRC_IN
         );
 
-        FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        TMessage message = getIntent().getParcelableExtra("message");
-        Bundle bundle = getIntent().getExtras();
-        transaction.replace(R.id.container, getFragment(message, bundle));
-        transaction.commit();
-
-        timerProgressBar.setProgress(1000);
+        timerProgressBar.setProgress(PROGRESS_MAX);
         anim = ObjectAnimator.ofInt(timerProgressBar, "progress", timerProgressBar.getProgress(), 0);
-        anim.setDuration(10000);
+        anim.setDuration(PROGRESS_ANIM_DURATION);
         anim.setInterpolator(new LinearInterpolator());
 
-        timer = createTimer(anim);
-    }
-
-    private CountDownTimer createTimer(final ObjectAnimator anim) {
-
-        return new CountDownTimer(10 * 1000, 900) {
-
-            @Override
-            public void onTick(long l) {
-
-                if(!anim.isStarted()) {
-
-                    anim.start();
-                }
-
-                if(timerProgressBar.getProgress() > 999) {
-
-                    clockTextView.setText("00:" + (timerProgressBar.getProgress() / 100));
-                }
-                else {
-
-                    clockTextView.setText("00:0" + (timerProgressBar.getProgress() / 100));
-                }
-            }
-
-            @Override
-            public void onFinish() {
-
-                clockTextView.setText("00:00");
-                ViewMessageFragment fragment = (ViewMessageFragment) getSupportFragmentManager()
-                        .findFragmentById(R.id.container);
-
-                fragment.onFinish();
-                exit();
-            }
-        };
+        timer = new MessageTimer(this, PROGRESS_ANIM_DURATION, TICK_INTERVAL);
     }
 
     @Override
     public void onBackPressed() {
 
+        // Cancel the timer
         timer.cancel();
-        timer.onFinish();
-//        ViewMessageFragment fragment = (ViewMessageFragment) getSupportFragmentManager()
-//            .findFragmentById(R.id.container);
-//
-//        fragment.onFinish();
 
+        // Perform the finish code from the timer when the user presses the back button
+        timer.onFinish();
         super.onBackPressed();
     }
 
     public void start() {
 
+        anim.start();
         timer.start();
     }
 
-    public void showProgress() {
+    @Override
+    public void setProgressbarVisibility(int visibility) {
 
-        progressBar.setVisibility(View.VISIBLE);
-        timerCardView.setVisibility(View.GONE);
+        this.progressBar.setVisibility(visibility);
     }
 
-    public void hideProgress() {
+    @Override
+    public void setCardViewVisibility(int viewVisibility) {
 
-        progressBar.setVisibility(View.GONE);
-        timerCardView.setVisibility(View.VISIBLE);
+        this.timerCardView.setVisibility(viewVisibility);
     }
 
-    protected abstract Fragment getFragment(TMessage message, Bundle bundle);
+    @Override
+    public void onTick(String formatedTick) {
 
-    public void exit() {
+        this.clockTextView.setText(formatedTick);
+    }
 
+    @Override
+    public void onFinish(String formatedTick) {
+
+        this.clockTextView.setText(formatedTick);
+
+        ViewMessageFragment fragment = (ViewMessageFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.container);
+
+        fragment.onFinish();
         finish();
     }
 }

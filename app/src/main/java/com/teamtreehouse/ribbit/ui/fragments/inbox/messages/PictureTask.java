@@ -35,6 +35,6 @@ public class PictureTask extends AsyncTask<Uri, Void, Uri> {
     @Override
     protected Uri doInBackground(Uri... uris) {
 
-        return FileHelper.resizeUri((Context) this.listener, uris[0]);
+        return FileHelper.resizeUri(((FragmentImageMessage) this.listener).getContext(), uris[0]);
     }
 }

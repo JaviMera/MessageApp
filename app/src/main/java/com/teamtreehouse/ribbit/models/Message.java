@@ -10,6 +10,8 @@ import android.support.annotation.NonNull;
 
 public abstract class Message extends Item implements Parcelable {
 
+    public static final String KEY = "message";
+
     private String id;
     private String username;
     private long date;

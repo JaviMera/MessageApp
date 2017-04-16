@@ -1,7 +1,6 @@
 package com.teamtreehouse.ribbit.database;
 
 import android.support.annotation.NonNull;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -12,6 +11,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
+import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.ImageMessage;
 import com.teamtreehouse.ribbit.models.TextMessage;
 import com.teamtreehouse.ribbit.models.User;
@@ -20,7 +20,6 @@ import com.teamtreehouse.ribbit.models.UserFriend;
 import com.teamtreehouse.ribbit.models.UserRecipient;
 import com.teamtreehouse.ribbit.models.UserSender;
 import com.teamtreehouse.ribbit.models.UserRequest;
-import com.teamtreehouse.ribbit.ui.activities.ImageMessageActivity;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -42,6 +41,8 @@ public class MessageDB {
     public static final String MESSAGES_NODE = "messages";
     public static final String TEXT_MESSAGES_NODE = "text";
     public static final String IMAGES_NODE = "images";
+    public static final String IMAGE_PATH_PROPERTY = "path";
+    public static final String TEXT_MESSAGE_ID_PROPERTY = "id";
 
     public static void insertUser(final User newUser, final UserInsertCallback listener) {
 
@@ -368,7 +369,7 @@ public class MessageDB {
                 @Override
                 public void onSuccess(Void aVoid) {
 
-                    callback.onSuccess();
+                    callback.onSuccess("", "");
                 }
             })
             .addOnFailureListener(new OnFailureListener() {
@@ -376,6 +377,81 @@ public class MessageDB {
                 public void onFailure(@NonNull Exception e) {
 
                     callback.onFailure();
+                }
+            });
+    }
+
+    public static void deleteImageMessage(final ImageMessage message, final DeletePictureCallback callback) {
+
+        FirebaseDatabase
+            .getInstance()
+            .getReference()
+            .child(MESSAGES_NODE)
+            .child(IMAGES_NODE)
+            .child(Auth.getInstance().getId())
+            .addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+
+                        HashMap<String, String> currentMessage = (HashMap<String, String>) ds.getValue();
+                        if (currentMessage.get(IMAGE_PATH_PROPERTY).equals(message.getPath())) {
+
+                            ds.getRef().setValue(null);
+                            break;
+                        }
+                    }
+
+                    callback.onSuccess();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                    callback.onFailure(databaseError.getMessage());
+                }
+            });
+    }
+
+    public static void deleteTextMessage(final String messageId, final DeleteTextCallback callback) {
+
+        FirebaseDatabase
+            .getInstance()
+            .getReference()
+            .child(MESSAGES_NODE)
+            .child(TEXT_MESSAGES_NODE)
+            .child(Auth.getInstance().getId())
+            .runTransaction(new Transaction.Handler() {
+                @Override
+                public Transaction.Result doTransaction(MutableData mutableData) {
+
+                    for(MutableData md : mutableData.getChildren()) {
+
+                        HashMap<String, String> map = (HashMap<String, String>) md.getValue();
+
+                        if(map.get(TEXT_MESSAGE_ID_PROPERTY).equals(messageId)) {
+
+                            md.setValue(null);
+                            return Transaction.success(mutableData);
+                        }
+                    }
+
+                    return Transaction.abort();
+                }
+
+                @Override
+                public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+
+                    if(databaseError == null) {
+
+                        callback.onSuccess();
+                    }
+                    else {
+
+                        callback.onFailure(databaseError.getMessage());
+                    }
+
                 }
             });
     }
