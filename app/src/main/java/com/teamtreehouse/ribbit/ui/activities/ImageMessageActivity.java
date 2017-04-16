@@ -2,24 +2,20 @@ package com.teamtreehouse.ribbit.ui.activities;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
-import com.google.firebase.storage.UploadTask;
 import com.teamtreehouse.ribbit.R;
+import com.teamtreehouse.ribbit.database.ImageInsertCallback;
+import com.teamtreehouse.ribbit.database.InsertStorageCallback;
+import com.teamtreehouse.ribbit.database.MessageDB;
+import com.teamtreehouse.ribbit.database.MessageStorage;
 import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.ImageMessage;
 import com.teamtreehouse.ribbit.models.User;
-import com.teamtreehouse.ribbit.ui.fragments.FragmentImageMessage;
-import com.teamtreehouse.ribbit.utils.FileHelper;
+import com.teamtreehouse.ribbit.ui.fragments.inbox.messages.FragmentImageMessage;
 
 import java.util.Date;
 import java.util.UUID;
@@ -34,11 +30,7 @@ public class ImageMessageActivity extends MessageActivity {
         super.onCreate(savedInstanceState);
 
         Uri pictureUri = getIntent().getParcelableExtra("uri");
-
-        FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = manager.beginTransaction();
-        fragmentTransaction.replace(R.id.messageContainer, FragmentImageMessage.newInstance(pictureUri));
-        fragmentTransaction.commit();
+        replaceFragment(R.id.messageContainer, FragmentImageMessage.newInstance(pictureUri));
     }
 
     @Override
@@ -61,56 +53,54 @@ public class ImageMessageActivity extends MessageActivity {
     @OnClick(R.id.sendTextImage)
     public void onSendMessageClick(View view) {
 
-        showProgress();
+        this.presenter.setSendLayoutVisibility(View.GONE);
+        this.presenter.setProgressbarVisibility(View.VISIBLE);
 
-        FragmentImageMessage fragment = (FragmentImageMessage) getSupportFragmentManager().findFragmentById(R.id.messageContainer);
-        Uri pictureUri = fragment.getUri();
+        FragmentImageMessage fragment = findFragmentById(R.id.messageContainer);
+        Uri pictureUri = fragment.getValue();
 
         for(final User user : recipients) {
 
-            FirebaseStorage
-                .getInstance()
-                .getReference()
-                .child("images")
-                .child(user.getId())
-                .child(pictureUri.getLastPathSegment())
-                .putFile(pictureUri)
-                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            MessageStorage.insertPicture(user.getId(), pictureUri, new InsertStorageCallback() {
 
-                    @Override
-                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                    }
-                })
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    @SuppressWarnings("VisibleForTests")
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                @Override
+                public void onSuccess(String url, String path) {
 
-                        String url = taskSnapshot.getMetadata().getDownloadUrl().toString();
-                        String sender = Auth.getInstance().getUsername();
-                        String path = taskSnapshot.getMetadata().getPath();
-                        ImageMessage message = new ImageMessage(
-                                UUID.randomUUID().toString(),
-                                url, path, sender, new Date().getTime());
+                    ImageMessage message = new ImageMessage(
+                        UUID.randomUUID().toString(),
+                        Auth.getInstance().getUsername(),
+                        url,
+                        path,
+                        new Date().getTime()
+                    );
 
-                        FirebaseDatabase
-                            .getInstance()
-                            .getReference()
-                            .child("messages")
-                            .child("images")
-                            .child(user.getId())
-                            .push()
-                            .setValue((message))
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
+                    MessageDB.insertImageMessage(user.getId(), message, new ImageInsertCallback() {
 
-                                    Toast.makeText(ImageMessageActivity.this, "Uploaded Image!", Toast.LENGTH_SHORT).show();
-                                    finish();
-                                }
-                            });
-                    }
-                });
+                        @Override
+                        public void onSuccess() {
+
+                        }
+
+                        @Override
+                        public void onFailure() {
+
+                        }
+                    });
+                }
+
+                @Override
+                public void onFailure() {
+
+                    Toast
+                        .makeText(
+                            ImageMessageActivity.this,
+                            "Unable to send image to " + user.getUsername(),
+                            Toast.LENGTH_SHORT)
+                        .show();
+                }
+            });
+
+            finish();
         }
     }
 }

@@ -14,8 +14,10 @@ import android.view.ViewGroup;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.FragmentRecipientsAdapter;
 import com.teamtreehouse.ribbit.models.User;
+import com.teamtreehouse.ribbit.ui.activities.MessageActivity;
 import com.teamtreehouse.ribbit.ui.activities.MessageActivityView;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentRecycler;
+import com.teamtreehouse.ribbit.utils.Animations;
 
 /**
  * Created by javie on 4/10/2017.
@@ -72,8 +74,10 @@ public class FragmentRecipient
         if(adapter.getItemCount() == 0) {
 
             this.recyclerView.setVisibility(View.VISIBLE);
-            this.parent.showSendButton();
-            this.parent.showInputEditText();
+            this.parent.setSendImageViewAnimation(Animations.scaleUp(getActivity()));
+            this.parent.setSendImageVisibility(View.VISIBLE);
+            this.parent.setMessageEditTextAnimation(Animations.rightTranslate(getActivity()));
+            this.parent.setMessageEditTextVisibility(View.VISIBLE);
         }
 
         adapter.add(user);
@@ -89,8 +93,10 @@ public class FragmentRecipient
         if(adapter.getItemCount() == 0) {
 
             this.recyclerView.setVisibility(View.GONE);
-            this.parent.hideSendButton();
-            this.parent.hideInputEditText();
+            this.parent.setSendImageViewAnimation(Animations.scaleDown(getActivity()));
+            this.parent.setSendImageVisibility(View.INVISIBLE);
+            this.parent.setMessageEditTextAnimation(Animations.leftTranslate(getActivity()));
+            this.parent.setMessageEditTextVisibility(View.INVISIBLE);
         }
     }
 

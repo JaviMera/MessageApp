@@ -1,6 +1,9 @@
 package com.teamtreehouse.ribbit.models;
 
 import android.os.Parcel;
+
+import com.google.firebase.storage.UploadTask;
+
 /**
  * Created by javie on 4/13/2017.
  */
@@ -14,7 +17,7 @@ public class ImageMessage extends Message{
         super("", "", 0);
     }
 
-    public ImageMessage(String id, String url, String path, String username, long date) {
+    public ImageMessage(String id, String username, String url, String path, long date) {
 
         super(id, username, date);
         this.url = url;

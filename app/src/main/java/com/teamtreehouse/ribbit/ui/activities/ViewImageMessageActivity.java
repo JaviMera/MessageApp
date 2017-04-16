@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import com.teamtreehouse.ribbit.models.ImageMessage;
-import com.teamtreehouse.ribbit.ui.fragments.ViewImageMessageFragment;
+import com.teamtreehouse.ribbit.ui.fragments.inbox.view.ViewImageMessageFragment;
 
 /**
  * Created by javie on 4/13/2017.

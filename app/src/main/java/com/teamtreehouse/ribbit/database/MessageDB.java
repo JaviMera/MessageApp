@@ -1,5 +1,10 @@
 package com.teamtreehouse.ribbit.database;
 
+import android.support.annotation.NonNull;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -7,6 +12,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
+import com.teamtreehouse.ribbit.models.ImageMessage;
 import com.teamtreehouse.ribbit.models.TextMessage;
 import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.models.UserCurrent;
@@ -14,6 +20,7 @@ import com.teamtreehouse.ribbit.models.UserFriend;
 import com.teamtreehouse.ribbit.models.UserRecipient;
 import com.teamtreehouse.ribbit.models.UserSender;
 import com.teamtreehouse.ribbit.models.UserRequest;
+import com.teamtreehouse.ribbit.ui.activities.ImageMessageActivity;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -34,6 +41,7 @@ public class MessageDB {
     public static final String USERNAME_PROP = "username";
     public static final String MESSAGES_NODE = "messages";
     public static final String TEXT_MESSAGES_NODE = "text";
+    public static final String IMAGES_NODE = "images";
 
     public static void insertUser(final User newUser, final UserInsertCallback listener) {
 
@@ -320,31 +328,54 @@ public class MessageDB {
             });
     }
 
-    public static void insertMessages(final List<User> recipients, final TextMessage message) {
+    public static void insertTextMessage(final String recipientId, TextMessage message, final TextInsertCallback callback) {
 
         FirebaseDatabase
             .getInstance()
             .getReference()
             .child(MESSAGES_NODE)
             .child(TEXT_MESSAGES_NODE)
-            .addListenerForSingleValueEvent(new ValueEventListener() {
-
+            .child(recipientId)
+            .push()
+            .setValue(message)
+            .addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+                public void onSuccess(Void aVoid) {
 
-                    for(User user : recipients) {
-
-                        dataSnapshot
-                            .child(user.getId())
-                            .getRef()
-                            .push()
-                            .setValue(message);
-                    }
+                    callback.onSuccess();
                 }
-
+            })
+            .addOnFailureListener(new OnFailureListener() {
                 @Override
-                public void onCancelled(DatabaseError databaseError) {
+                public void onFailure(@NonNull Exception e) {
 
+                    callback.onFailure();
+                }
+            });
+    }
+
+    public static void insertImageMessage(String recipientId, ImageMessage message, final ImageInsertCallback callback) {
+
+        FirebaseDatabase
+            .getInstance()
+            .getReference()
+            .child(MESSAGES_NODE)
+            .child(IMAGES_NODE)
+            .child(recipientId)
+            .push()
+            .setValue(message)
+            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+
+                    callback.onSuccess();
+                }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                    callback.onFailure();
                 }
             });
     }

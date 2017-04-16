@@ -1,4 +1,4 @@
-package com.teamtreehouse.ribbit.ui;
+package com.teamtreehouse.ribbit.ui.activities;
 
 import android.content.Context;
 import android.support.v4.app.FragmentManager;

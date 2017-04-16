@@ -1,5 +1,6 @@
-package com.teamtreehouse.ribbit.ui.fragments;
+package com.teamtreehouse.ribbit.ui.fragments.inbox.messages;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -7,13 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.teamtreehouse.ribbit.ui.activities.MessageActivity;
+import com.teamtreehouse.ribbit.ui.activities.MessageActivityView;
 
 /**
  * Created by javie on 4/14/2017.
  */
 
-public class FragmentTextMessage extends Fragment{
+public class FragmentTextMessage
+    extends
+        FragmentMessage<Void>  {
 
     public static Fragment newInstance() {
 
@@ -25,7 +28,8 @@ public class FragmentTextMessage extends Fragment{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        ((MessageActivity)getActivity()).hideProgress();
+        parent.setSendLayoutVisibility(View.VISIBLE);
+        parent.setProgressBarVisibility(View.GONE);
         return view;
     }
 }

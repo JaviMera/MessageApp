@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -12,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.animation.Animation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -28,8 +30,8 @@ import com.teamtreehouse.ribbit.ui.fragments.recipients.FragmentRecipient;
 import com.teamtreehouse.ribbit.ui.fragments.recipients.FragmentRecipientsView;
 import com.teamtreehouse.ribbit.ui.fragments.suggestions.FragmentSuggestions;
 import com.teamtreehouse.ribbit.ui.fragments.suggestions.FragmentSuggestionsView;
-import com.teamtreehouse.ribbit.utils.Animations;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -37,9 +39,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public abstract class MessageActivity extends AppCompatActivity implements MessageActivityView {
-
-    private static final String SUGGESTIONS_TAG = "suggestions";
-    private static final String RECIPIENTS_TAG = "recipients";
 
     @BindView(R.id.root)
     RelativeLayout rootLayout;
@@ -59,6 +58,9 @@ public abstract class MessageActivity extends AppCompatActivity implements Messa
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
 
+    HashMap<String, View> views;
+
+    protected MessageActivityPresenter presenter;
     protected List<User> recipients;
 
     @Override
@@ -66,6 +68,7 @@ public abstract class MessageActivity extends AppCompatActivity implements Messa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
 
+        this.presenter = new MessageActivityPresenter(this);
         this.recipients = new LinkedList<>();
 
         ButterKnife.bind(this);
@@ -75,8 +78,8 @@ public abstract class MessageActivity extends AppCompatActivity implements Messa
                 PorterDuff.Mode.SRC_IN
         );
 
-        this.sendImageView.setVisibility(View.INVISIBLE);
-        this.messageEditText.setVisibility(View.INVISIBLE);
+        this.presenter.setSendImageVisibility(View.INVISIBLE);
+        this.presenter.setMessageEditTextVisibility(View.INVISIBLE);
 
         recipientsEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -89,8 +92,7 @@ public abstract class MessageActivity extends AppCompatActivity implements Messa
 
                 String input = String.valueOf(charSequence);
 
-                final FragmentSuggestionsView fragment = (FragmentSuggestionsView)
-                        getSupportFragmentManager().findFragmentByTag(SUGGESTIONS_TAG);
+                final FragmentSuggestionsView fragment = findFragmentById(R.id.suggestionsContainer);
 
                 if (input.isEmpty()) {
 
@@ -127,59 +129,29 @@ public abstract class MessageActivity extends AppCompatActivity implements Messa
             }
         });
 
+        replaceFragment(R.id.recipientsContainer, FragmentRecipient.newInstance());
+        replaceFragment(R.id.suggestionsContainer, FragmentSuggestions.newInstance());
+    }
+
+    @Override
+    public void replaceFragment(int containerId, Fragment fragment) {
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.recipientsContainer, FragmentRecipient.newInstance(), RECIPIENTS_TAG);
-        fragmentTransaction.replace(R.id.suggestionsContainer, FragmentSuggestions.newInstance(), SUGGESTIONS_TAG);
+        fragmentTransaction.replace(containerId, fragment);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public <TFragment> TFragment findFragmentById(int containerId) {
+
+        return (TFragment) getSupportFragmentManager().findFragmentById(containerId);
     }
 
     @Override
     public void recipientRemoved(int position) {
 
         this.recipients.remove(position);
-    }
-
-    @Override
-    public void showSendButton() {
-
-        this.sendImageView.setAnimation(Animations.scaleUp(this));
-        this.sendImageView.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void hideSendButton() {
-
-        this.sendImageView.setAnimation(Animations.scaleDown(this));
-        this.sendImageView.setVisibility(View.INVISIBLE);
-    }
-
-    @Override
-    public void showInputEditText() {
-
-        this.messageEditText.setAnimation(Animations.rightTranslate(this));
-        this.messageEditText.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void hideInputEditText() {
-
-        this.messageEditText.setAnimation(Animations.leftTranslate(this));
-        this.messageEditText.setVisibility(View.INVISIBLE);
-    }
-
-    @Override
-    public void showProgress() {
-
-        this.sendLayout.setVisibility(View.GONE);
-        this.progressBar.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void hideProgress() {
-
-        this.sendLayout.setVisibility(View.VISIBLE);
-        this.progressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -190,10 +162,46 @@ public abstract class MessageActivity extends AppCompatActivity implements Messa
         this.recipients.add(user);
         this.recipientsEditText.setText("");
 
-        FragmentRecipientsView fragment = (FragmentRecipientsView) getSupportFragmentManager().findFragmentByTag(RECIPIENTS_TAG);
+        FragmentRecipientsView fragment = findFragmentById(R.id.recipientsContainer);
         fragment.onFriendAdded(user);
 
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(rootLayout.getWindowToken(), 0);
+    }
+
+    @Override
+    public void setSendImageVisibility(int visibility) {
+
+        this.sendImageView.setVisibility(visibility);
+    }
+
+    @Override
+    public void setMessageEditTextVisibility(int visible) {
+
+        this.messageEditText.setVisibility(visible);
+    }
+
+    @Override
+    public void setSendLayoutVisibility(int visibility) {
+
+        this.sendLayout.setVisibility(visibility);
+    }
+
+    @Override
+    public void setProgressBarVisibility(int visibility) {
+
+        this.progressBar.setVisibility(visibility);
+    }
+
+    @Override
+    public void setSendImageViewAnimation(Animation anim) {
+
+        this.sendImageView.setAnimation(anim);
+    }
+
+    @Override
+    public void setMessageEditTextAnimation(Animation anim) {
+
+        this.messageEditText.setAnimation(anim);
     }
 }

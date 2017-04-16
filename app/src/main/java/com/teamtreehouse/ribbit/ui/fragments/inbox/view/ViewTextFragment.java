@@ -1,4 +1,4 @@
-package com.teamtreehouse.ribbit.ui.fragments;
+package com.teamtreehouse.ribbit.ui.fragments.inbox.view;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -16,8 +16,6 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.models.Auth;
-import com.teamtreehouse.ribbit.models.Item;
-import com.teamtreehouse.ribbit.models.Message;
 import com.teamtreehouse.ribbit.models.TextMessage;
 import com.teamtreehouse.ribbit.ui.activities.ViewMessageActivity;
 
@@ -30,7 +28,7 @@ import butterknife.ButterKnife;
  * Created by javie on 4/13/2017.
  */
 
-public class ViewTextFragment extends Fragment implements ViewMessageFragment{
+public class ViewTextFragment extends Fragment implements ViewMessageFragment {
 
     private TextMessage friendMessage;
 

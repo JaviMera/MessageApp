@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.models.Message;
-import com.teamtreehouse.ribbit.ui.fragments.ViewMessageFragment;
+import com.teamtreehouse.ribbit.ui.fragments.inbox.view.ViewMessageFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -110,10 +110,12 @@ public abstract class ViewMessageActivity<TMessage extends Message> extends AppC
     @Override
     public void onBackPressed() {
 
-        ViewMessageFragment fragment = (ViewMessageFragment) getSupportFragmentManager()
-            .findFragmentById(R.id.container);
-
-        fragment.onFinish();
+        timer.cancel();
+        timer.onFinish();
+//        ViewMessageFragment fragment = (ViewMessageFragment) getSupportFragmentManager()
+//            .findFragmentById(R.id.container);
+//
+//        fragment.onFinish();
 
         super.onBackPressed();
     }

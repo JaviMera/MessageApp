@@ -1,7 +1,7 @@
-package com.teamtreehouse.ribbit.ui.fragments;
+package com.teamtreehouse.ribbit.ui.fragments.inbox.messages;
 
+import android.content.Context;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,12 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.teamtreehouse.ribbit.R;
-import com.teamtreehouse.ribbit.ui.activities.MessageActivity;
-import com.teamtreehouse.ribbit.utils.FileHelper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,7 +21,11 @@ import butterknife.ButterKnife;
  * Created by javie on 4/14/2017.
  */
 
-public class FragmentImageMessage extends Fragment {
+public class FragmentImageMessage
+    extends
+        FragmentMessage<Uri>
+    implements
+        PictureListener {
 
     public static Fragment newInstance(Uri uri) {
 
@@ -38,8 +40,6 @@ public class FragmentImageMessage extends Fragment {
     @BindView(R.id.imageView)
     ImageView pictureView;
 
-    private Uri pictureUri;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -48,38 +48,27 @@ public class FragmentImageMessage extends Fragment {
 
         ButterKnife.bind(this, view);
 
-        pictureUri = getArguments().getParcelable("uri");
-        new PictureTask().execute(pictureUri);
+        Toast.makeText(getActivity(), "Converting picture...", Toast.LENGTH_SHORT).show();
+
+        this.value = getArguments().getParcelable("uri");
+        new PictureTask(this).execute(this.value);
         return view;
     }
 
-    public class PictureTask extends AsyncTask<Uri, Void, Uri> {
+    @Override
+    public void onPreExecute() {
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            ((MessageActivity)getActivity()).showProgress();
-        }
-
-        @Override
-        protected void onPostExecute(Uri uri) {
-            super.onPostExecute(uri);
-
-            ((MessageActivity)getActivity()).hideProgress();
-            pictureUri = uri;
-            Picasso.with(getActivity()).load(pictureUri).into(pictureView);
-        }
-
-        @Override
-        protected Uri doInBackground(Uri... uris) {
-
-            return FileHelper.resizeUri(getActivity(), uris[0]);
-        }
+        parent.setSendLayoutVisibility(View.GONE);
+        parent.setProgressBarVisibility(View.VISIBLE);
     }
 
-    public Uri getUri() {
+    @Override
+    public void onPostExecute(Uri resizedPictureUri) {
 
-        return this.pictureUri;
+        parent.setSendLayoutVisibility(View.VISIBLE);
+        parent.setProgressBarVisibility(View.GONE);
+
+        this.value = resizedPictureUri;
+        Picasso.with(getActivity()).load(value).into(pictureView);
     }
 }
