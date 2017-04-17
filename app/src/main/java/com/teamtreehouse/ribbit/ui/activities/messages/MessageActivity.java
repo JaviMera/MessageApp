@@ -8,10 +8,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.inputmethod.InputMethodManager;
@@ -43,6 +46,9 @@ public abstract class MessageActivity extends AppCompatActivity implements Messa
     @BindView(R.id.root)
     RelativeLayout rootLayout;
 
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
     @BindView(R.id.recipientsEditText)
     EditText recipientsEditText;
 
@@ -72,6 +78,9 @@ public abstract class MessageActivity extends AppCompatActivity implements Messa
         this.recipients = new LinkedList<>();
 
         ButterKnife.bind(this);
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         progressBar.getIndeterminateDrawable().setColorFilter(
                 ContextCompat.getColor(this, R.color.apptheme_color),
@@ -131,6 +140,18 @@ public abstract class MessageActivity extends AppCompatActivity implements Messa
 
         replaceFragment(R.id.recipientsContainer, FragmentRecipient.newInstance());
         replaceFragment(R.id.suggestionsContainer, FragmentSuggestions.newInstance());
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch(item.getItemId()) {
+
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

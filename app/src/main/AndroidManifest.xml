@@ -62,7 +62,7 @@
         </activity>
         <activity
             android:name="com.teamtreehouse.ribbit.ui.activities.messages.ImageMessageActivity"
-            android:label="@string/title_activity_view_image"
+            android:label="@string/activity_text_message_label"
             android:parentActivityName="com.teamtreehouse.ribbit.ui.activities.MainActivity"
             android:screenOrientation="portrait" >
             <meta-data
@@ -81,7 +81,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.teamtreehouse.ribbit.ui.activities.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.messages.TextMessageActivity" >
+        <activity android:name=".ui.activities.messages.TextMessageActivity"
+                android:label="@string/activity_text_message_label">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.teamtreehouse.ribbit.ui.activities.MainActivity" />

@@ -66,5 +66,6 @@
     <string name="message_options_text">text message</string>
     <string name="activity_edit_friend_label">Edit</string>
     <string name="activity_users_label">Search people</string>
+    <string name="activity_text_message_label">Edit Message</string>
 
 </resources>
