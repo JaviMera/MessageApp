@@ -3,6 +3,7 @@ package com.teamtreehouse.ribbit.ui.activities;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -52,6 +53,7 @@ public class EditFriendActivity extends AppCompatActivity implements DialogInter
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         friend = getIntent().getParcelableExtra(EDIT_FRIEND_KEY);
         username.setText(friend.getUsername());
@@ -65,9 +67,26 @@ public class EditFriendActivity extends AppCompatActivity implements DialogInter
     }
 
     @Override
+    public void onBackPressed() {
+
+        NavUtils.navigateUpFromSameTask(this);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch(item.getItemId()) {
+
+            case android.R.id.home:
+                // This ID represents the Home or Up button. In the case of this
+                // fragment, the Up button is shown. Use NavUtils to allow users
+                // to navigate up one level in the application structure. For
+                // more details, see the Navigation pattern on Android Design:
+                //
+                // http://developer.android.com/design/patterns/navigation.html#up-vs-back
+                //
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
 
             case R.id.action_delete:
 
@@ -86,6 +105,6 @@ public class EditFriendActivity extends AppCompatActivity implements DialogInter
     public void onClick(DialogInterface dialogInterface, int i) {
 
         MessageDB.deleteFriend(Auth.getInstance().getUser(), friend);
-        finish();
+        NavUtils.navigateUpFromSameTask(this);
     }
 }

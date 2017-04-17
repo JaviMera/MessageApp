@@ -74,7 +74,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.teamtreehouse.ribbit.ui.activities.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.EditFriendActivity" >
+        <activity android:name=".ui.activities.EditFriendActivity"
+            android:label="@string/activity_edit_friend_label">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.teamtreehouse.ribbit.ui.activities.MainActivity" />
         </activity>
         <activity android:name=".ui.activities.TextMessageActivity" >
             <meta-data
