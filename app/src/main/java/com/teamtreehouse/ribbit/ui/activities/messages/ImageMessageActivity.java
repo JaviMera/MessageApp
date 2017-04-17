@@ -1,4 +1,4 @@
-package com.teamtreehouse.ribbit.ui.activities;
+package com.teamtreehouse.ribbit.ui.activities.messages;
 
 import android.net.Uri;
 import android.os.Bundle;

@@ -65,5 +65,6 @@
     <string name="message_options_video">videos</string>
     <string name="message_options_text">text message</string>
     <string name="activity_edit_friend_label">Edit</string>
+    <string name="activity_users_label">Search people</string>
 
 </resources>

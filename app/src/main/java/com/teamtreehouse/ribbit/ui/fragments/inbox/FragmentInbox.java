@@ -1,10 +1,7 @@
 package com.teamtreehouse.ribbit.ui.fragments.inbox;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,13 +18,12 @@ import com.teamtreehouse.ribbit.models.ImageMessage;
 import com.teamtreehouse.ribbit.models.Message;
 import com.teamtreehouse.ribbit.models.TextMessage;
 import com.teamtreehouse.ribbit.ui.activities.ActivityView;
-import com.teamtreehouse.ribbit.ui.activities.MainActivity;
-import com.teamtreehouse.ribbit.ui.activities.ViewImageMessageActivity;
+import com.teamtreehouse.ribbit.ui.activities.messages.view.ViewImageMessageActivity;
 import com.teamtreehouse.ribbit.ui.callbacks.ImageMessagesCallback;
 import com.teamtreehouse.ribbit.ui.callbacks.MessageRecipient;
 import com.teamtreehouse.ribbit.ui.callbacks.TextMessagesCallback;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentPager;
-import com.teamtreehouse.ribbit.ui.activities.ViewTextMessageActivity;
+import com.teamtreehouse.ribbit.ui.activities.messages.view.ViewTextMessageActivity;
 import com.teamtreehouse.ribbit.utils.Resources;
 
 import butterknife.BindView;

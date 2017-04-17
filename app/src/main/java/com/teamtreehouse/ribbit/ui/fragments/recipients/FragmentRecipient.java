@@ -14,8 +14,7 @@ import android.view.ViewGroup;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.FragmentRecipientsAdapter;
 import com.teamtreehouse.ribbit.models.User;
-import com.teamtreehouse.ribbit.ui.activities.MessageActivity;
-import com.teamtreehouse.ribbit.ui.activities.MessageActivityView;
+import com.teamtreehouse.ribbit.ui.activities.messages.MessageActivityView;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentRecycler;
 import com.teamtreehouse.ribbit.utils.Animations;
 

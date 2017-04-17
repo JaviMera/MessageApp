@@ -1,4 +1,4 @@
-package com.teamtreehouse.ribbit.ui.activities;
+package com.teamtreehouse.ribbit.ui.activities.messages.view;
 
 import android.animation.ObjectAnimator;
 import android.graphics.PorterDuff;
@@ -14,8 +14,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.teamtreehouse.ribbit.R;
-import com.teamtreehouse.ribbit.ui.activities.messages.view.MessageTimer;
-import com.teamtreehouse.ribbit.ui.activities.messages.view.TimerListener;
 import com.teamtreehouse.ribbit.ui.fragments.inbox.view.ViewMessageFragment;
 
 import butterknife.BindView;

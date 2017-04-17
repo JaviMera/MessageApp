@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.activities.ImageMessageActivity">
+    tools:context=".ui.activities.messages.ImageMessageActivity">
 
     <ImageView
         android:id="@+id/imageView"

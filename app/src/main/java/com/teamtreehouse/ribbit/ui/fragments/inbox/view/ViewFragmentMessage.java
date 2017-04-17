@@ -3,7 +3,7 @@ package com.teamtreehouse.ribbit.ui.fragments.inbox.view;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 
-import com.teamtreehouse.ribbit.ui.activities.ViewMessageActivity;
+import com.teamtreehouse.ribbit.ui.activities.messages.view.ViewMessageActivity;
 
 /**
  * Created by javie on 4/16/2017.

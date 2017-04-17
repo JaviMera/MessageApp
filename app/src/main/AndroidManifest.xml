@@ -61,7 +61,7 @@
                 android:value="com.teamtreehouse.ribbit.ui.activities.MainActivity" />
         </activity>
         <activity
-            android:name="com.teamtreehouse.ribbit.ui.activities.ImageMessageActivity"
+            android:name="com.teamtreehouse.ribbit.ui.activities.messages.ImageMessageActivity"
             android:label="@string/title_activity_view_image"
             android:parentActivityName="com.teamtreehouse.ribbit.ui.activities.MainActivity"
             android:screenOrientation="portrait" >
@@ -69,7 +69,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.teamtreehouse.ribbit.ui.activities.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.UsersActivity" >
+        <activity android:name=".ui.activities.UsersActivity"
+                android:label="@string/activity_users_label">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.teamtreehouse.ribbit.ui.activities.MainActivity" />
@@ -80,17 +81,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.teamtreehouse.ribbit.ui.activities.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.TextMessageActivity" >
+        <activity android:name=".ui.activities.messages.TextMessageActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.teamtreehouse.ribbit.ui.activities.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.ViewTextMessageActivity" >
+        <activity android:name=".ui.activities.messages.view.ViewTextMessageActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.teamtreehouse.ribbit.ui.activities.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.ViewImageMessageActivity" >
+        <activity android:name=".ui.activities.messages.view.ViewImageMessageActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.teamtreehouse.ribbit.ui.activities.MainActivity" />

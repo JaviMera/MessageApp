@@ -1,14 +1,11 @@
 package com.teamtreehouse.ribbit.ui.fragments.inbox.messages;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.teamtreehouse.ribbit.ui.activities.MessageActivityView;
 
 /**
  * Created by javie on 4/14/2017.

@@ -1,22 +1,17 @@
 package com.teamtreehouse.ribbit.dialogs;
 
-import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 
 import com.teamtreehouse.ribbit.R;
-import com.teamtreehouse.ribbit.models.Message;
 import com.teamtreehouse.ribbit.ui.activities.MainActivity;
-import com.teamtreehouse.ribbit.ui.activities.MessageActivity;
-import com.teamtreehouse.ribbit.ui.activities.TextMessageActivity;
+import com.teamtreehouse.ribbit.ui.activities.messages.TextMessageActivity;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;

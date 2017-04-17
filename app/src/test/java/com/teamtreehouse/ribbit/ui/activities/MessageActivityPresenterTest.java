@@ -3,6 +3,9 @@ package com.teamtreehouse.ribbit.ui.activities;
 import android.view.View;
 import android.view.animation.Animation;
 
+import com.teamtreehouse.ribbit.ui.activities.messages.MessageActivityPresenter;
+import com.teamtreehouse.ribbit.ui.activities.messages.MessageActivityView;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

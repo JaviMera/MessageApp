@@ -1,10 +1,9 @@
 package com.teamtreehouse.ribbit.ui.fragments.inbox.messages;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-import com.teamtreehouse.ribbit.ui.activities.MessageActivityView;
+import com.teamtreehouse.ribbit.ui.activities.messages.MessageActivityView;
 
 /**
  * Created by javie on 4/16/2017.

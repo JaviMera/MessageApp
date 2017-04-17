@@ -1,4 +1,4 @@
-package com.teamtreehouse.ribbit.ui.activities;
+package com.teamtreehouse.ribbit.ui.activities.messages.view;
 
 /**
  * Created by javie on 4/16/2017.
