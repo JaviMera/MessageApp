@@ -50,7 +50,7 @@ public class ViewImageMessageFragment extends ViewFragmentMessage implements Vie
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.view_image_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_view_image, container, false);
 
         ButterKnife.bind(this, view);
         message = getArguments().getParcelable(Message.KEY);

@@ -29,6 +29,7 @@ import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.database.UserReadCallback;
+import com.teamtreehouse.ribbit.ui.activities.MainActivity;
 import com.teamtreehouse.ribbit.ui.fragments.recipients.FragmentRecipient;
 import com.teamtreehouse.ribbit.ui.fragments.recipients.FragmentRecipientsView;
 import com.teamtreehouse.ribbit.ui.fragments.suggestions.FragmentSuggestions;
@@ -148,7 +149,8 @@ public abstract class MessageActivity extends AppCompatActivity implements Messa
         switch(item.getItemId()) {
 
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+
+                finish();
                 break;
         }
         return super.onOptionsItemSelected(item);

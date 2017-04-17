@@ -42,7 +42,7 @@ public class ViewTextFragment extends ViewFragmentMessage implements ViewMessage
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.view_text_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_view_text, container, false);
 
         ButterKnife.bind(this, view);
 

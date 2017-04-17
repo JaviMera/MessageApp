@@ -22,6 +22,8 @@ public class ViewImageMessageActivity extends ViewMessageActivity {
         super.onCreate(savedInstanceState);
 
         ImageMessage message = getIntent().getParcelableExtra(Message.KEY);
+        getSupportActionBar().setTitle(message.getUsername());
+
         Bundle bundle = getIntent().getExtras();
 
         FragmentManager manager = getSupportFragmentManager();

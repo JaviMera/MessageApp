@@ -22,6 +22,7 @@ public class ViewTextMessageActivity extends ViewMessageActivity {
         super.onCreate(savedInstanceState);
 
         TextMessage message = getIntent().getParcelableExtra(Message.KEY);
+        getSupportActionBar().setTitle(message.getUsername());
 
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();

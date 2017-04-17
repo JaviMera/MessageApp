@@ -5,10 +5,13 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.animation.LinearInterpolator;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -31,6 +34,10 @@ public abstract class ViewMessageActivity
     public static final int PROGRESS_MAX = 1000;
     public static final int PROGRESS_ANIM_DURATION = 10000;
     public static final int TICK_INTERVAL = 1000;
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
     @BindView(R.id.clockTextView)
     TextView clockTextView;
 
@@ -49,9 +56,12 @@ public abstract class ViewMessageActivity
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.view_message_activity);
+        setContentView(R.layout.activity_view_message);
 
         ButterKnife.bind(this);
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         progressBar.getIndeterminateDrawable().setColorFilter(
                 ContextCompat.getColor(this, R.color.apptheme_color),
@@ -74,7 +84,23 @@ public abstract class ViewMessageActivity
 
         // Perform the finish code from the timer when the user presses the back button
         timer.onFinish();
+
+        // Navigate back to the parent activity
         super.onBackPressed();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+
+            case android.R.id.home:
+
+                onBackPressed();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public void start() {

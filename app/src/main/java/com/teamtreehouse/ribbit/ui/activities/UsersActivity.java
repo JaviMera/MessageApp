@@ -94,7 +94,7 @@ public class UsersActivity extends AppCompatActivity implements ActivityView {
         switch(item.getItemId()) {
 
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                finish();
                 return true;
         }
 
