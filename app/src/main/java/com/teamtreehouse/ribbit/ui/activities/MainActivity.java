@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -24,6 +25,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.Logger;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.SectionsPagerAdapter;
 import com.teamtreehouse.ribbit.models.Auth;
@@ -46,7 +48,7 @@ import butterknife.OnClick;
 public class MainActivity extends AppCompatActivity implements ActivityView {
 
     private static int[] fabIcons = new int[]{
-        R.mipmap.ic_message, R.mipmap.ic_add_contact
+            R.mipmap.ic_message, R.mipmap.ic_add_contact
     };
 
     public static final String TAG = MainActivity.class.getSimpleName();
@@ -190,6 +192,7 @@ public class MainActivity extends AppCompatActivity implements ActivityView {
     FloatingActionButton fab;
 
     private FragmentPager currentFragment;
+    private Uri captureImageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -211,11 +214,11 @@ public class MainActivity extends AppCompatActivity implements ActivityView {
         tabLayout.setupWithViewPager(viewPager);
 
         // Setup icons to display for each tab
-        for(int tab = 0; tab < tabLayout.getTabCount(); tab++) {
+        for (int tab = 0; tab < tabLayout.getTabCount(); tab++) {
 
             TabLayout.Tab currentTab = tabLayout.getTabAt(tab);
 
-            if(currentTab != null) {
+            if (currentTab != null) {
 
                 currentTab.setIcon(viewPagerAdapter.getIcon(tab));
             }
@@ -253,27 +256,35 @@ public class MainActivity extends AppCompatActivity implements ActivityView {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        switch(requestCode) {
+        switch (requestCode) {
 
             case PICK_PHOTO_REQUEST:
 
-                if(data != null) {
+                if (data != null) {
 
                     Uri imageUri = data.getData();
-                    Intent intent = new Intent(MainActivity.this, ImageMessageActivity.class);
-                    intent.putExtra("uri", imageUri);
-                    startActivity(intent);
+                    Intent pickPictureIntent = new Intent(MainActivity.this, ImageMessageActivity.class);
+                    pickPictureIntent.putExtra("uri", imageUri);
+                    startActivity(pickPictureIntent);
                 }
+                break;
+
+            case TAKE_PHOTO_REQUEST:
+
+                    Intent takePictureIntent = new Intent(MainActivity.this, ImageMessageActivity.class);
+                    takePictureIntent.putExtra("uri", captureImageUri);
+                    startActivity(takePictureIntent);
+
                 break;
 
             case PICK_VIDEO_REQUEST:
 
-                if(data != null) {
+                if (data != null) {
 
                     Uri videoUri = data.getData();
-                    Intent intent = new Intent(MainActivity.this, VideoMessageActivity.class);
-                    intent.putExtra("video", videoUri);
-                    startActivity(intent);
+                    Intent pickVideoIntent = new Intent(MainActivity.this, VideoMessageActivity.class);
+                    pickVideoIntent.putExtra("video", videoUri);
+                    startActivity(pickVideoIntent);
                 }
                 break;
         }
@@ -383,11 +394,11 @@ public class MainActivity extends AppCompatActivity implements ActivityView {
     protected void onStop() {
         super.onStop();
 
-        if(isFinishing()) {
+        if (isFinishing()) {
 
             FirebaseAuth
-                .getInstance()
-                .signOut();
+                    .getInstance()
+                    .signOut();
         }
     }
 
@@ -410,7 +421,7 @@ public class MainActivity extends AppCompatActivity implements ActivityView {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
-        switch(requestCode) {
+        switch (requestCode) {
 
             case REQUEST_EXTERNAL_STORAGE:
 
@@ -419,16 +430,16 @@ public class MainActivity extends AppCompatActivity implements ActivityView {
                         && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 }
 
-                launchGalleryActicity();
+                choosePicture();
 
                 break;
         }
     }
 
-    public void launchGalleryActicity() {
+    public void choosePicture() {
 
-        if(ContextCompat.checkSelfPermission(
-            this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+        if (ContextCompat.checkSelfPermission(
+                this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
 
             requestPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
             return;
@@ -439,9 +450,9 @@ public class MainActivity extends AppCompatActivity implements ActivityView {
         startActivityForResult(choosePhotoIntent, MainActivity.PICK_PHOTO_REQUEST);
     }
 
-    public void launchGalleryVideoActivity() {
+    public void chooseVideo() {
 
-        if(ContextCompat.checkSelfPermission(
+        if (ContextCompat.checkSelfPermission(
                 this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
 
             requestPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
@@ -453,4 +464,50 @@ public class MainActivity extends AppCompatActivity implements ActivityView {
         Toast.makeText(MainActivity.this, R.string.video_file_size_warning, Toast.LENGTH_LONG).show();
         startActivityForResult(chooseVideoIntent, PICK_VIDEO_REQUEST);
     }
+
+    public void capturePicture() {
+
+        if (ContextCompat.checkSelfPermission(
+                this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+
+            requestPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
+            return;
+        }
+
+        if (isExternalStorageAvailable()) {
+            // getValue the URI
+
+            // 1. Get the external storage directory
+            File mediaStorageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+            // 2. Create a unique file name
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            String fileName = "IMG_" + timeStamp;
+
+            // 3. Create the file
+            File mediaFile;
+            try {
+                mediaFile = File.createTempFile(fileName, ".jpg", mediaStorageDir);
+
+                // 4. Return the file's URI
+                captureImageUri = Uri.fromFile(mediaFile);
+                Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, captureImageUri);
+                startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST);
+            }
+            catch (IOException e) {
+
+                Toast.makeText(this, "Error creating file: " +
+                    mediaStorageDir.getAbsolutePath() + fileName + ".jpg", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private boolean isExternalStorageAvailable() {
+
+        String state = Environment.getExternalStorageState();
+
+        return state.equals(Environment.MEDIA_MOUNTED);
+    }
 }
+

@@ -55,11 +55,15 @@ public class MessageOptionDialog extends DialogFragment {
                 break;
 
             case R.id.picturesLayout:
-                ((MainActivity)getActivity()).launchGalleryActicity();
+                ((MainActivity)getActivity()).choosePicture();
+                break;
+
+            case R.id.capturePicturesLayout:
+                ((MainActivity)getActivity()).capturePicture();
                 break;
 
             case R.id.videoLayout:
-                ((MainActivity)getActivity()).launchGalleryVideoActivity();
+                ((MainActivity)getActivity()).chooseVideo();
                 break;
         }
 
