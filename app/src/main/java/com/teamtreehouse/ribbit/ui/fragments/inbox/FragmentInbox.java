@@ -17,11 +17,14 @@ import com.teamtreehouse.ribbit.dialogs.MessageOptionDialog;
 import com.teamtreehouse.ribbit.models.ImageMessage;
 import com.teamtreehouse.ribbit.models.Message;
 import com.teamtreehouse.ribbit.models.TextMessage;
+import com.teamtreehouse.ribbit.models.VideoMessage;
 import com.teamtreehouse.ribbit.ui.activities.ActivityView;
 import com.teamtreehouse.ribbit.ui.activities.messages.view.ViewImageMessageActivity;
+import com.teamtreehouse.ribbit.ui.activities.messages.view.ViewVideoMessageActivity;
 import com.teamtreehouse.ribbit.ui.callbacks.ImageMessagesCallback;
 import com.teamtreehouse.ribbit.ui.callbacks.MessageRecipient;
 import com.teamtreehouse.ribbit.ui.callbacks.TextMessagesCallback;
+import com.teamtreehouse.ribbit.ui.callbacks.VideoMessagesCallback;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentPager;
 import com.teamtreehouse.ribbit.ui.activities.messages.view.ViewTextMessageActivity;
 import com.teamtreehouse.ribbit.utils.Resources;
@@ -34,10 +37,11 @@ public class FragmentInbox
     implements
         FragmentInboxView,
         MessageRecipient,
-        ImageMessagesCallback.ImageMessageListener{
+        ImageMessagesCallback.ImageMessageListener, VideoMessagesCallback.VideoMessageListener {
 
     private TextMessagesCallback messagesCallback;
     private ImageMessagesCallback imageMessagesCallback;
+    private VideoMessagesCallback videoMessagesCallback;
 
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
@@ -86,6 +90,7 @@ public class FragmentInbox
 
         this.messagesCallback = new TextMessagesCallback(this);
         this.imageMessagesCallback = new ImageMessagesCallback(this);
+        this.videoMessagesCallback = new VideoMessagesCallback(this);
     }
 
     @Override
@@ -213,6 +218,12 @@ public class FragmentInbox
             intent.putExtra(Message.KEY, message);
             startActivity(intent);
         }
+        else if(message instanceof VideoMessage) {
+
+            Intent intent = new Intent(this.getActivity(), ViewVideoMessageActivity.class);
+            intent.putExtra(Message.KEY, message);
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -246,6 +257,21 @@ public class FragmentInbox
 
     @Override
     public void onMessageRemoved(ImageMessage message) {
+
+        InboxFragmentAdapter adapter = getAdapter();
+        int position = adapter.getPosition(message);
+        adapter.removeItem(position);
+    }
+
+    @Override
+    public void onMessageAdded(VideoMessage message) {
+
+        InboxFragmentAdapter adapter = getAdapter();
+        adapter.add(message);
+    }
+
+    @Override
+    public void onMessageRemoved(VideoMessage message) {
 
         InboxFragmentAdapter adapter = getAdapter();
         int position = adapter.getPosition(message);

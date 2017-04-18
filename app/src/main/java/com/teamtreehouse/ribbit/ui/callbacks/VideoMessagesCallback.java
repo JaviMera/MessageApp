@@ -5,30 +5,31 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.teamtreehouse.ribbit.models.Auth;
-import com.teamtreehouse.ribbit.models.ImageMessage;
+import com.teamtreehouse.ribbit.models.VideoMessage;
 
 /**
- * Created by javie on 4/13/2017.
+ * Created by javie on 4/17/2017.
  */
 
-public class ImageMessagesCallback implements ChildEventListener{
+public class VideoMessagesCallback implements ChildEventListener {
 
-    private ImageMessageListener listener;
+    public interface VideoMessageListener {
 
-    public interface ImageMessageListener {
-
-        void onMessageAdded(ImageMessage message);
-        void onMessageRemoved(ImageMessage message);
+        void onMessageAdded(VideoMessage message);
+        void onMessageRemoved(VideoMessage message);
     }
 
-    public ImageMessagesCallback(ImageMessageListener listener) {
+    private VideoMessageListener listener;
+
+    public VideoMessagesCallback(VideoMessageListener listener) {
 
         this.listener = listener;
+
         FirebaseDatabase
             .getInstance()
             .getReference()
             .child("messages")
-            .child("images")
+            .child("videos")
             .child(Auth.getInstance().getId())
             .addChildEventListener(this);
     }
@@ -36,7 +37,7 @@ public class ImageMessagesCallback implements ChildEventListener{
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-        this.listener.onMessageAdded(dataSnapshot.getValue(ImageMessage.class));
+        this.listener.onMessageAdded(dataSnapshot.getValue(VideoMessage.class));
     }
 
     @Override
@@ -47,7 +48,7 @@ public class ImageMessagesCallback implements ChildEventListener{
     @Override
     public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-        this.listener.onMessageRemoved(dataSnapshot.getValue(ImageMessage.class));
+        this.listener.onMessageRemoved(dataSnapshot.getValue(VideoMessage.class));
     }
 
     @Override

@@ -8,7 +8,9 @@ import android.support.v4.app.FragmentTransaction;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.models.ImageMessage;
 import com.teamtreehouse.ribbit.models.Message;
+import com.teamtreehouse.ribbit.models.MessageDuration;
 import com.teamtreehouse.ribbit.ui.fragments.inbox.view.ViewImageMessageFragment;
+import com.teamtreehouse.ribbit.ui.fragments.inbox.view.ViewMessageFragmentView;
 
 /**
  * Created by javie on 4/13/2017.
@@ -24,11 +26,6 @@ public class ViewImageMessageActivity extends ViewMessageActivity {
         ImageMessage message = getIntent().getParcelableExtra(Message.KEY);
         getSupportActionBar().setTitle(message.getUsername());
 
-        Bundle bundle = getIntent().getExtras();
-
-        FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.container, ViewImageMessageFragment.newInstance(message, bundle));
-        transaction.commit();
+        replaceFragment(R.id.container, ViewImageMessageFragment.newInstance(message));
     }
 }

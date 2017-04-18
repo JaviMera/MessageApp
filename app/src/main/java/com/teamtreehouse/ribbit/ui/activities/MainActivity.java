@@ -29,6 +29,7 @@ import com.teamtreehouse.ribbit.adapters.SectionsPagerAdapter;
 import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.purgatory.ObsoleteUser;
 import com.teamtreehouse.ribbit.ui.activities.messages.ImageMessageActivity;
+import com.teamtreehouse.ribbit.ui.activities.messages.VideoMessageActivity;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentPager;
 import com.teamtreehouse.ribbit.ui.fragments.friends.FriendsFragment;
 import com.teamtreehouse.ribbit.ui.fragments.inbox.FragmentInbox;
@@ -117,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements ActivityView {
                     // To be safe, you should check that the SDCard is mounted
                     // using Environment.getExternalStorageState() before doing this.
                     if (isExternalStorageAvailable()) {
-                        // get the URI
+                        // getValue the URI
 
                         // 1. Get the external storage directory
                         File mediaStorageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -252,14 +253,30 @@ public class MainActivity extends AppCompatActivity implements ActivityView {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if(requestCode == PICK_PHOTO_REQUEST && data != null) {
+        switch(requestCode) {
 
-            Uri uri = data.getData();
-            Intent intent = new Intent(MainActivity.this, ImageMessageActivity.class);
-            intent.putExtra("uri", uri);
-            startActivity(intent);
+            case PICK_PHOTO_REQUEST:
+
+                if(data != null) {
+
+                    Uri imageUri = data.getData();
+                    Intent intent = new Intent(MainActivity.this, ImageMessageActivity.class);
+                    intent.putExtra("uri", imageUri);
+                    startActivity(intent);
+                }
+                break;
+
+            case PICK_VIDEO_REQUEST:
+
+                if(data != null) {
+
+                    Uri videoUri = data.getData();
+                    Intent intent = new Intent(MainActivity.this, VideoMessageActivity.class);
+                    intent.putExtra("video", videoUri);
+                    startActivity(intent);
+                }
+                break;
         }
-
 //        else if (resultCode == RESULT_OK) {
 //
 //            if (requestCode == PICK_PHOTO_REQUEST || requestCode == PICK_VIDEO_REQUEST) {
@@ -320,7 +337,7 @@ public class MainActivity extends AppCompatActivity implements ActivityView {
 
     private void navigateToLogin() {
         Intent intent = new Intent(this, LoginActivity.class);
-        // change this intent so that the usernameText can't hit "back" and get into the inbox
+        // change this intent so that the usernameText can't hit "back" and getValue into the inbox
 
         // Set these flags to finish any other tasks that are related to Main Activity
         // This way when login fragment is launched, there is no previous fragment to go back to,
@@ -420,5 +437,20 @@ public class MainActivity extends AppCompatActivity implements ActivityView {
         Intent choosePhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
         choosePhotoIntent.setType("image/*");
         startActivityForResult(choosePhotoIntent, MainActivity.PICK_PHOTO_REQUEST);
+    }
+
+    public void launchGalleryVideoActivity() {
+
+        if(ContextCompat.checkSelfPermission(
+                this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+
+            requestPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
+            return;
+        }
+
+        Intent chooseVideoIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        chooseVideoIntent.setType("video/*");
+        Toast.makeText(MainActivity.this, R.string.video_file_size_warning, Toast.LENGTH_LONG).show();
+        startActivityForResult(chooseVideoIntent, PICK_VIDEO_REQUEST);
     }
 }

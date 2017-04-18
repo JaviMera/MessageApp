@@ -1,8 +1,11 @@
 package com.teamtreehouse.ribbit.utils;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 
 import com.teamtreehouse.ribbit.R;
 

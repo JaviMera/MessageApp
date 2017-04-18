@@ -85,7 +85,7 @@ public class FileHelper {
         if (fileType.equals(Message.TYPE_IMAGE)) {
             fileName += "png";
         } else {
-            // For video, we want to get the actual file extension
+            // For video, we want to getValue the actual file extension
             if (uri.getScheme().equals("content")) {
                 // do it using the mime type
                 String mimeType = context.getContentResolver().getType(uri);

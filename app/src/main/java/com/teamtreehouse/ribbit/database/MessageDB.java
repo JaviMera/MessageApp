@@ -20,6 +20,7 @@ import com.teamtreehouse.ribbit.models.UserFriend;
 import com.teamtreehouse.ribbit.models.UserRecipient;
 import com.teamtreehouse.ribbit.models.UserSender;
 import com.teamtreehouse.ribbit.models.UserRequest;
+import com.teamtreehouse.ribbit.models.VideoMessage;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -43,6 +44,7 @@ public class MessageDB {
     public static final String IMAGES_NODE = "images";
     public static final String IMAGE_PATH_PROPERTY = "path";
     public static final String TEXT_MESSAGE_ID_PROPERTY = "id";
+    private static final String VIDEOS_NODE = "videos";
 
     public static void insertUser(final User newUser, final UserInsertCallback listener) {
 
@@ -381,6 +383,32 @@ public class MessageDB {
             });
     }
 
+    public static void insertVideoMessage(String recipientId, ImageMessage message, final ImageInsertCallback callback) {
+
+        FirebaseDatabase
+            .getInstance()
+            .getReference()
+            .child(MESSAGES_NODE)
+            .child(VIDEOS_NODE)
+            .child(recipientId)
+            .push()
+            .setValue(message)
+            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+
+                    callback.onSuccess("", "");
+                }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                    callback.onFailure();
+                }
+            });
+    }
+
     public static void deleteImageMessage(final ImageMessage message, final DeletePictureCallback callback) {
 
         FirebaseDatabase
@@ -452,6 +480,38 @@ public class MessageDB {
                         callback.onFailure(databaseError.getMessage());
                     }
 
+                }
+            });
+    }
+
+    public static void deleteVideoMessage(final VideoMessage message, final DeleteVideoCallback callback) {
+        FirebaseDatabase
+            .getInstance()
+            .getReference()
+            .child(MESSAGES_NODE)
+            .child(VIDEOS_NODE)
+            .child(Auth.getInstance().getId())
+            .addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+
+                        HashMap<String, String> currentMessage = (HashMap<String, String>) ds.getValue();
+                        if (currentMessage.get(IMAGE_PATH_PROPERTY).equals(message.getPath())) {
+
+                            ds.getRef().setValue(null);
+                            break;
+                        }
+                    }
+
+                    callback.onSuccess();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                    callback.onFailure(databaseError.getMessage());
                 }
             });
     }

@@ -1,6 +1,5 @@
 package com.teamtreehouse.ribbit.ui.fragments.inbox.messages;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;

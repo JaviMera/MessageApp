@@ -30,50 +30,40 @@
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize">
 
+        <FrameLayout
+            android:id="@+id/recipientsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/recipientsEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="To"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:textSize="20sp"/>
+
         <RelativeLayout
             android:id="@+id/root"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
-
-            <FrameLayout
-                android:id="@+id/recipientsContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <EditText
-                android:layout_below="@+id/recipientsContainer"
-                android:id="@+id/recipientsEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="To"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
-                android:textSize="20sp"/>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/recipientsEditText">
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
 
                 <FrameLayout
                     android:id="@+id/messageContainer"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_centerInParent="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"/>
+                    android:layout_centerInParent="true"/>
 
                 <FrameLayout
                     android:id="@+id/suggestionsContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_centerInParent="true"/>
+                    android:layout_height="match_parent"/>
 
-            </RelativeLayout>
         </RelativeLayout>
 
         <LinearLayout

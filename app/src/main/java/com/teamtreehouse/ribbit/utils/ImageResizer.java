@@ -58,7 +58,7 @@ public class ImageResizer {
         // Use BitmapFactory to decode the image
         BitmapFactory.Options options = new BitmapFactory.Options();
 
-        // Only decode the bounds of the image, not the whole image, to get the dimensions
+        // Only decode the bounds of the image, not the whole image, to getValue the dimensions
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeByteArray(imageData, 0, imageData.length, options);
 

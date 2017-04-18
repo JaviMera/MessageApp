@@ -1,6 +1,7 @@
 package com.teamtreehouse.ribbit.ui.activities.messages.view;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -8,24 +9,25 @@ import android.support.v4.app.FragmentTransaction;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.models.Message;
 import com.teamtreehouse.ribbit.models.MessageDuration;
-import com.teamtreehouse.ribbit.models.TextMessage;
-import com.teamtreehouse.ribbit.ui.fragments.inbox.view.ViewImageMessageFragment;
-import com.teamtreehouse.ribbit.ui.fragments.inbox.view.ViewTextFragment;
+import com.teamtreehouse.ribbit.models.VideoDuration;
+import com.teamtreehouse.ribbit.models.VideoMessage;
+import com.teamtreehouse.ribbit.ui.fragments.inbox.view.ViewMessageFragmentView;
+import com.teamtreehouse.ribbit.ui.fragments.inbox.view.ViewVideoMessageFragment;
 
 /**
- * Created by javie on 4/13/2017.
+ * Created by javie on 4/17/2017.
  */
 
-public class ViewTextMessageActivity extends ViewMessageActivity {
+public class ViewVideoMessageActivity extends ViewMessageActivity{
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
-        TextMessage message = getIntent().getParcelableExtra(Message.KEY);
+        VideoMessage message = getIntent().getParcelableExtra(Message.KEY);
         getSupportActionBar().setTitle(message.getUsername());
 
-        replaceFragment(R.id.container, ViewTextFragment.newInstance(message));
+        replaceFragment(R.id.container, ViewVideoMessageFragment.newInstance(message));
     }
 }

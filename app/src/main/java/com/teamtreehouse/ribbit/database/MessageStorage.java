@@ -73,4 +73,27 @@ public class MessageStorage {
                 }
             });
     }
+
+    public static void deleteVideo(String path, final DeleteVideoCallback callback){
+
+        FirebaseStorage
+            .getInstance()
+            .getReference()
+            .child(path)
+            .delete()
+            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+
+                    callback.onSuccess();
+                }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                    callback.onFailure(e.getMessage());
+                }
+            });
+    }
 }

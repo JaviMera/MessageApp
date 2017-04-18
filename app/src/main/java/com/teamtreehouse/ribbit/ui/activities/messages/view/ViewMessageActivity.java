@@ -5,7 +5,9 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
-import android.support.v4.app.NavUtils;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.AppCompatActivity;
@@ -17,7 +19,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.teamtreehouse.ribbit.R;
-import com.teamtreehouse.ribbit.ui.fragments.inbox.view.ViewMessageFragment;
+import com.teamtreehouse.ribbit.models.MessageDuration;
+import com.teamtreehouse.ribbit.ui.fragments.FragmentVideoMessage;
+import com.teamtreehouse.ribbit.ui.fragments.inbox.view.ViewFragmentMessage;
+import com.teamtreehouse.ribbit.ui.fragments.inbox.view.ViewMessageFragmentView;
+import com.teamtreehouse.ribbit.ui.fragments.inbox.view.ViewVideoMessageFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,7 +38,6 @@ public abstract class ViewMessageActivity
     implements ViewMessageActivityView, TimerListener {
 
     public static final int PROGRESS_MAX = 1000;
-    public static final int PROGRESS_ANIM_DURATION = 10000;
     public static final int TICK_INTERVAL = 1000;
 
     @BindView(R.id.toolbar)
@@ -51,7 +56,6 @@ public abstract class ViewMessageActivity
     ProgressBar progressBar;
 
     private CountDownTimer timer;
-    private ObjectAnimator anim;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,11 +73,6 @@ public abstract class ViewMessageActivity
         );
 
         timerProgressBar.setProgress(PROGRESS_MAX);
-        anim = ObjectAnimator.ofInt(timerProgressBar, "progress", timerProgressBar.getProgress(), 0);
-        anim.setDuration(PROGRESS_ANIM_DURATION);
-        anim.setInterpolator(new LinearInterpolator());
-
-        timer = new MessageTimer(this, PROGRESS_ANIM_DURATION, TICK_INTERVAL);
     }
 
     @Override
@@ -103,7 +102,30 @@ public abstract class ViewMessageActivity
         return super.onOptionsItemSelected(item);
     }
 
+    protected <TFragment extends ViewMessageFragmentView> MessageDuration getMessageDuration() {
+
+        TFragment fragment = (TFragment) getSupportFragmentManager().findFragmentById(R.id.container);
+
+        return fragment.getMessageDuration();
+    }
+
+    protected void replaceFragment(int containerId, ViewFragmentMessage fragment) {
+
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(containerId, fragment);
+        transaction.commit();
+    }
+
     public void start() {
+
+        // Create a timer object to receive notifications every 1 second of the length of the message
+        timer = new MessageTimer(this, getMessageDuration().getValue(), TICK_INTERVAL);
+
+        // Create an animation object to smoothly decreased the progress bar backwards
+        ObjectAnimator anim = ObjectAnimator.ofInt(timerProgressBar, "progress", timerProgressBar.getProgress(), 0);
+        anim.setDuration(getMessageDuration().getValue());
+        anim.setInterpolator(new LinearInterpolator());
 
         anim.start();
         timer.start();
@@ -132,7 +154,7 @@ public abstract class ViewMessageActivity
 
         this.clockTextView.setText(formatedTick);
 
-        ViewMessageFragment fragment = (ViewMessageFragment) getSupportFragmentManager()
+        ViewMessageFragmentView fragment = (ViewMessageFragmentView) getSupportFragmentManager()
                 .findFragmentById(R.id.container);
 
         fragment.onFinish();

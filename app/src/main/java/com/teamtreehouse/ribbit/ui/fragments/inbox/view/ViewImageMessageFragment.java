@@ -18,8 +18,10 @@ import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.database.DeletePictureCallback;
 import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.database.MessageStorage;
+import com.teamtreehouse.ribbit.models.DefaultDuration;
 import com.teamtreehouse.ribbit.models.ImageMessage;
 import com.teamtreehouse.ribbit.models.Message;
+import com.teamtreehouse.ribbit.models.MessageDuration;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,7 +30,7 @@ import butterknife.ButterKnife;
  * Created by javie on 4/13/2017.
  */
 
-public class ViewImageMessageFragment extends ViewFragmentMessage implements ViewMessageFragment {
+public class ViewImageMessageFragment extends ViewFragmentMessage implements ViewMessageFragmentView {
 
     public static final int MAX_IMAGE_MEMORY = 1024 * 1024 * 10;
 
@@ -37,9 +39,10 @@ public class ViewImageMessageFragment extends ViewFragmentMessage implements Vie
 
     private ImageMessage message;
 
-    public static ViewImageMessageFragment newInstance(ImageMessage message, Bundle bundle) {
+    public static ViewImageMessageFragment newInstance(ImageMessage message) {
 
         ViewImageMessageFragment fragment = new ViewImageMessageFragment();
+        Bundle bundle = new Bundle();
         bundle.putParcelable(Message.KEY, message);
         fragment.setArguments(bundle);
 
@@ -82,6 +85,12 @@ public class ViewImageMessageFragment extends ViewFragmentMessage implements Vie
         });
 
         return view;
+    }
+
+    @Override
+    public MessageDuration getMessageDuration() {
+
+        return new DefaultDuration();
     }
 
     @Override

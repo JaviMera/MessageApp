@@ -6,40 +6,40 @@ import android.os.Parcel;
  * Created by javie on 4/13/2017.
  */
 
-public class ImageMessage extends Message{
+public class VideoMessage extends Message{
 
     public static final String KEY = "uri";
 
     private String url;
     private String path;
 
-    public ImageMessage(){
+    public VideoMessage(){
         super("", "", 0);
     }
 
-    public ImageMessage(String id, String username, String url, String path, long date) {
+    public VideoMessage(String id, String username, String url, String path, long date) {
 
         super(id, username, date);
         this.url = url;
         this.path = path;
     }
 
-    protected ImageMessage(Parcel in) {
+    protected VideoMessage(Parcel in) {
         super(in);
 
         url = in.readString();
         path = in.readString();
     }
 
-    public static final Creator<ImageMessage> CREATOR = new Creator<ImageMessage>() {
+    public static final Creator<VideoMessage> CREATOR = new Creator<VideoMessage>() {
         @Override
-        public ImageMessage createFromParcel(Parcel in) {
-            return new ImageMessage(in);
+        public VideoMessage createFromParcel(Parcel in) {
+            return new VideoMessage(in);
         }
 
         @Override
-        public ImageMessage[] newArray(int size) {
-            return new ImageMessage[size];
+        public VideoMessage[] newArray(int size) {
+            return new VideoMessage[size];
         }
     };
 

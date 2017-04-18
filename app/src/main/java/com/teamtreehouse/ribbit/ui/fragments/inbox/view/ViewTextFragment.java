@@ -11,7 +11,9 @@ import android.widget.Toast;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.database.DeleteTextCallback;
 import com.teamtreehouse.ribbit.database.MessageDB;
+import com.teamtreehouse.ribbit.models.DefaultDuration;
 import com.teamtreehouse.ribbit.models.Message;
+import com.teamtreehouse.ribbit.models.MessageDuration;
 import com.teamtreehouse.ribbit.models.TextMessage;
 
 import butterknife.BindView;
@@ -21,7 +23,7 @@ import butterknife.ButterKnife;
  * Created by javie on 4/13/2017.
  */
 
-public class ViewTextFragment extends ViewFragmentMessage implements ViewMessageFragment {
+public class ViewTextFragment extends ViewFragmentMessage implements ViewMessageFragmentView {
 
     private TextMessage friendMessage;
 
@@ -58,6 +60,12 @@ public class ViewTextFragment extends ViewFragmentMessage implements ViewMessage
         this.parent.start();
 
         return view;
+    }
+
+    @Override
+    public MessageDuration getMessageDuration() {
+
+        return new DefaultDuration();
     }
 
     @Override
