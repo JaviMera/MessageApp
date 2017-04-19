@@ -15,6 +15,7 @@ import com.teamtreehouse.ribbit.database.ImageInsertCallback;
 import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.ImageMessage;
+import com.teamtreehouse.ribbit.models.MultimediaMessage;
 import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentVideoMessage;
 
@@ -36,7 +37,7 @@ public class VideoMessageActivity extends MessageActivity {
         this.presenter.setSendLayoutVisibility(View.VISIBLE);
         this.presenter.setProgressbarVisibility(View.GONE);
 
-        Uri videoUri = getIntent().getParcelableExtra("video");
+        Uri videoUri = getIntent().getParcelableExtra(MultimediaMessage.KEY);
         replaceFragment(R.id.messageContainer, FragmentVideoMessage.newInstance(videoUri));
     }
 
@@ -72,11 +73,11 @@ public class VideoMessageActivity extends MessageActivity {
                         String url = taskSnapshot.getMetadata().getDownloadUrl().toString();
                         String path = taskSnapshot.getMetadata().getPath();
                         ImageMessage message = new ImageMessage(
-                                UUID.randomUUID().toString(),
-                                Auth.getInstance().getUsername(),
-                                url,
-                                path,
-                                new Date().getTime()
+                            UUID.randomUUID().toString(),
+                            Auth.getInstance().getUsername(),
+                            url,
+                            path,
+                            new Date().getTime()
                         );
 
                         MessageDB.insertVideoMessage(user.getId(), message, new ImageInsertCallback() {

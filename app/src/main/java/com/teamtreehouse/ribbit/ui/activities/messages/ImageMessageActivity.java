@@ -12,6 +12,7 @@ import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.database.MessageStorage;
 import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.ImageMessage;
+import com.teamtreehouse.ribbit.models.MultimediaMessage;
 import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.ui.fragments.inbox.messages.FragmentImageMessage;
 
@@ -27,7 +28,7 @@ public class ImageMessageActivity extends MessageActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Uri pictureUri = getIntent().getParcelableExtra("uri");
+        Uri pictureUri = getIntent().getParcelableExtra(MultimediaMessage.KEY);
         replaceFragment(R.id.messageContainer, FragmentImageMessage.newInstance(pictureUri));
     }
 

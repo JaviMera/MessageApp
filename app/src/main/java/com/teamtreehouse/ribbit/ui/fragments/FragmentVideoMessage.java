@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.VideoView;
 
 import com.teamtreehouse.ribbit.R;
+import com.teamtreehouse.ribbit.models.MultimediaMessage;
 import com.teamtreehouse.ribbit.ui.fragments.inbox.messages.FragmentMessage;
 
 import butterknife.BindView;
@@ -25,7 +26,7 @@ public class FragmentVideoMessage extends FragmentMessage<Uri> {
 
         FragmentVideoMessage fragment = new FragmentVideoMessage();
         Bundle bundle = new Bundle();
-        bundle.putParcelable("video", videoUri);
+        bundle.putParcelable(MultimediaMessage.KEY, videoUri);
         fragment.setArguments(bundle);
 
         return fragment;
@@ -42,7 +43,7 @@ public class FragmentVideoMessage extends FragmentMessage<Uri> {
 
         ButterKnife.bind(this, view);
 
-        this.value = getArguments().getParcelable("video");
+        this.value = getArguments().getParcelable(MultimediaMessage.KEY);
 
         this.videoView.setVideoURI(this.value);
         this.videoView.start();

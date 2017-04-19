@@ -105,11 +105,22 @@ public class FileHelper {
         byte[] data = FileHelper.getByteArrayFromFile(context, originalUri);
         byte[] newData = FileHelper.reduceImageForUpload(data);
 
-        Bitmap bitmap = BitmapFactory.decodeByteArray(newData, 0, newData.length);
+        String path = getPath(newData, context);
+        return Uri.parse(path);
+    }
+
+    public static String getPath(byte[] data, Context context) {
+
+        Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "temp", null);
+        return MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "temp", null);
+    }
 
-        return Uri.parse(path);
+    public static String getPath(Bitmap bitmap, Context context){
+
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        return MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "temp", null);
     }
 }

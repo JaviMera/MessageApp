@@ -6,30 +6,9 @@ import android.os.Parcel;
  * Created by javie on 4/13/2017.
  */
 
-public class VideoMessage extends Message{
+public class VideoMessage extends MultimediaMessage {
 
-    public static final String KEY = "uri";
-
-    private String url;
-    private String path;
-
-    public VideoMessage(){
-        super("", "", 0);
-    }
-
-    public VideoMessage(String id, String username, String url, String path, long date) {
-
-        super(id, username, date);
-        this.url = url;
-        this.path = path;
-    }
-
-    protected VideoMessage(Parcel in) {
-        super(in);
-
-        url = in.readString();
-        path = in.readString();
-    }
+    public VideoMessage(){}
 
     public static final Creator<VideoMessage> CREATOR = new Creator<VideoMessage>() {
         @Override
@@ -43,26 +22,13 @@ public class VideoMessage extends Message{
         }
     };
 
-    public String getUrl() {
-        return url;
-    }
+    public VideoMessage(Parcel in) {
 
-    public String getPath() {
-
-        return path;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
+        super(in);
     }
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-
-        super.writeToParcel(parcel,i);
-
-        parcel.writeString(url);
-        parcel.writeString(path);
+        super.writeToParcel(parcel, i);
     }
 }

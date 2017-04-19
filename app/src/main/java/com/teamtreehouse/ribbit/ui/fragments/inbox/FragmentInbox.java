@@ -207,13 +207,6 @@ public class FragmentInbox
         }
         else if(message instanceof ImageMessage) {
 
-//            int permission = ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
-//            if (permission != PackageManager.PERMISSION_GRANTED) {
-//
-//                ((MainActivity)this.parent).requestPermissions();
-//                return;
-//            }
-
             Intent intent = new Intent(getActivity(), ViewImageMessageActivity.class);
             intent.putExtra(Message.KEY, message);
             startActivity(intent);
