@@ -3,7 +3,6 @@ package com.teamtreehouse.ribbit.ui.activities;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -12,11 +11,15 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPropertyAnimatorListener;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,9 +32,11 @@ import com.teamtreehouse.ribbit.models.PictureCaptureResultIntent;
 import com.teamtreehouse.ribbit.models.PicturePickResultIntent;
 import com.teamtreehouse.ribbit.models.VideoCaptureResultIntent;
 import com.teamtreehouse.ribbit.models.VideoPickResultIntent;
+import com.teamtreehouse.ribbit.ui.activities.messages.TextMessageActivity;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentPager;
 import com.teamtreehouse.ribbit.ui.fragments.friends.FriendsFragment;
 import com.teamtreehouse.ribbit.ui.fragments.inbox.FragmentInbox;
+import com.teamtreehouse.ribbit.utils.Animations;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,7 +48,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity implements ActivityView {
+public class MainActivity extends AppCompatActivity implements MainActivityView {
 
     public static final int ITEM_SELECT_CODE = 1000;
     private static int[] fabIcons = new int[]{
@@ -51,7 +56,8 @@ public class MainActivity extends AppCompatActivity implements ActivityView {
     };
 
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
-    private static String[] PERMISSIONS_STORAGE = {
+
+    public static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
@@ -74,11 +80,30 @@ public class MainActivity extends AppCompatActivity implements ActivityView {
     @BindView(R.id.pager)
     ViewPager viewPager;
 
+    @BindView(R.id.fabMenu)
+    LinearLayout fabMenu;
+
     @BindView(R.id.fab)
     FloatingActionButton fab;
 
+    @BindView(R.id.fabPictureMessage)
+    FloatingActionButton pictureFab;
+
+    @BindView(R.id.fabCapturePictureMessage)
+    FloatingActionButton capturePictureFab;
+
+    @BindView(R.id.fabVideoMessage)
+    FloatingActionButton videoFab;
+
+    @BindView(R.id.fabCaptureVideoMessage)
+    FloatingActionButton captureVideoFab;
+
+    @BindView(R.id.fabTextMesssage)
+    FloatingActionButton textFab;
+
+    private MainActivityPresenter presenter;
     private FragmentPager currentFragment;
-    private Uri captureImageUri;
+    private boolean fabMenuOpen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +117,9 @@ public class MainActivity extends AppCompatActivity implements ActivityView {
         this.intentTypes.put(TAKE_VIDEO_REQUEST, new VideoCaptureResultIntent());
 
         ButterKnife.bind(this);
+
+        presenter = new MainActivityPresenter(this);
+        presenter.hideFabMenu();
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(Auth.getInstance().getUsername());
@@ -125,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements ActivityView {
             @Override
             public void onPageSelected(int position) {
 
+                hideFabMenu();
                 fab.setImageResource(fabIcons[position]);
                 currentFragment = viewPagerAdapter.getItem(position);
             }
@@ -179,6 +208,18 @@ public class MainActivity extends AppCompatActivity implements ActivityView {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch(item.getItemId()) {
+
+            case R.id.action_logout:
+                navigateToLogin();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
 
@@ -196,13 +237,14 @@ public class MainActivity extends AppCompatActivity implements ActivityView {
         startActivityForResult(intent, ITEM_SELECT_CODE);
     }
 
+    @Override
     public void requestPermissions(String... permissions) {
 
         // We don't have permission so prompt the user
         ActivityCompat.requestPermissions(
-                this,
-                permissions,
-                REQUEST_EXTERNAL_STORAGE
+            this,
+            permissions,
+            REQUEST_EXTERNAL_STORAGE
         );
     }
 
@@ -216,51 +258,42 @@ public class MainActivity extends AppCompatActivity implements ActivityView {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED
                         && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-
-                    choosePicture();
                 }
 
                 break;
         }
     }
 
-    public void choosePicture() {
+    private boolean isExternalStorageAvailable() {
 
-        if (ContextCompat.checkSelfPermission(
-                this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+        String state = Environment.getExternalStorageState();
 
-            requestPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
-            return;
-        }
+        return state.equals(Environment.MEDIA_MOUNTED);
+    }
+
+    @OnClick(R.id.fabTextMesssage)
+    public void onTextMessageClick(View view) {
+
+        this.hideFabMenu();
+
+        Intent messageIntent = new Intent(this, TextMessageActivity.class);
+        startActivity(messageIntent);
+    }
+
+    @OnClick(R.id.fabPictureMessage)
+    public void onPictureMessageClick(View view) {
+
+        this.hideFabMenu();
 
         Intent choosePhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
         choosePhotoIntent.setType("image/*");
         startActivityForResult(choosePhotoIntent, MainActivity.PICK_PHOTO_REQUEST);
     }
 
-    public void chooseVideo() {
+    @OnClick(R.id.fabCapturePictureMessage)
+    public void onCapturePictureMessageClick(View view) {
 
-        if (ContextCompat.checkSelfPermission(
-                this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-
-            requestPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
-            return;
-        }
-
-        Intent chooseVideoIntent = new Intent(Intent.ACTION_GET_CONTENT);
-        chooseVideoIntent.setType("video/*");
-        Toast.makeText(MainActivity.this, R.string.video_file_size_warning, Toast.LENGTH_LONG).show();
-        startActivityForResult(chooseVideoIntent, PICK_VIDEO_REQUEST);
-    }
-
-    public void capturePicture() {
-
-        if (ContextCompat.checkSelfPermission(
-                this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-
-            requestPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
-            return;
-        }
+        this.hideFabMenu();
 
         if (isExternalStorageAvailable()) {
             // getValue the URI
@@ -281,19 +314,26 @@ public class MainActivity extends AppCompatActivity implements ActivityView {
             catch (IOException e) {
 
                 Toast.makeText(this, "Error creating file: " +
-                    mediaStorageDir.getAbsolutePath() + fileName + ".jpg", Toast.LENGTH_SHORT).show();
+                        mediaStorageDir.getAbsolutePath() + fileName + ".jpg", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    public void captureVideo() {
+    @OnClick(R.id.fabVideoMessage)
+    public void onVideoMessageClick(View view) {
 
-        if (ContextCompat.checkSelfPermission(
-                this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+        this.hideFabMenu();
 
-            requestPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
-            return;
-        }
+        Intent chooseVideoIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        chooseVideoIntent.setType("video/*");
+        Toast.makeText(MainActivity.this, R.string.video_file_size_warning, Toast.LENGTH_LONG).show();
+        startActivityForResult(chooseVideoIntent, PICK_VIDEO_REQUEST);
+    }
+
+    @OnClick(R.id.fabCaptureVideoMessage)
+    public void onVideoCaptureMessageClick(View view) {
+
+        this.hideFabMenu();
 
         if (isExternalStorageAvailable()) {
             // getValue the URI
@@ -323,11 +363,48 @@ public class MainActivity extends AppCompatActivity implements ActivityView {
         }
     }
 
-    private boolean isExternalStorageAvailable() {
+    @Override
+    public void showFabMenu() {
 
-        String state = Environment.getExternalStorageState();
+        fabMenuOpen = true;
+        Animations.scaleUpFab(textFab, 1.0f, 500);
+        Animations.scaleUpFab(pictureFab, 1.0f, 400);
+        Animations.scaleUpFab(capturePictureFab, 1.0f, 300);
+        Animations.scaleUpFab(videoFab, 1.0f, 200);
+        Animations.scaleUpFab(captureVideoFab, 1.0f, 100);
+    }
 
-        return state.equals(Environment.MEDIA_MOUNTED);
+    @Override
+    public void hideFabMenu() {
+
+        fabMenuOpen = false;
+
+        Animations.scaleDownFab(textFab, 0.0f, 100);
+        Animations.scaleDownFab(pictureFab, 0.0f, 200);
+        Animations.scaleDownFab(capturePictureFab, 0.0f, 300);
+        Animations.scaleDownFab(videoFab, 0.0f, 400);
+        Animations.scaleDownFab(captureVideoFab, 0.0f, 500);
+    }
+
+    @Override
+    public int getFabMenuVisibility() {
+
+        return fabMenuOpen ? View.VISIBLE : View.GONE;
+    }
+
+    @Override
+    public boolean checkPermissions(String[] permissions) {
+
+        for(String permission : permissions) {
+
+            if (ContextCompat
+                    .checkSelfPermission(this, permission) == PackageManager.PERMISSION_DENIED) {
+
+                return false;
+            }
+        }
+
+        return true;
     }
 }
 

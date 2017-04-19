@@ -13,12 +13,12 @@ import android.widget.TextView;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.InboxFragmentAdapter;
-import com.teamtreehouse.ribbit.dialogs.MessageOptionDialog;
 import com.teamtreehouse.ribbit.models.ImageMessage;
 import com.teamtreehouse.ribbit.models.Message;
 import com.teamtreehouse.ribbit.models.TextMessage;
 import com.teamtreehouse.ribbit.models.VideoMessage;
-import com.teamtreehouse.ribbit.ui.activities.ActivityView;
+import com.teamtreehouse.ribbit.ui.activities.MainActivity;
+import com.teamtreehouse.ribbit.ui.activities.MainActivityView;
 import com.teamtreehouse.ribbit.ui.activities.messages.view.ViewImageMessageActivity;
 import com.teamtreehouse.ribbit.ui.activities.messages.view.ViewVideoMessageActivity;
 import com.teamtreehouse.ribbit.ui.callbacks.ImageMessagesCallback;
@@ -33,7 +33,7 @@ import butterknife.BindView;
 
 public class FragmentInbox
     extends
-        FragmentPager<ActivityView, FragmentInboxPresenter, InboxFragmentAdapter>
+        FragmentPager<MainActivityView, FragmentInboxPresenter, InboxFragmentAdapter>
     implements
         FragmentInboxView,
         MessageRecipient,
@@ -42,6 +42,7 @@ public class FragmentInbox
     private TextMessagesCallback messagesCallback;
     private ImageMessagesCallback imageMessagesCallback;
     private VideoMessagesCallback videoMessagesCallback;
+    private boolean showing;
 
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
@@ -222,8 +223,24 @@ public class FragmentInbox
     @Override
     public void execute() {
 
-        MessageOptionDialog dialog = new MessageOptionDialog();
-        dialog.show(this.getActivity().getSupportFragmentManager(), "messages_dialog");
+        // Check if the user has the permissions to read/write in the device before
+        // choosing any type of message to send
+        boolean granted = this.parent.checkPermissions(MainActivity.PERMISSIONS_STORAGE);
+
+        if(!granted) {
+
+            this.parent.requestPermissions(MainActivity.PERMISSIONS_STORAGE);
+            return;
+        }
+
+        if(this.parent.getFabMenuVisibility() == View.VISIBLE) {
+
+            this.parent.hideFabMenu();
+        }
+        else {
+
+            this.parent.showFabMenu();
+        }
     }
 
     @Override

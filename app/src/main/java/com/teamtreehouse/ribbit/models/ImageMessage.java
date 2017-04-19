@@ -8,6 +8,8 @@ import android.os.Parcel;
 
 public class ImageMessage extends MultimediaMessage{
 
+    public ImageMessage() {};
+
     public ImageMessage(String id, String username, String url, String path, long time){
         super(id, username, url, path, time);
     }

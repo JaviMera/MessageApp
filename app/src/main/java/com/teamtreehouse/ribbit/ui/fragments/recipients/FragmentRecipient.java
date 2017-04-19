@@ -73,7 +73,7 @@ public class FragmentRecipient
         if(adapter.getItemCount() == 0) {
 
             this.recyclerView.setVisibility(View.VISIBLE);
-            this.parent.setSendImageViewAnimation(Animations.scaleUp(getActivity()));
+            this.parent.setSendImageViewAnimation(Animations.scale(getActivity(), R.anim.scale_up_500));
             this.parent.setSendImageVisibility(View.VISIBLE);
             this.parent.setMessageEditTextAnimation(Animations.rightTranslate(getActivity()));
             this.parent.setMessageEditTextVisibility(View.VISIBLE);
@@ -92,7 +92,7 @@ public class FragmentRecipient
         if(adapter.getItemCount() == 0) {
 
             this.recyclerView.setVisibility(View.GONE);
-            this.parent.setSendImageViewAnimation(Animations.scaleDown(getActivity()));
+            this.parent.setSendImageViewAnimation(Animations.scale(getActivity(), R.anim.scale_down_500));
             this.parent.setSendImageVisibility(View.INVISIBLE);
             this.parent.setMessageEditTextAnimation(Animations.leftTranslate(getActivity()));
             this.parent.setMessageEditTextVisibility(View.INVISIBLE);

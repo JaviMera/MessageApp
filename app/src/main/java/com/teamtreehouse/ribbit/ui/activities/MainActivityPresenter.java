@@ -17,4 +17,29 @@ public class MainActivityPresenter {
 
         this.view = view;
     }
+
+    public void showFabMenu() {
+
+        this.view.showFabMenu();
+    }
+
+    public void hideFabMenu() {
+
+        this.view.hideFabMenu();
+    }
+
+    public int getFabMenuVisitibility() {
+
+        return this.view.getFabMenuVisibility();
+    }
+
+    public boolean checkPermissions(String[] permissions) {
+
+        return this.view.checkPermissions(permissions);
+    }
+
+    public void requestPermissions(String[] permissions) {
+
+        this.view.requestPermissions(permissions);
+    }
 }

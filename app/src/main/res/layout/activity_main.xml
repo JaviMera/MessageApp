@@ -43,11 +43,73 @@
 
     </LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/ic_add_contact"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"/>
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="16dp">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:src="@mipmap/ic_add_contact"
+            android:layout_alignParentBottom="true"
+            android:scaleType="center"
+            app:fabSize="normal"/>
+
+        <LinearLayout
+            android:id="@+id/fabMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/fab"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fabTextMesssage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_text_message"
+                android:tint="@android:color/white"
+                android:layout_marginBottom="10dp"
+                app:fabSize="mini" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fabPictureMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_pictures"
+                android:tint="@android:color/white"
+                android:layout_marginBottom="10dp"
+                app:fabSize="mini" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fabCapturePictureMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_capture_pictures"
+                android:tint="@android:color/white"
+                android:layout_marginBottom="10dp"
+                app:fabSize="mini" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fabVideoMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_video"
+                android:tint="@android:color/white"
+                android:layout_marginBottom="10dp"
+                app:fabSize="mini" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fabCaptureVideoMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_capture_video"
+                android:tint="@android:color/white"
+                android:layout_marginBottom="10dp"
+                app:fabSize="mini" />
+        </LinearLayout>
+    </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>
