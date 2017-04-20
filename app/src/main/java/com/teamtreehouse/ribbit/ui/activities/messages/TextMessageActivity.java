@@ -9,8 +9,8 @@ import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.database.TextInsertCallback;
 import com.teamtreehouse.ribbit.models.Auth;
-import com.teamtreehouse.ribbit.models.TextMessage;
-import com.teamtreehouse.ribbit.models.User;
+import com.teamtreehouse.ribbit.models.messages.TextMessage;
+import com.teamtreehouse.ribbit.models.users.User;
 import com.teamtreehouse.ribbit.ui.fragments.inbox.messages.FragmentTextMessage;
 
 import java.util.Date;

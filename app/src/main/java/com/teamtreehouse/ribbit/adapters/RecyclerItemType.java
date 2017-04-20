@@ -1,7 +1,6 @@
 package com.teamtreehouse.ribbit.adapters;
 
 import com.teamtreehouse.ribbit.adapters.actions.ButtonAction;
-import com.teamtreehouse.ribbit.models.User;
 
 import java.util.List;
 

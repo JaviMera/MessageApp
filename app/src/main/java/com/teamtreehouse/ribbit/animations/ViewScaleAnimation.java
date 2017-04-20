@@ -1,4 +1,4 @@
-package com.teamtreehouse.ribbit.models;
+package com.teamtreehouse.ribbit.animations;
 
 import android.view.View;
 

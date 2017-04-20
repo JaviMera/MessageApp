@@ -6,7 +6,7 @@ import android.widget.TextView;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.viewholders.FragmentRecyclerVH;
-import com.teamtreehouse.ribbit.models.User;
+import com.teamtreehouse.ribbit.models.users.User;
 
 /**
  * Created by javie on 4/10/2017.

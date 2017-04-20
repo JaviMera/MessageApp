@@ -1,11 +1,6 @@
 package com.teamtreehouse.ribbit.ui.callbacks;
 
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.teamtreehouse.ribbit.models.Auth;
-import com.teamtreehouse.ribbit.models.ImageMessage;
+import com.teamtreehouse.ribbit.models.messages.ImageMessage;
 
 /**
  * Created by javie on 4/13/2017.

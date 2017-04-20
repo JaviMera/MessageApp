@@ -1,6 +1,6 @@
 package com.teamtreehouse.ribbit.ui.fragments.inbox;
 
-import com.teamtreehouse.ribbit.models.Message;
+import com.teamtreehouse.ribbit.models.messages.Message;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentRecyclerView;
 
 /**

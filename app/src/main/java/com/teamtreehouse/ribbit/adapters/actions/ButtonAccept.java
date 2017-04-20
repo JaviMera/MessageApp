@@ -3,7 +3,7 @@ package com.teamtreehouse.ribbit.adapters.actions;
 import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.InviteStatus;
-import com.teamtreehouse.ribbit.models.User;
+import com.teamtreehouse.ribbit.models.users.User;
 import com.teamtreehouse.ribbit.database.UpdateInviteCallback;
 
 /**

@@ -4,9 +4,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.teamtreehouse.ribbit.database.MessageDB;
-import com.teamtreehouse.ribbit.models.Message;
-import com.teamtreehouse.ribbit.models.MessageDuration;
-import com.teamtreehouse.ribbit.models.TextMessage;
+import com.teamtreehouse.ribbit.models.messages.Message;
 
 /**
  * Created by javie on 4/19/2017.

@@ -4,7 +4,7 @@ import android.view.View;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.viewholders.FragmentRecyclerVH;
-import com.teamtreehouse.ribbit.models.User;
+import com.teamtreehouse.ribbit.models.users.User;
 import com.teamtreehouse.ribbit.ui.fragments.recipients.FragmentRecipientVH;
 import com.teamtreehouse.ribbit.ui.fragments.recipients.FragmentRecipientsView;
 

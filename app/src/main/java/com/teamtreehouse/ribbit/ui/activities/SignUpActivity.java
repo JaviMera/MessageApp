@@ -20,8 +20,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.dialogs.DialogFragmentError;
-import com.teamtreehouse.ribbit.models.User;
-import com.teamtreehouse.ribbit.models.UserCurrent;
+import com.teamtreehouse.ribbit.models.users.User;
+import com.teamtreehouse.ribbit.models.users.UserCurrent;
 import com.teamtreehouse.ribbit.database.UserInsertCallback;
 
 import butterknife.BindView;

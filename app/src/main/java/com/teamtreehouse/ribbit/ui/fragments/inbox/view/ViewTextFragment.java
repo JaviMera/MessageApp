@@ -11,10 +11,10 @@ import android.widget.Toast;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.database.DeleteTextCallback;
 import com.teamtreehouse.ribbit.database.MessageDB;
-import com.teamtreehouse.ribbit.models.DefaultDuration;
-import com.teamtreehouse.ribbit.models.Message;
-import com.teamtreehouse.ribbit.models.MessageDuration;
-import com.teamtreehouse.ribbit.models.TextMessage;
+import com.teamtreehouse.ribbit.models.messages.DefaultDuration;
+import com.teamtreehouse.ribbit.models.messages.Message;
+import com.teamtreehouse.ribbit.models.messages.MessageDuration;
+import com.teamtreehouse.ribbit.models.messages.TextMessage;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

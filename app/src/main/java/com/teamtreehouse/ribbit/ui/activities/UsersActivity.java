@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -13,7 +12,7 @@ import android.view.MenuItem;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.database.MessageDB;
-import com.teamtreehouse.ribbit.models.User;
+import com.teamtreehouse.ribbit.models.users.User;
 import com.teamtreehouse.ribbit.database.UserReadCallback;
 import com.teamtreehouse.ribbit.ui.fragments.search.FragmentSearch;
 

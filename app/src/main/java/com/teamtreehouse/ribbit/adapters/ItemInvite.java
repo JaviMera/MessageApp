@@ -1,10 +1,10 @@
-package com.teamtreehouse.ribbit.models;
+package com.teamtreehouse.ribbit.adapters;
 
 import android.view.View;
 
-import com.teamtreehouse.ribbit.adapters.RecyclerItemType;
+import com.teamtreehouse.ribbit.adapters.actions.ButtonAccept;
 import com.teamtreehouse.ribbit.adapters.actions.ButtonAction;
-import com.teamtreehouse.ribbit.models.User;
+import com.teamtreehouse.ribbit.adapters.actions.ButtonCancel;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -13,40 +13,48 @@ import java.util.List;
  * Created by javie on 4/2/2017.
  */
 
-public class ItemFriend implements RecyclerItemType {
-
+public class ItemInvite implements RecyclerItemType {
     @Override
     public List<ButtonAction> getNegativeButtonResponses() {
-        return new LinkedList<>();
+
+        return new LinkedList<ButtonAction>(){
+            {
+                add(new ButtonCancel());
+            }
+        };
     }
 
     @Override
     public List<ButtonAction> getPositiveButtonResponses() {
-        return new LinkedList<>();
+        return new LinkedList<ButtonAction>(){
+            {
+                add(new ButtonAccept());
+            }
+        };
     }
 
     @Override
     public int cancelButtonVisibility() {
 
-        return View.GONE;
+        return View.VISIBLE;
     }
 
     @Override
     public int acceptButtonVisibility() {
 
-        return View.GONE;
+        return View.VISIBLE;
     }
 
     @Override
     public String cancelButtonText() {
 
-        return "";
+        return "Cancel";
     }
 
     @Override
     public String acceptButtonText() {
 
-        return "";
+        return "Accept";
     }
 
     @Override
@@ -58,6 +66,6 @@ public class ItemFriend implements RecyclerItemType {
     @Override
     public int editImageVisibility() {
 
-        return View.VISIBLE;
+        return View.GONE;
     }
 }

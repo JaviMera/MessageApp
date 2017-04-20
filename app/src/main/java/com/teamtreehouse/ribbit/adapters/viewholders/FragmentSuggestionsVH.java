@@ -4,7 +4,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.teamtreehouse.ribbit.R;
-import com.teamtreehouse.ribbit.models.UserFriend;
+import com.teamtreehouse.ribbit.models.users.UserFriend;
 import com.teamtreehouse.ribbit.ui.fragments.suggestions.FragmentSuggestionsView;
 
 /**

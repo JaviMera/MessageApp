@@ -5,7 +5,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.models.Auth;
-import com.teamtreehouse.ribbit.models.UserRecipient;
+import com.teamtreehouse.ribbit.models.users.UserRecipient;
 
 /**
  * Created by javie on 3/31/2017.

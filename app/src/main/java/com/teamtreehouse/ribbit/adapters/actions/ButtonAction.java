@@ -1,6 +1,6 @@
 package com.teamtreehouse.ribbit.adapters.actions;
 
-import com.teamtreehouse.ribbit.models.User;
+import com.teamtreehouse.ribbit.models.users.User;
 
 /**
  * Created by javie on 3/30/2017.

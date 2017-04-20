@@ -1,14 +1,9 @@
-package com.teamtreehouse.ribbit.models;
+package com.teamtreehouse.ribbit.adapters;
 
 import android.view.View;
 
-import com.teamtreehouse.ribbit.adapters.RecyclerItemType;
-import com.teamtreehouse.ribbit.adapters.actions.ButtonAccept;
 import com.teamtreehouse.ribbit.adapters.actions.ButtonAction;
-import com.teamtreehouse.ribbit.adapters.actions.ButtonCancel;
-import com.teamtreehouse.ribbit.models.User;
-import com.teamtreehouse.ribbit.models.UserFriend;
-import com.teamtreehouse.ribbit.models.UserRequest;
+import com.teamtreehouse.ribbit.adapters.actions.ButtonRequest;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -17,22 +12,20 @@ import java.util.List;
  * Created by javie on 4/2/2017.
  */
 
-public class ItemInvite implements RecyclerItemType {
+public class ItemRequest implements RecyclerItemType {
+
     @Override
     public List<ButtonAction> getNegativeButtonResponses() {
 
-        return new LinkedList<ButtonAction>(){
-            {
-                add(new ButtonCancel());
-            }
-        };
+        return new LinkedList<>();
     }
 
     @Override
     public List<ButtonAction> getPositiveButtonResponses() {
+
         return new LinkedList<ButtonAction>(){
             {
-                add(new ButtonAccept());
+                add(new ButtonRequest());
             }
         };
     }
@@ -40,7 +33,7 @@ public class ItemInvite implements RecyclerItemType {
     @Override
     public int cancelButtonVisibility() {
 
-        return View.VISIBLE;
+        return View.GONE;
     }
 
     @Override
@@ -52,13 +45,13 @@ public class ItemInvite implements RecyclerItemType {
     @Override
     public String cancelButtonText() {
 
-        return "Cancel";
+        return "";
     }
 
     @Override
     public String acceptButtonText() {
 
-        return "Accept";
+        return "friend request";
     }
 
     @Override

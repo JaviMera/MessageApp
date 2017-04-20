@@ -1,7 +1,6 @@
 package com.teamtreehouse.ribbit.ui.callbacks;
 
-import com.teamtreehouse.ribbit.models.ImageMessage;
-import com.teamtreehouse.ribbit.models.Message;
+import com.teamtreehouse.ribbit.models.messages.Message;
 
 /**
  * Created by javie on 4/19/2017.

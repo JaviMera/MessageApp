@@ -1,7 +1,6 @@
 package com.teamtreehouse.ribbit.utils;
 
 import android.content.Context;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorListener;
 import android.view.View;
@@ -10,7 +9,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 
 import com.teamtreehouse.ribbit.R;
-import com.teamtreehouse.ribbit.models.ViewScaleAnimation;
+import com.teamtreehouse.ribbit.animations.ViewScaleAnimation;
 
 /**
  * Created by javie on 4/12/2017.

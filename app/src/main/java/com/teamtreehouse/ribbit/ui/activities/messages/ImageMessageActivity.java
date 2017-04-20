@@ -11,9 +11,9 @@ import com.teamtreehouse.ribbit.database.ImageInsertCallback;
 import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.database.MessageStorage;
 import com.teamtreehouse.ribbit.models.Auth;
-import com.teamtreehouse.ribbit.models.ImageMessage;
-import com.teamtreehouse.ribbit.models.MultimediaMessage;
-import com.teamtreehouse.ribbit.models.User;
+import com.teamtreehouse.ribbit.models.messages.ImageMessage;
+import com.teamtreehouse.ribbit.models.messages.MultimediaMessage;
+import com.teamtreehouse.ribbit.models.users.User;
 import com.teamtreehouse.ribbit.ui.fragments.inbox.messages.FragmentImageMessage;
 
 import java.util.Date;

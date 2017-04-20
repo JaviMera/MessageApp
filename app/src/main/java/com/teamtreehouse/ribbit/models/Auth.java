@@ -1,5 +1,7 @@
 package com.teamtreehouse.ribbit.models;
 
+import com.teamtreehouse.ribbit.models.users.User;
+
 /**
  * Created by javie on 3/26/2017.
  */

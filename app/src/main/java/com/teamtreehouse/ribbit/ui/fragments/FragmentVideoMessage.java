@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.VideoView;
 
 import com.teamtreehouse.ribbit.R;
-import com.teamtreehouse.ribbit.models.MultimediaMessage;
+import com.teamtreehouse.ribbit.models.messages.MultimediaMessage;
 import com.teamtreehouse.ribbit.ui.fragments.inbox.messages.FragmentMessage;
 
 import butterknife.BindView;

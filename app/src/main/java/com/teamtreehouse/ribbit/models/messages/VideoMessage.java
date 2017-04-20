@@ -1,6 +1,7 @@
-package com.teamtreehouse.ribbit.models;
+package com.teamtreehouse.ribbit.models.messages;
 
 import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Created by javie on 4/13/2017.
@@ -10,7 +11,7 @@ public class VideoMessage extends MultimediaMessage {
 
     public VideoMessage(){}
 
-    public static final Creator<VideoMessage> CREATOR = new Creator<VideoMessage>() {
+    public static final Parcelable.Creator<VideoMessage> CREATOR = new Parcelable.Creator<VideoMessage>() {
         @Override
         public VideoMessage createFromParcel(Parcel in) {
             return new VideoMessage(in);

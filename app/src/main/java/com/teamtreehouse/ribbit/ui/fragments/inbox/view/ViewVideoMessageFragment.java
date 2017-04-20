@@ -1,10 +1,8 @@
 package com.teamtreehouse.ribbit.ui.fragments.inbox.view;
 
-import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,13 +17,11 @@ import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.database.DeleteVideoCallback;
 import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.database.MessageStorage;
-import com.teamtreehouse.ribbit.models.Message;
-import com.teamtreehouse.ribbit.models.MessageDuration;
-import com.teamtreehouse.ribbit.models.VideoDuration;
-import com.teamtreehouse.ribbit.models.VideoMessage;
+import com.teamtreehouse.ribbit.models.messages.Message;
+import com.teamtreehouse.ribbit.models.messages.VideoDuration;
+import com.teamtreehouse.ribbit.models.messages.VideoMessage;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 import butterknife.BindView;

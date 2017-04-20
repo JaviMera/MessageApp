@@ -5,7 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.teamtreehouse.ribbit.R;
-import com.teamtreehouse.ribbit.models.User;
+import com.teamtreehouse.ribbit.models.users.User;
 import com.teamtreehouse.ribbit.ui.activities.ActivityView;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentRecycler;
 

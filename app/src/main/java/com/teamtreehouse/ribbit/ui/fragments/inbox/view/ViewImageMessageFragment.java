@@ -18,10 +18,10 @@ import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.database.DeletePictureCallback;
 import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.database.MessageStorage;
-import com.teamtreehouse.ribbit.models.DefaultDuration;
-import com.teamtreehouse.ribbit.models.ImageMessage;
-import com.teamtreehouse.ribbit.models.Message;
-import com.teamtreehouse.ribbit.models.MessageDuration;
+import com.teamtreehouse.ribbit.models.messages.DefaultDuration;
+import com.teamtreehouse.ribbit.models.messages.ImageMessage;
+import com.teamtreehouse.ribbit.models.messages.Message;
+import com.teamtreehouse.ribbit.models.messages.MessageDuration;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

@@ -1,6 +1,6 @@
 package com.teamtreehouse.ribbit.database;
 
-import com.teamtreehouse.ribbit.models.User;
+import com.teamtreehouse.ribbit.models.users.User;
 
 import java.util.List;
 

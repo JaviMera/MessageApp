@@ -10,21 +10,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.MutableData;
-import com.google.firebase.database.Transaction;
-import com.google.firebase.database.ValueEventListener;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.dialogs.DialogFragmentError;
 import com.teamtreehouse.ribbit.models.Auth;
-import com.teamtreehouse.ribbit.models.User;
-import com.teamtreehouse.ribbit.models.UserFriend;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.teamtreehouse.ribbit.models.users.User;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

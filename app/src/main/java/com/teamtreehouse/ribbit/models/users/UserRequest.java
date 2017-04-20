@@ -1,4 +1,4 @@
-package com.teamtreehouse.ribbit.models;
+package com.teamtreehouse.ribbit.models.users;
 
 import android.os.Parcel;
 

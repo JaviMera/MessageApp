@@ -5,7 +5,7 @@ import android.view.View;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.RecyclerAdapter;
 import com.teamtreehouse.ribbit.adapters.viewholders.FragmentSuggestionsVH;
-import com.teamtreehouse.ribbit.models.User;
+import com.teamtreehouse.ribbit.models.users.User;
 
 /**
  * Created by javie on 4/8/2017.

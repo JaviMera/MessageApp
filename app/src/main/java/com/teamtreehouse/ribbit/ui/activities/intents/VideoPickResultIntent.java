@@ -1,4 +1,4 @@
-package com.teamtreehouse.ribbit.models;
+package com.teamtreehouse.ribbit.ui.activities.intents;
 
 import android.content.Context;
 import android.content.Intent;

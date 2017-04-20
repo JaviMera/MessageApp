@@ -8,7 +8,7 @@ import android.widget.TextView;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.RecyclerItemType;
 import com.teamtreehouse.ribbit.models.UserFactory;
-import com.teamtreehouse.ribbit.models.User;
+import com.teamtreehouse.ribbit.models.users.User;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentUsersView;
 
 /**

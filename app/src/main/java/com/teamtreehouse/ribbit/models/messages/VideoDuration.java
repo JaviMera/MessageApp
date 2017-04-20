@@ -1,6 +1,6 @@
-package com.teamtreehouse.ribbit.models;
+package com.teamtreehouse.ribbit.models.messages;
 
-import com.teamtreehouse.ribbit.database.MessageDB;
+import com.teamtreehouse.ribbit.models.messages.MessageDuration;
 
 /**
  * Created by javie on 4/18/2017.

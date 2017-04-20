@@ -1,12 +1,13 @@
-package com.teamtreehouse.ribbit.models;
+package com.teamtreehouse.ribbit.models.messages;
 
 import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Created by javie on 4/13/2017.
  */
 
-public class ImageMessage extends MultimediaMessage{
+public class ImageMessage extends MultimediaMessage {
 
     public ImageMessage() {};
 
@@ -18,7 +19,7 @@ public class ImageMessage extends MultimediaMessage{
         super(in);
     }
 
-    public static final Creator<ImageMessage> CREATOR = new Creator<ImageMessage>() {
+    public static final Parcelable.Creator<ImageMessage> CREATOR = new Parcelable.Creator<ImageMessage>() {
         @Override
         public ImageMessage createFromParcel(Parcel in) {
             return new ImageMessage(in);

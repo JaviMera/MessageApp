@@ -1,6 +1,14 @@
 package com.teamtreehouse.ribbit.models;
 
+import com.teamtreehouse.ribbit.adapters.ItemFriend;
+import com.teamtreehouse.ribbit.adapters.ItemInvite;
+import com.teamtreehouse.ribbit.adapters.ItemPending;
+import com.teamtreehouse.ribbit.adapters.ItemRequest;
 import com.teamtreehouse.ribbit.adapters.RecyclerItemType;
+import com.teamtreehouse.ribbit.models.users.User;
+import com.teamtreehouse.ribbit.models.users.UserFriend;
+import com.teamtreehouse.ribbit.models.users.UserRecipient;
+import com.teamtreehouse.ribbit.models.users.UserSender;
 
 /**
  * Created by javie on 4/2/2017.

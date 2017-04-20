@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import com.teamtreehouse.ribbit.adapters.viewholders.FragmentRecyclerVH;
 import com.teamtreehouse.ribbit.models.Item;
-import com.teamtreehouse.ribbit.models.User;
+import com.teamtreehouse.ribbit.models.users.User;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentRecyclerView;
 
 import java.util.LinkedList;

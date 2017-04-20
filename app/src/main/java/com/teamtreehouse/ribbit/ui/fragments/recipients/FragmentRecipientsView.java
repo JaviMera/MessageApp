@@ -1,8 +1,6 @@
 package com.teamtreehouse.ribbit.ui.fragments.recipients;
 
-import android.support.v7.widget.RecyclerView;
-
-import com.teamtreehouse.ribbit.models.User;
+import com.teamtreehouse.ribbit.models.users.User;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentRecyclerView;
 
 /**

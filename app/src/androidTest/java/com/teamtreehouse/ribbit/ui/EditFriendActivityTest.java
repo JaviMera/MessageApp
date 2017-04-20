@@ -5,7 +5,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.teamtreehouse.ribbit.R;
-import com.teamtreehouse.ribbit.models.UserFriend;
+import com.teamtreehouse.ribbit.models.users.UserFriend;
 import com.teamtreehouse.ribbit.ui.activities.EditFriendActivity;
 
 import org.junit.Rule;

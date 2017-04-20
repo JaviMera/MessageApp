@@ -5,7 +5,7 @@ import android.view.View;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.viewholders.FragmentMessagesVH;
 import com.teamtreehouse.ribbit.adapters.viewholders.FragmentRecyclerVH;
-import com.teamtreehouse.ribbit.models.Message;
+import com.teamtreehouse.ribbit.models.messages.Message;
 import com.teamtreehouse.ribbit.ui.fragments.inbox.FragmentInboxView;
 
 /**

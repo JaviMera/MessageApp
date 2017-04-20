@@ -1,4 +1,4 @@
-package com.teamtreehouse.ribbit.models;
+package com.teamtreehouse.ribbit.models.messages;
 
 /**
  * Created by javie on 4/18/2017.

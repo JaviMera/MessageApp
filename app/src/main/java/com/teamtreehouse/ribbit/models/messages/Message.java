@@ -1,8 +1,9 @@
-package com.teamtreehouse.ribbit.models;
+package com.teamtreehouse.ribbit.models.messages;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
+
+import com.teamtreehouse.ribbit.models.Item;
 
 /**
  * Created by javie on 4/13/2017.

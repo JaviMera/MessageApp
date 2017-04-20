@@ -1,7 +1,7 @@
 package com.teamtreehouse.ribbit.ui.fragments;
 
 import com.teamtreehouse.ribbit.adapters.actions.ButtonAction;
-import com.teamtreehouse.ribbit.models.User;
+import com.teamtreehouse.ribbit.models.users.User;
 
 import java.util.List;
 

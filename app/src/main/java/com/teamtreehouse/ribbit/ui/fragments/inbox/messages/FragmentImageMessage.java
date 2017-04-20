@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.teamtreehouse.ribbit.R;
-import com.teamtreehouse.ribbit.models.MultimediaMessage;
+import com.teamtreehouse.ribbit.models.messages.MultimediaMessage;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

@@ -1,4 +1,4 @@
-package com.teamtreehouse.ribbit.models;
+package com.teamtreehouse.ribbit.animations;
 
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
@@ -7,13 +7,13 @@ import android.view.View;
  * Created by javie on 4/20/2017.
  */
 
-public class ViewScaleDown implements ViewScaleAnimation {
+public class ViewScaleUp implements ViewScaleAnimation {
 
     private final FloatingActionButton view;
     private final float value;
     private final int duration;
 
-    public ViewScaleDown(FloatingActionButton view, float value, int duration){
+    public ViewScaleUp(FloatingActionButton view, float value, int duration){
 
         this.view = view;
         this.value = value;
@@ -34,7 +34,7 @@ public class ViewScaleDown implements ViewScaleAnimation {
     @Override
     public void endAction() {
 
-        this.view.hide();
+        this.view.show();
     }
 
     @Override

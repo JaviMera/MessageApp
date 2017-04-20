@@ -2,14 +2,10 @@ package com.teamtreehouse.ribbit.ui.activities.messages.view;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 
 import com.teamtreehouse.ribbit.R;
-import com.teamtreehouse.ribbit.models.Message;
-import com.teamtreehouse.ribbit.models.MessageDuration;
-import com.teamtreehouse.ribbit.models.TextMessage;
-import com.teamtreehouse.ribbit.ui.fragments.inbox.view.ViewImageMessageFragment;
+import com.teamtreehouse.ribbit.models.messages.Message;
+import com.teamtreehouse.ribbit.models.messages.TextMessage;
 import com.teamtreehouse.ribbit.ui.fragments.inbox.view.ViewTextFragment;
 
 /**

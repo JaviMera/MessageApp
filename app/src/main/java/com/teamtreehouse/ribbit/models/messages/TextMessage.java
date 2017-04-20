@@ -1,7 +1,6 @@
-package com.teamtreehouse.ribbit.models;
+package com.teamtreehouse.ribbit.models.messages;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 
 /**
  * Created by javie on 4/8/2017.

@@ -5,7 +5,6 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -19,11 +18,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.teamtreehouse.ribbit.R;
-import com.teamtreehouse.ribbit.models.MessageDuration;
-import com.teamtreehouse.ribbit.ui.fragments.FragmentVideoMessage;
+import com.teamtreehouse.ribbit.models.messages.MessageDuration;
 import com.teamtreehouse.ribbit.ui.fragments.inbox.view.ViewFragmentMessage;
 import com.teamtreehouse.ribbit.ui.fragments.inbox.view.ViewMessageFragmentView;
-import com.teamtreehouse.ribbit.ui.fragments.inbox.view.ViewVideoMessageFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
