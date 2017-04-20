@@ -1,6 +1,5 @@
 package com.teamtreehouse.ribbit.utils;
 
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewCompat;
@@ -11,6 +10,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 
 import com.teamtreehouse.ribbit.R;
+import com.teamtreehouse.ribbit.models.ViewScaleAnimation;
 
 /**
  * Created by javie on 4/12/2017.
@@ -33,13 +33,13 @@ public class Animations {
         return AnimationUtils.loadAnimation(ctx, anim);
     }
 
-    public static void scaleDownFab(final FloatingActionButton fab, float value, int duration){
+    public static void scale(final ViewScaleAnimation animation){
 
         ViewCompat
-            .animate(fab)
-            .scaleX(value)
-            .scaleY(value)
-            .setDuration(duration)
+            .animate(animation.getView())
+            .scaleX(animation.getValue())
+            .scaleY(animation.getValue())
+            .setDuration(animation.getDuration())
             .setInterpolator(new LinearInterpolator())
             .setListener(new ViewPropertyAnimatorListener() {
                 @Override
@@ -50,35 +50,7 @@ public class Animations {
                 @Override
                 public void onAnimationEnd(View view) {
 
-                    fab.hide();
-                }
-
-                @Override
-                public void onAnimationCancel(View view) {
-
-                }
-            })
-            .start();
-    }
-
-    public static void scaleUpFab(final FloatingActionButton fab, float value, int duration){
-
-        ViewCompat
-            .animate(fab)
-            .scaleX(value)
-            .scaleY(value)
-            .setDuration(duration)
-            .setInterpolator(new LinearInterpolator())
-            .setListener(new ViewPropertyAnimatorListener() {
-                @Override
-                public void onAnimationStart(View view) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(View view) {
-
-                    fab.show();
+                    animation.endAction();
                 }
 
                 @Override

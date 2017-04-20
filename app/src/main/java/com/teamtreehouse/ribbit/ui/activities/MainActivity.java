@@ -11,9 +11,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPropertyAnimatorListener;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -32,6 +30,8 @@ import com.teamtreehouse.ribbit.models.PictureCaptureResultIntent;
 import com.teamtreehouse.ribbit.models.PicturePickResultIntent;
 import com.teamtreehouse.ribbit.models.VideoCaptureResultIntent;
 import com.teamtreehouse.ribbit.models.VideoPickResultIntent;
+import com.teamtreehouse.ribbit.models.ViewScaleDown;
+import com.teamtreehouse.ribbit.models.ViewScaleUp;
 import com.teamtreehouse.ribbit.ui.activities.messages.TextMessageActivity;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentPager;
 import com.teamtreehouse.ribbit.ui.fragments.friends.FriendsFragment;
@@ -367,11 +367,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     public void showFabMenu() {
 
         fabMenuOpen = true;
-        Animations.scaleUpFab(textFab, 1.0f, 500);
-        Animations.scaleUpFab(pictureFab, 1.0f, 400);
-        Animations.scaleUpFab(capturePictureFab, 1.0f, 300);
-        Animations.scaleUpFab(videoFab, 1.0f, 200);
-        Animations.scaleUpFab(captureVideoFab, 1.0f, 100);
+        Animations.scale(new ViewScaleUp(textFab, 1.0f, 500));
+        Animations.scale(new ViewScaleUp(pictureFab, 1.0f, 400));
+        Animations.scale(new ViewScaleUp(capturePictureFab, 1.0f, 300));
+        Animations.scale(new ViewScaleUp(videoFab, 1.0f, 200));
+        Animations.scale(new ViewScaleUp(captureVideoFab, 1.0f, 100));
     }
 
     @Override
@@ -379,11 +379,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
         fabMenuOpen = false;
 
-        Animations.scaleDownFab(textFab, 0.0f, 100);
-        Animations.scaleDownFab(pictureFab, 0.0f, 200);
-        Animations.scaleDownFab(capturePictureFab, 0.0f, 300);
-        Animations.scaleDownFab(videoFab, 0.0f, 400);
-        Animations.scaleDownFab(captureVideoFab, 0.0f, 500);
+        Animations.scale(new ViewScaleDown(textFab, 0.0f, 100));
+        Animations.scale(new ViewScaleDown(pictureFab, 0.0f, 200));
+        Animations.scale(new ViewScaleDown(capturePictureFab, 0.0f, 300));
+        Animations.scale(new ViewScaleDown(videoFab, 0.0f, 400));
+        Animations.scale(new ViewScaleDown(captureVideoFab, 0.0f, 500));
     }
 
     @Override
