@@ -17,12 +17,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.SectionsPagerAdapter;
+import com.teamtreehouse.ribbit.animations.TextViewAlphaIn;
+import com.teamtreehouse.ribbit.animations.TextViewAlphaOut;
+import com.teamtreehouse.ribbit.animations.ViewAnimationCallback;
 import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.ui.activities.intents.MultimediaResultIntent;
 import com.teamtreehouse.ribbit.models.messages.MultimediaMessage;
@@ -30,8 +33,8 @@ import com.teamtreehouse.ribbit.ui.activities.intents.PictureCaptureResultIntent
 import com.teamtreehouse.ribbit.ui.activities.intents.PicturePickResultIntent;
 import com.teamtreehouse.ribbit.ui.activities.intents.VideoCaptureResultIntent;
 import com.teamtreehouse.ribbit.ui.activities.intents.VideoPickResultIntent;
-import com.teamtreehouse.ribbit.animations.ViewScaleDown;
-import com.teamtreehouse.ribbit.animations.ViewScaleUp;
+import com.teamtreehouse.ribbit.animations.FabDown;
+import com.teamtreehouse.ribbit.animations.FabUp;
 import com.teamtreehouse.ribbit.ui.activities.messages.TextMessageActivity;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentPager;
 import com.teamtreehouse.ribbit.ui.fragments.friends.FriendsFragment;
@@ -80,11 +83,23 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     @BindView(R.id.pager)
     ViewPager viewPager;
 
-    @BindView(R.id.fabMenu)
-    LinearLayout fabMenu;
-
     @BindView(R.id.fab)
     FloatingActionButton fab;
+
+    @BindView(R.id.fabTextLabel)
+    TextView fabTextLabel;
+
+    @BindView(R.id.fabPictureLabel)
+    TextView fabPictureLabel;
+
+    @BindView(R.id.fabCapturePictureLabel)
+    TextView fabCapturePictureLabel;
+
+    @BindView(R.id.fabVideoLabel)
+    TextView fabVideoLabel;
+
+    @BindView(R.id.fabCaptureVideoLabel)
+    TextView fabCaptureVideoLabel;
 
     @BindView(R.id.fabPictureMessage)
     FloatingActionButton pictureFab;
@@ -177,7 +192,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if(resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
 
             MultimediaResultIntent intentType = this.intentTypes.get(requestCode);
 
@@ -210,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
 
             case R.id.action_logout:
                 navigateToLogin();
@@ -226,8 +241,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         if (isFinishing()) {
 
             FirebaseAuth
-                .getInstance()
-                .signOut();
+                    .getInstance()
+                    .signOut();
         }
     }
 
@@ -242,9 +257,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
         // We don't have permission so prompt the user
         ActivityCompat.requestPermissions(
-            this,
-            permissions,
-            REQUEST_EXTERNAL_STORAGE
+                this,
+                permissions,
+                REQUEST_EXTERNAL_STORAGE
         );
     }
 
@@ -305,13 +320,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
             String fileName = "IMG_" + timeStamp;
 
-            try
-            {
+            try {
                 File.createTempFile(fileName, ".jpg", mediaStorageDir);
                 Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST);
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
 
                 Toast.makeText(this, "Error creating file: " +
                         mediaStorageDir.getAbsolutePath() + fileName + ".jpg", Toast.LENGTH_SHORT).show();
@@ -345,8 +358,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
             String fileName = "VID_" + timeStamp;
 
-            try
-            {
+            try {
                 File.createTempFile(fileName, ".mp4", mediaStorageDir);
 
                 // 4. Return the file's URI
@@ -354,8 +366,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
                 videoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 15);
                 videoIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0); // 0 = lowest res
                 startActivityForResult(videoIntent, TAKE_VIDEO_REQUEST);
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
 
                 Toast.makeText(this, "Error creating file: " +
                         mediaStorageDir.getAbsolutePath() + fileName + ".mp4", Toast.LENGTH_SHORT).show();
@@ -367,11 +378,37 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     public void showFabMenu() {
 
         fabMenuOpen = true;
-        Animations.scale(new ViewScaleUp(textFab, 1.0f, 500));
-        Animations.scale(new ViewScaleUp(pictureFab, 1.0f, 400));
-        Animations.scale(new ViewScaleUp(capturePictureFab, 1.0f, 300));
-        Animations.scale(new ViewScaleUp(videoFab, 1.0f, 200));
-        Animations.scale(new ViewScaleUp(captureVideoFab, 1.0f, 100));
+
+        Animations.scale(new FabUp(textFab, 1.0f, 500), new ViewAnimationCallback() {
+            @Override
+            public void onFinish() {
+                Animations.alpha(new TextViewAlphaIn(fabTextLabel, 1.0f, 100));
+            }
+        });
+        Animations.scale(new FabUp(pictureFab, 1.0f, 400), new ViewAnimationCallback() {
+            @Override
+            public void onFinish() {
+                Animations.alpha(new TextViewAlphaIn(fabPictureLabel, 1.0f, 100));
+            }
+        });
+        Animations.scale(new FabUp(capturePictureFab, 1.0f, 300), new ViewAnimationCallback() {
+            @Override
+            public void onFinish() {
+                Animations.alpha(new TextViewAlphaIn(fabCapturePictureLabel, 1.0f, 100));
+            }
+        });
+        Animations.scale(new FabUp(videoFab, 1.0f, 200), new ViewAnimationCallback() {
+            @Override
+            public void onFinish() {
+                Animations.alpha(new TextViewAlphaIn(fabVideoLabel, 1.0f, 100));
+            }
+        });
+        Animations.scale(new FabUp(captureVideoFab, 1.0f, 100), new ViewAnimationCallback() {
+            @Override
+            public void onFinish() {
+                Animations.alpha(new TextViewAlphaIn(fabCaptureVideoLabel, 1.0f, 100));
+            }
+        });
     }
 
     @Override
@@ -379,11 +416,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
         fabMenuOpen = false;
 
-        Animations.scale(new ViewScaleDown(textFab, 0.0f, 100));
-        Animations.scale(new ViewScaleDown(pictureFab, 0.0f, 200));
-        Animations.scale(new ViewScaleDown(capturePictureFab, 0.0f, 300));
-        Animations.scale(new ViewScaleDown(videoFab, 0.0f, 400));
-        Animations.scale(new ViewScaleDown(captureVideoFab, 0.0f, 500));
+        Animations.scale(new FabDown(textFab, 0.0f, 100), null);
+        Animations.alpha(new TextViewAlphaOut(fabTextLabel, 0.0f, 100));
+        Animations.scale(new FabDown(pictureFab, 0.0f, 200), null);
+        Animations.alpha(new TextViewAlphaIn(fabPictureLabel, 0.0f, 100));
+        Animations.scale(new FabDown(capturePictureFab, 0.0f, 300), null);
+        Animations.alpha(new TextViewAlphaIn(fabCapturePictureLabel, 0.0f, 100));
+        Animations.scale(new FabDown(videoFab, 0.0f, 400), null);
+        Animations.alpha(new TextViewAlphaIn(fabVideoLabel, 0.0f, 100));
+        Animations.scale(new FabDown(captureVideoFab, 0.0f, 500), null);
+        Animations.alpha(new TextViewAlphaIn(fabCaptureVideoLabel, 0.0f, 100));
     }
 
     @Override
@@ -395,7 +437,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     @Override
     public boolean checkPermissions(String[] permissions) {
 
-        for(String permission : permissions) {
+        for (String permission : permissions) {
 
             if (ContextCompat
                     .checkSelfPermission(this, permission) == PackageManager.PERMISSION_DENIED) {

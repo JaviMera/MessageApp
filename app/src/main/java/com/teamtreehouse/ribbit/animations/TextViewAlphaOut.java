@@ -1,19 +1,19 @@
 package com.teamtreehouse.ribbit.animations;
 
-import android.support.design.widget.FloatingActionButton;
 import android.view.View;
+import android.widget.TextView;
 
 /**
  * Created by javie on 4/20/2017.
  */
 
-public class ViewScaleDown implements ViewScaleAnimation {
+public class TextViewAlphaOut implements ViewAnimation {
 
-    private final FloatingActionButton view;
+    private final TextView view;
     private final float value;
     private final int duration;
 
-    public ViewScaleDown(FloatingActionButton view, float value, int duration){
+    public TextViewAlphaOut(TextView view, float value, int duration){
 
         this.view = view;
         this.value = value;
@@ -22,7 +22,6 @@ public class ViewScaleDown implements ViewScaleAnimation {
 
     @Override
     public float getValue() {
-
         return this.value;
     }
 
@@ -33,13 +32,11 @@ public class ViewScaleDown implements ViewScaleAnimation {
 
     @Override
     public void endAction() {
-
-        this.view.hide();
+        this.view.setVisibility(View.GONE);
     }
 
     @Override
     public View getView() {
-
         return this.view;
     }
 }

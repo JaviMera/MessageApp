@@ -67,5 +67,10 @@
     <string name="activity_edit_friend_label">Edit</string>
     <string name="activity_users_label">Search people</string>
     <string name="activity_text_message_label">Edit Message</string>
+    <string name="fab_label_text">Text Message</string>
+    <string name="fab_label_picture">Picture Message</string>
+    <string name="fab_label_capture_picture">Capture Picture</string>
+    <string name="fab_label_video">Video Message</string>
+    <string name="fab_label_capture_video">Capture Video</string>
 
 </resources>
