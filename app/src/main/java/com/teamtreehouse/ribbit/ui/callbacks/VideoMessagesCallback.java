@@ -11,53 +11,24 @@ import com.teamtreehouse.ribbit.models.VideoMessage;
  * Created by javie on 4/17/2017.
  */
 
-public class VideoMessagesCallback implements ChildEventListener {
+public class VideoMessagesCallback extends MessageCallback<VideoMessage> {
 
-    public interface VideoMessageListener {
+    private MessageListener<VideoMessage> listener;
 
-        void onMessageAdded(VideoMessage message);
-        void onMessageRemoved(VideoMessage message);
-    }
+    public VideoMessagesCallback(String userId, MessageListener<VideoMessage> listener) {
 
-    private VideoMessageListener listener;
-
-    public VideoMessagesCallback(VideoMessageListener listener) {
-
-        this.listener = listener;
-
-        FirebaseDatabase
-            .getInstance()
-            .getReference()
-            .child("messages")
-            .child("videos")
-            .child(Auth.getInstance().getId())
-            .addChildEventListener(this);
+        super(userId, listener);
     }
 
     @Override
-    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+    protected Class<VideoMessage> getClassType() {
 
-        this.listener.onMessageAdded(dataSnapshot.getValue(VideoMessage.class));
+        return VideoMessage.class;
     }
 
     @Override
-    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+    protected String getMessageNode() {
 
-    }
-
-    @Override
-    public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-        this.listener.onMessageRemoved(dataSnapshot.getValue(VideoMessage.class));
-    }
-
-    @Override
-    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-    }
-
-    @Override
-    public void onCancelled(DatabaseError databaseError) {
-
+        return "videos";
     }
 }

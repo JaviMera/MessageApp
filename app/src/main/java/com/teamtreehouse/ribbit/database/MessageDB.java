@@ -21,6 +21,7 @@ import com.teamtreehouse.ribbit.models.UserRecipient;
 import com.teamtreehouse.ribbit.models.UserSender;
 import com.teamtreehouse.ribbit.models.UserRequest;
 import com.teamtreehouse.ribbit.models.VideoMessage;
+import com.teamtreehouse.ribbit.ui.callbacks.MessageListener;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -407,6 +408,17 @@ public class MessageDB {
                     callback.onFailure();
                 }
             });
+    }
+
+    public static void readMessages(String userId, String messageNode, ChildEventListener listener) {
+
+        FirebaseDatabase
+            .getInstance()
+            .getReference()
+            .child(MESSAGES_NODE)
+            .child(messageNode)
+            .child(Auth.getInstance().getId())
+            .addChildEventListener(listener);
     }
 
     public static void deleteImageMessage(final ImageMessage message, final DeletePictureCallback callback) {

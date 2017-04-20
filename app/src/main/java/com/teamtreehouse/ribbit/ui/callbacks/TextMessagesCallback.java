@@ -11,47 +11,23 @@ import com.teamtreehouse.ribbit.models.TextMessage;
  * Created by javie on 4/9/2017.
  */
 
-public class TextMessagesCallback implements ChildEventListener {
+public class TextMessagesCallback extends MessageCallback<TextMessage> {
 
-    private final MessageRecipient listener;
+    public TextMessagesCallback(String userId, MessageListener<TextMessage> listener) {
 
-    public TextMessagesCallback(MessageRecipient listener) {
-
-        this.listener = listener;
-
-        FirebaseDatabase
-            .getInstance()
-            .getReference()
-            .child("messages")
-            .child("text")
-            .child(Auth.getInstance().getId())
-            .addChildEventListener(this);
-    }
-
-    @Override
-    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-        this.listener.onMessageAdded(dataSnapshot.getValue(TextMessage.class));
-    }
-
-    @Override
-    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        super(userId, listener);
 
     }
 
     @Override
-    public void onChildRemoved(DataSnapshot dataSnapshot) {
+    protected Class<TextMessage> getClassType() {
 
-        this.listener.onMessageRemoved(dataSnapshot.getValue(TextMessage.class));
+        return TextMessage.class;
     }
 
     @Override
-    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+    protected String getMessageNode() {
 
-    }
-
-    @Override
-    public void onCancelled(DatabaseError databaseError) {
-
+        return "text";
     }
 }

@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.InboxFragmentAdapter;
+import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.ImageMessage;
 import com.teamtreehouse.ribbit.models.Message;
 import com.teamtreehouse.ribbit.models.TextMessage;
@@ -22,7 +23,7 @@ import com.teamtreehouse.ribbit.ui.activities.MainActivityView;
 import com.teamtreehouse.ribbit.ui.activities.messages.view.ViewImageMessageActivity;
 import com.teamtreehouse.ribbit.ui.activities.messages.view.ViewVideoMessageActivity;
 import com.teamtreehouse.ribbit.ui.callbacks.ImageMessagesCallback;
-import com.teamtreehouse.ribbit.ui.callbacks.MessageRecipient;
+import com.teamtreehouse.ribbit.ui.callbacks.MessageListener;
 import com.teamtreehouse.ribbit.ui.callbacks.TextMessagesCallback;
 import com.teamtreehouse.ribbit.ui.callbacks.VideoMessagesCallback;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentPager;
@@ -36,13 +37,11 @@ public class FragmentInbox
         FragmentPager<MainActivityView, FragmentInboxPresenter, InboxFragmentAdapter>
     implements
         FragmentInboxView,
-        MessageRecipient,
-        ImageMessagesCallback.ImageMessageListener, VideoMessagesCallback.VideoMessageListener {
+        MessageListener {
 
     private TextMessagesCallback messagesCallback;
     private ImageMessagesCallback imageMessagesCallback;
     private VideoMessagesCallback videoMessagesCallback;
-    private boolean showing;
 
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
@@ -89,9 +88,11 @@ public class FragmentInbox
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
-        this.messagesCallback = new TextMessagesCallback(this);
-        this.imageMessagesCallback = new ImageMessagesCallback(this);
-        this.videoMessagesCallback = new VideoMessagesCallback(this);
+        String userId = Auth.getInstance().getId();
+
+        this.messagesCallback = new TextMessagesCallback(userId, this);
+        this.imageMessagesCallback = new ImageMessagesCallback(userId, this);
+        this.videoMessagesCallback = new VideoMessagesCallback(userId, this);
     }
 
     @Override
@@ -244,44 +245,14 @@ public class FragmentInbox
     }
 
     @Override
-    public void onMessageAdded(TextMessage msg) {
-
-        InboxFragmentAdapter adapter = getAdapter();
-        adapter.add(msg);
-    }
-
-    @Override
-    public void onMessageRemoved(TextMessage message) {
-
-        InboxFragmentAdapter adapter = getAdapter();
-        int position = adapter.getPosition(message);
-        adapter.removeItem(position);
-    }
-
-    @Override
-    public void onMessageAdded(ImageMessage message) {
+    public void onMessageAdded(Message message) {
 
         InboxFragmentAdapter adapter = getAdapter();
         adapter.add(message);
     }
 
     @Override
-    public void onMessageRemoved(ImageMessage message) {
-
-        InboxFragmentAdapter adapter = getAdapter();
-        int position = adapter.getPosition(message);
-        adapter.removeItem(position);
-    }
-
-    @Override
-    public void onMessageAdded(VideoMessage message) {
-
-        InboxFragmentAdapter adapter = getAdapter();
-        adapter.add(message);
-    }
-
-    @Override
-    public void onMessageRemoved(VideoMessage message) {
+    public void onMessageRemoved(Message message) {
 
         InboxFragmentAdapter adapter = getAdapter();
         int position = adapter.getPosition(message);

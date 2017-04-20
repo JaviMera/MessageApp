@@ -11,52 +11,24 @@ import com.teamtreehouse.ribbit.models.ImageMessage;
  * Created by javie on 4/13/2017.
  */
 
-public class ImageMessagesCallback implements ChildEventListener{
+public class ImageMessagesCallback extends MessageCallback<ImageMessage>{
 
-    private ImageMessageListener listener;
+    private MessageListener<ImageMessage> listener;
 
-    public interface ImageMessageListener {
+    public ImageMessagesCallback(String userId, MessageListener<ImageMessage> listener) {
 
-        void onMessageAdded(ImageMessage message);
-        void onMessageRemoved(ImageMessage message);
-    }
-
-    public ImageMessagesCallback(ImageMessageListener listener) {
-
-        this.listener = listener;
-        FirebaseDatabase
-            .getInstance()
-            .getReference()
-            .child("messages")
-            .child("images")
-            .child(Auth.getInstance().getId())
-            .addChildEventListener(this);
+        super(userId, listener);
     }
 
     @Override
-    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+    protected String getMessageNode() {
 
-        this.listener.onMessageAdded(dataSnapshot.getValue(ImageMessage.class));
+        return "images";
     }
 
     @Override
-    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+    protected Class<ImageMessage> getClassType() {
 
-    }
-
-    @Override
-    public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-        this.listener.onMessageRemoved(dataSnapshot.getValue(ImageMessage.class));
-    }
-
-    @Override
-    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-    }
-
-    @Override
-    public void onCancelled(DatabaseError databaseError) {
-
+        return ImageMessage.class;
     }
 }
