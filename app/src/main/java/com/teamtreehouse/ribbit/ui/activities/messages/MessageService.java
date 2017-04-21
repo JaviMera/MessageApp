@@ -44,34 +44,47 @@ public class MessageService extends IntentService {
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         builder.setContentTitle("Message upload");
         builder.setContentText("Download in progress");
-        builder.setSmallIcon(R.mipmap.ic_launcher);
-
+        builder.setSmallIcon(android.R.drawable.stat_sys_upload);
+        builder.setOngoing(true);
         final int notificationId = 001;
-        for(final User user : recipients) {
+        try {
 
-            MessageDB.insertTextMessage(user.getId(), message, new TextInsertCallback() {
-                @Override
-                public void onSuccess() {
+            for(final User user : recipients) {
 
-                    builder.setProgress(100, 100 / recipients.size(), false);
-                    manager.notify(notificationId, builder.build());
-                }
+                MessageDB.insertTextMessage(user.getId(), message, new TextInsertCallback() {
+                    @Override
+                    public void onSuccess() {
 
-                @Override
-                public void onFailure() {
-                }
-            });
+                        builder.setProgress(100, 100 / recipients.size(), false);
+                        manager.notify(notificationId, builder.build());
+                    }
+
+                    @Override
+                    public void onFailure() {
+                    }
+                });
+            }
+
+            Thread.sleep(2000);
+
+            builder
+                .setContentText("Download complete")
+                .setSmallIcon(android.R.drawable.stat_sys_upload_done)
+                .setProgress(0,0, false)
+                .setOngoing(false)
+                .setAutoCancel(true);
+
+            manager.notify(notificationId, builder.build());
+
+            Intent responseIntent = new Intent("message_send");
+            responseIntent.putExtra(Message.KEY, "success");
+            LocalBroadcastManager
+                .getInstance(MessageService.this)
+                .sendBroadcast(responseIntent);
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
-        builder
-            .setContentText("Download complete")
-            .setProgress(0,0, false);
-        manager.notify(notificationId, builder.build());
-
-        Intent responseIntent = new Intent("message_send");
-        responseIntent.putExtra(Message.KEY, "success");
-        LocalBroadcastManager
-            .getInstance(MessageService.this)
-            .sendBroadcast(responseIntent);
     }
 }
