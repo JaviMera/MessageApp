@@ -21,16 +21,10 @@ import java.util.ArrayList;
 public class TextMessageService extends MessageService<TextMessage>{
 
     @Override
-    protected void handle(TextMessage message, final ArrayList<User> recipients) {
+    protected void handle(Intent intent) {
 
-        final int notificationId = 001;
-        final NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-        builder
-            .setContentTitle("Message upload")
-            .setContentText("Download in progress")
-            .setSmallIcon(android.R.drawable.stat_sys_upload)
-            .setOngoing(true);
+        TextMessage message = intent.getParcelableExtra(Message.KEY);
+        final ArrayList<User> recipients = intent.getParcelableArrayListExtra(User.KEY);
 
         for(final User user : recipients) {
 
@@ -38,41 +32,21 @@ public class TextMessageService extends MessageService<TextMessage>{
                 @Override
                 public void onSuccess() {
 
-                    builder.setProgress(PROGRESS_MAX, PROGRESS_MAX / recipients.size(), false);
-                    manager.notify(notificationId, builder.build());
+                    if(recipients.indexOf(user) == recipients.size() - 1) {
+
+                        // Notify main activity about messages successfully sent
+                        Intent responseIntent = new Intent("message_send");
+                        responseIntent.putExtra(Message.KEY, "success");
+                        LocalBroadcastManager
+                                .getInstance(TextMessageService.this)
+                                .sendBroadcast(responseIntent);
+                    }
                 }
 
                 @Override
                 public void onFailure() {
                 }
             });
-        }
-
-        try {
-
-            // Because text messages will probably not take any time to be sent
-            // Make the service sleep 2 seconds before publishing the done upload icon
-            Thread.sleep(2000);
-
-            // After the message sending is done, send a last notification showing the user
-            // everything was sent successfully
-            builder
-                    .setContentText("Download complete")
-                    .setSmallIcon(android.R.drawable.stat_sys_upload_done)
-                    .setProgress(0,0, false)
-                    .setOngoing(false)
-                    .setAutoCancel(true);
-
-            manager.notify(notificationId, builder.build());
-
-            // Notify main activity about messages successfully sent
-            Intent responseIntent = new Intent("message_send");
-            responseIntent.putExtra(Message.KEY, "success");
-            LocalBroadcastManager
-                    .getInstance(TextMessageService.this)
-                    .sendBroadcast(responseIntent);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
     }
 }

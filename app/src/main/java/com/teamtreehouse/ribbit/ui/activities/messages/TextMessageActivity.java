@@ -1,8 +1,12 @@
 package com.teamtreehouse.ribbit.ui.activities.messages;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.Toast;
 
@@ -52,6 +56,5 @@ public class TextMessageActivity extends MessageActivity {
         serviceIntent.putParcelableArrayListExtra(User.KEY, new ArrayList<>(this.recipients));
         serviceIntent.putExtra(Message.KEY, message);
         startService(serviceIntent);
-        finish();
     }
 }

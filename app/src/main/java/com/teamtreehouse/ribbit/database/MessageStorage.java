@@ -17,7 +17,7 @@ public class MessageStorage {
 
     public static final String IMAGES_NODE = "images";
 
-    public static void insertPicture(String userId, Uri uri, final ImageInsertCallback callback) {
+    public static void insertPicture(String userId, Uri uri, final ImageStorageCallback callback) {
 
         FirebaseStorage
             .getInstance()

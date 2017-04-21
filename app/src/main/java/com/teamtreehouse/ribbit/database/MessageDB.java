@@ -357,7 +357,7 @@ public class MessageDB {
             });
     }
 
-    public static void insertImageMessage(String recipientId, ImageMessage message, final ImageInsertCallback callback) {
+    public static void insertImageMessage(String recipientId, ImageMessage message, final MultimediaInsertCallback callback) {
 
         FirebaseDatabase
             .getInstance()
@@ -371,19 +371,18 @@ public class MessageDB {
                 @Override
                 public void onSuccess(Void aVoid) {
 
-                    callback.onSuccess("", "");
+                    callback.onSuccess();
                 }
             })
             .addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
 
-                    callback.onFailure();
                 }
             });
     }
 
-    public static void insertVideoMessage(String recipientId, ImageMessage message, final ImageInsertCallback callback) {
+    public static void insertVideoMessage(String recipientId, ImageMessage message, final MultimediaInsertCallback callback) {
 
         FirebaseDatabase
             .getInstance()
@@ -397,14 +396,13 @@ public class MessageDB {
                 @Override
                 public void onSuccess(Void aVoid) {
 
-                    callback.onSuccess("", "");
+                    callback.onSuccess();
                 }
             })
             .addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
 
-                    callback.onFailure();
                 }
             });
     }

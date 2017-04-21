@@ -113,6 +113,10 @@
         <service
             android:name=".ui.TextMessageService"
             android:exported="false"/>
+
+        <service
+            android:name=".ui.activities.messages.ImageMessageService"
+            android:exported="false" />
     </application>
 
 </manifest>

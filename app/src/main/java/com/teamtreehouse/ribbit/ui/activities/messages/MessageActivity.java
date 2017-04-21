@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -71,6 +72,16 @@ public abstract class MessageActivity extends AppCompatActivity implements Messa
 
     protected MessageActivityPresenter presenter;
     protected List<User> recipients;
+
+    private BroadcastReceiver messageBroadcast = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            String data = intent.getStringExtra("message_sent");
+            Toast.makeText(MessageActivity.this, data, Toast.LENGTH_SHORT).show();
+            finish();
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -143,6 +154,25 @@ public abstract class MessageActivity extends AppCompatActivity implements Messa
 
         replaceFragment(R.id.recipientsContainer, FragmentRecipient.newInstance());
         replaceFragment(R.id.suggestionsContainer, FragmentSuggestions.newInstance());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        IntentFilter intentFilter = new IntentFilter("message_send");
+        LocalBroadcastManager
+            .getInstance(this)
+            .registerReceiver(this.messageBroadcast, intentFilter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        LocalBroadcastManager
+            .getInstance(this)
+            .unregisterReceiver(this.messageBroadcast);
     }
 
     @Override

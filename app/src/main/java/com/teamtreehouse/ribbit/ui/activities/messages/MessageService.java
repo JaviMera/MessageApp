@@ -25,7 +25,7 @@ import java.util.ArrayList;
 public abstract class MessageService<TMessage extends Message> extends IntentService {
 
     protected int PROGRESS_MAX = 100;
-    protected abstract void handle(TMessage message, ArrayList<User> recipients);
+    protected abstract void handle(Intent message);
 
     public MessageService(){
 
@@ -40,9 +40,6 @@ public abstract class MessageService<TMessage extends Message> extends IntentSer
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
 
-        TMessage message = intent.getParcelableExtra(Message.KEY);
-        final ArrayList<User> recipients = intent.getParcelableArrayListExtra(User.KEY);
-
-        handle(message, recipients);
+        handle(intent);
     }
 }

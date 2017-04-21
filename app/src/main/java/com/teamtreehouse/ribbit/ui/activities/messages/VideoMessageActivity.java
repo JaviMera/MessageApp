@@ -11,8 +11,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.UploadTask;
 import com.teamtreehouse.ribbit.R;
-import com.teamtreehouse.ribbit.database.ImageInsertCallback;
+import com.teamtreehouse.ribbit.database.ImageStorageCallback;
 import com.teamtreehouse.ribbit.database.MessageDB;
+import com.teamtreehouse.ribbit.database.MultimediaInsertCallback;
 import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.messages.ImageMessage;
 import com.teamtreehouse.ribbit.models.messages.MultimediaMessage;
@@ -80,14 +81,9 @@ public class VideoMessageActivity extends MessageActivity {
                             new Date().getTime()
                         );
 
-                        MessageDB.insertVideoMessage(user.getId(), message, new ImageInsertCallback() {
+                        MessageDB.insertVideoMessage(user.getId(), message, new MultimediaInsertCallback() {
                             @Override
-                            public void onSuccess(String url, String path) {
-
-                            }
-
-                            @Override
-                            public void onFailure() {
+                            public void onSuccess() {
 
                             }
                         });
