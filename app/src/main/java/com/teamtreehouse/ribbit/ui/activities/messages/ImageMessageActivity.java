@@ -25,18 +25,23 @@ import butterknife.OnClick;
 // TODO add tool bar to view image fragment layout
 public class ImageMessageActivity extends MessageActivity {
 
-    private BroadcastReceiver messageBroadcast = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-            String data = intent.getStringExtra(Message.KEY);
-            Toast.makeText(ImageMessageActivity.this, data, Toast.LENGTH_SHORT).show();
+        Uri pictureUri = getIntent().getParcelableExtra(MultimediaMessage.KEY);
+        replaceFragment(R.id.messageContainer, FragmentImageMessage.newInstance(pictureUri));
+    }
 
-            setSendLayoutVisibility(View.VISIBLE);
-            setProgressBarVisibility(View.GONE);
-            finish();
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
         }
-    };
+        return super.onOptionsItemSelected(item);
+    }
 
     @OnClick(R.id.sendTextImage)
     public void onSendMessageClick(View view) {
