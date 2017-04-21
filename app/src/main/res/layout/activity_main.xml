@@ -76,17 +76,13 @@
                 <TextView
                     android:id="@+id/fabTextLabel"
                     android:text="@string/fab_label_text"
-                    style="@style/FabLabel"/>
+                    style="@style/fabMenuLabel"/>
 
                 <android.support.design.widget.FloatingActionButton
                     android:id="@+id/fabTextMesssage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:src="@mipmap/ic_text_message"
-                    android:tint="@android:color/white"
-                    android:layout_margin="8dp"
-                    android:visibility="gone"
-                    app:fabSize="mini" />
+                    app:fabSize="mini"
+                    style="@style/fabMenu"/>
             </LinearLayout>
 
             <LinearLayout
@@ -98,18 +94,13 @@
                 <TextView
                     android:id="@+id/fabPictureLabel"
                     android:text="@string/fab_label_picture"
-                    style="@style/FabLabel"/>
+                    style="@style/fabMenuLabel"/>
 
                 <android.support.design.widget.FloatingActionButton
                     android:id="@+id/fabPictureMessage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
                     android:src="@mipmap/ic_pictures"
-                    android:tint="@android:color/white"
-                    android:layout_margin="8dp"
-                    android:visibility="gone"
-                    app:fabSize="mini" />
+                    app:fabSize="mini"
+                    style="@style/fabMenu" />
             </LinearLayout>
 
         <LinearLayout
@@ -121,17 +112,15 @@
             <TextView
                 android:id="@+id/fabCapturePictureLabel"
                 android:text="@string/fab_label_capture_picture"
-                style="@style/FabLabel"/>
+                style="@style/fabMenuLabel"/>
+
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/fabCapturePictureMessage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:src="@mipmap/ic_capture_pictures"
-                android:tint="@android:color/white"
-                android:layout_margin="8dp"
-                android:visibility="gone"
-                app:fabSize="mini" />
-            </LinearLayout>
+                app:fabSize="mini"
+                style="@style/fabMenu" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -142,17 +131,13 @@
             <TextView
                 android:id="@+id/fabVideoLabel"
                 android:text="@string/fab_label_video"
-                style="@style/FabLabel"/>
+                style="@style/fabMenuLabel"/>
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/fabVideoMessage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:src="@mipmap/ic_video"
-                android:tint="@android:color/white"
-                android:layout_margin="8dp"
-                android:visibility="gone"
-                app:fabSize="mini" />
+                app:fabSize="mini"
+                style="@style/fabMenu" />
             </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -163,16 +148,13 @@
             <TextView
                 android:id="@+id/fabCaptureVideoLabel"
                 android:text="@string/fab_label_capture_video"
-                style="@style/FabLabel"/>
+                style="@style/fabMenuLabel"/>
+
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/fabCaptureVideoMessage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:src="@mipmap/ic_capture_video"
-                android:tint="@android:color/white"
-                android:layout_margin="8dp"
-                android:visibility="gone"
-                app:fabSize="mini" />
+                app:fabSize="mini"
+                style="@style/fabMenu" />
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>

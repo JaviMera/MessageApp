@@ -175,16 +175,26 @@
         <item name="android:layout_alignParentTop">true</item>
     </style>
 
-    <style name="FabLabel">
+    <style name="fabMenu">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center</item>
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:tint">@android:color/white</item>
+        <item name="android:visibility">visible</item>
+    </style>
+
+    <style name="fabMenuLabel">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginRight">5dp</item>
         <item name="android:gravity">right</item>
         <item name="android:padding">6dp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">@color/apptheme_color</item>
         <item name="android:background">@drawable/fab_label</item>
-        <item name="android:visibility">gone</item>
+        <item name="android:visibility">visible</item>
     </style>
 </resources>
 
