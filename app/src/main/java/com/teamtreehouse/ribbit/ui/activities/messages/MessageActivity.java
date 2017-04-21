@@ -1,7 +1,9 @@
 package com.teamtreehouse.ribbit.ui.activities.messages;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -22,10 +24,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.models.Auth;
+import com.teamtreehouse.ribbit.models.messages.Message;
 import com.teamtreehouse.ribbit.models.users.User;
 import com.teamtreehouse.ribbit.database.UserReadCallback;
 import com.teamtreehouse.ribbit.ui.fragments.recipients.FragmentRecipient;

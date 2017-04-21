@@ -1,7 +1,10 @@
 package com.teamtreehouse.ribbit.ui.activities;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
@@ -11,6 +14,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -27,6 +31,7 @@ import com.teamtreehouse.ribbit.animations.TextViewAlphaIn;
 import com.teamtreehouse.ribbit.animations.TextViewAlphaOut;
 import com.teamtreehouse.ribbit.animations.ViewAnimationCallback;
 import com.teamtreehouse.ribbit.models.Auth;
+import com.teamtreehouse.ribbit.models.messages.Message;
 import com.teamtreehouse.ribbit.ui.activities.intents.MultimediaResultIntent;
 import com.teamtreehouse.ribbit.models.messages.MultimediaMessage;
 import com.teamtreehouse.ribbit.ui.activities.intents.PictureCaptureResultIntent;
@@ -35,6 +40,7 @@ import com.teamtreehouse.ribbit.ui.activities.intents.VideoCaptureResultIntent;
 import com.teamtreehouse.ribbit.ui.activities.intents.VideoPickResultIntent;
 import com.teamtreehouse.ribbit.animations.FabDown;
 import com.teamtreehouse.ribbit.animations.FabUp;
+import com.teamtreehouse.ribbit.ui.activities.messages.MessageActivity;
 import com.teamtreehouse.ribbit.ui.activities.messages.TextMessageActivity;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentPager;
 import com.teamtreehouse.ribbit.ui.fragments.friends.FragmentFriends;
@@ -180,6 +186,28 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
         fab.setImageResource(fabIcons[0]);
         this.currentFragment = this.viewPagerAdapter.getItem(0);
+    }
+
+    private BroadcastReceiver messageBroadcast = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            String result = intent.getStringExtra(Message.KEY);
+            Toast
+                .makeText(
+                    MainActivity.this,
+                    result,
+                    Toast.LENGTH_SHORT)
+                .show();
+        }
+    };
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        IntentFilter filter = new IntentFilter("message_send");
+        LocalBroadcastManager.getInstance(this).registerReceiver(messageBroadcast, filter);
     }
 
     @OnClick(R.id.fab)

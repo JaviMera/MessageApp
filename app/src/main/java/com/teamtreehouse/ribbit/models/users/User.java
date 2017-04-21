@@ -12,6 +12,8 @@ import com.teamtreehouse.ribbit.models.Item;
 
 public abstract class User extends Item implements Parcelable, Comparable<User> {
 
+    public static final String KEY = "users";
+
     private String uId;
     private String email;
     private String username;

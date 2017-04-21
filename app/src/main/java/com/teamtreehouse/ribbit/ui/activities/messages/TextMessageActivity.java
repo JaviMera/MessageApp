@@ -1,5 +1,6 @@
 package com.teamtreehouse.ribbit.ui.activities.messages;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -9,10 +10,12 @@ import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.database.TextInsertCallback;
 import com.teamtreehouse.ribbit.models.Auth;
+import com.teamtreehouse.ribbit.models.messages.Message;
 import com.teamtreehouse.ribbit.models.messages.TextMessage;
 import com.teamtreehouse.ribbit.models.users.User;
 import com.teamtreehouse.ribbit.ui.fragments.inbox.messages.FragmentTextMessage;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 
@@ -44,26 +47,10 @@ public class TextMessageActivity extends MessageActivity {
             new Date().getTime()
         );
 
-        for(final User user : this.recipients) {
-
-            MessageDB.insertTextMessage(user.getId(), message, new TextInsertCallback() {
-                @Override
-                public void onSuccess() {
-                }
-
-                @Override
-                public void onFailure() {
-
-                    Toast
-                        .makeText(
-                            TextMessageActivity.this,
-                            "Unable to send message to " + user.getUsername(),
-                            Toast.LENGTH_SHORT)
-                        .show();
-                }
-            });
-        }
-
+        Intent serviceIntent = new Intent(this, MessageService.class);
+        serviceIntent.putParcelableArrayListExtra(User.KEY, new ArrayList<>(this.recipients));
+        serviceIntent.putExtra(Message.KEY, message);
+        startService(serviceIntent);
         finish();
     }
 }
