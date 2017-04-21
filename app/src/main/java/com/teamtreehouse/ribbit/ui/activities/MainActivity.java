@@ -37,7 +37,7 @@ import com.teamtreehouse.ribbit.animations.FabDown;
 import com.teamtreehouse.ribbit.animations.FabUp;
 import com.teamtreehouse.ribbit.ui.activities.messages.TextMessageActivity;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentPager;
-import com.teamtreehouse.ribbit.ui.fragments.friends.FriendsFragment;
+import com.teamtreehouse.ribbit.ui.fragments.friends.FragmentFriends;
 import com.teamtreehouse.ribbit.ui.fragments.inbox.FragmentInbox;
 import com.teamtreehouse.ribbit.utils.Animations;
 
@@ -134,13 +134,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         ButterKnife.bind(this);
 
         presenter = new MainActivityPresenter(this);
-        presenter.hideFabMenu();
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(Auth.getInstance().getUsername());
 
         viewPagerAdapter = new SectionsPagerAdapter(
-                getSupportFragmentManager(), new FragmentInbox(), new FriendsFragment());
+                getSupportFragmentManager(), new FragmentInbox(), new FragmentFriends());
 
         // Set up the ViewPager with the sections adapter.
         viewPager.setAdapter(viewPagerAdapter);
@@ -187,6 +186,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     public void onFabClick(View view) {
 
         this.currentFragment.execute();
+
+        overridePendingTransition(R.anim.slide_top_to_bottom, R.anim.slide_bottom_to_top);
     }
 
     @Override
@@ -296,7 +297,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     public void onTextMessageClick(View view) {
 
         this.hideFabMenu();
-
+        this.setFabIcon(R.mipmap.ic_message);
         Intent messageIntent = new Intent(this, TextMessageActivity.class);
         startActivity(messageIntent);
     }
@@ -305,6 +306,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     public void onPictureMessageClick(View view) {
 
         this.hideFabMenu();
+        this.setFabIcon(R.mipmap.ic_message);
 
         Intent choosePhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
         choosePhotoIntent.setType("image/*");
@@ -315,7 +317,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     public void onCapturePictureMessageClick(View view) {
 
         this.hideFabMenu();
-
+        this.setFabIcon(R.mipmap.ic_message);
         if (isExternalStorageAvailable()) {
             // getValue the URI
 
@@ -342,7 +344,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     public void onVideoMessageClick(View view) {
 
         this.hideFabMenu();
-
+        this.setFabIcon(R.mipmap.ic_message);
         Intent chooseVideoIntent = new Intent(Intent.ACTION_GET_CONTENT);
         chooseVideoIntent.setType("video/*");
         Toast.makeText(MainActivity.this, R.string.video_file_size_warning, Toast.LENGTH_LONG).show();
@@ -353,7 +355,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     public void onVideoCaptureMessageClick(View view) {
 
         this.hideFabMenu();
-
+        this.setFabIcon(R.mipmap.ic_message);
         if (isExternalStorageAvailable()) {
             // getValue the URI
 

@@ -181,7 +181,7 @@
         <item name="android:layout_gravity">center</item>
         <item name="android:layout_margin">5dp</item>
         <item name="android:tint">@android:color/white</item>
-        <item name="android:visibility">visible</item>
+        <item name="android:visibility">gone</item>
     </style>
 
     <style name="fabMenuLabel">
@@ -194,7 +194,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/apptheme_color</item>
         <item name="android:background">@drawable/fab_label</item>
-        <item name="android:visibility">visible</item>
+        <item name="android:visibility">gone</item>
     </style>
 </resources>
 

@@ -27,7 +27,7 @@ import com.teamtreehouse.ribbit.ui.fragments.FragmentUsersView;
 
 import java.util.List;
 
-public class FriendsFragment extends FragmentPager<ActivityView, FragmentUsersPresenter, FragmentFriendsAdapter>
+public class FragmentFriends extends FragmentPager<ActivityView, FragmentUsersPresenter, FragmentFriendsAdapter>
     implements
         FragmentUsersView,
         RecipientListener,
