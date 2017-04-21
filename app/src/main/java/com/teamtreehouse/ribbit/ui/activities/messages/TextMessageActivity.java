@@ -13,6 +13,7 @@ import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.messages.Message;
 import com.teamtreehouse.ribbit.models.messages.TextMessage;
 import com.teamtreehouse.ribbit.models.users.User;
+import com.teamtreehouse.ribbit.ui.TextMessageService;
 import com.teamtreehouse.ribbit.ui.fragments.inbox.messages.FragmentTextMessage;
 
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class TextMessageActivity extends MessageActivity {
             new Date().getTime()
         );
 
-        Intent serviceIntent = new Intent(this, MessageService.class);
+        Intent serviceIntent = new Intent(this, TextMessageService.class);
         serviceIntent.putParcelableArrayListExtra(User.KEY, new ArrayList<>(this.recipients));
         serviceIntent.putExtra(Message.KEY, message);
         startService(serviceIntent);

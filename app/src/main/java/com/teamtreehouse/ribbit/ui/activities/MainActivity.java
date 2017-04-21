@@ -192,13 +192,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            String result = intent.getStringExtra(Message.KEY);
-            Toast
-                .makeText(
-                    MainActivity.this,
-                    result,
-                    Toast.LENGTH_SHORT)
-                .show();
+        String result = intent.getStringExtra(Message.KEY);
+        Toast
+            .makeText(
+                MainActivity.this,
+                result,
+                Toast.LENGTH_SHORT)
+            .show();
         }
     };
 

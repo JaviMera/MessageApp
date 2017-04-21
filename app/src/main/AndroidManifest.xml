@@ -111,7 +111,7 @@
         </activity>
 
         <service
-            android:name=".ui.activities.messages.MessageService"
+            android:name=".ui.TextMessageService"
             android:exported="false"/>
     </application>
 
