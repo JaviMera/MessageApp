@@ -237,10 +237,12 @@ public class FragmentInbox
         if(this.parent.getFabMenuVisibility() == View.VISIBLE) {
 
             this.parent.hideFabMenu();
+            this.parent.setFabIcon(R.mipmap.ic_message);
         }
         else {
 
             this.parent.showFabMenu();
+            this.parent.setFabIcon(R.mipmap.ic_cancel);
         }
     }
 

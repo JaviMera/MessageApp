@@ -16,4 +16,5 @@ public interface MainActivityView extends ActivityView{
     int getFabMenuVisibility();
     boolean checkPermissions(String[] permissionsStorage);
     void requestPermissions(String[] permissionsStorage);
+    void setFabIcon(int icon);
 }

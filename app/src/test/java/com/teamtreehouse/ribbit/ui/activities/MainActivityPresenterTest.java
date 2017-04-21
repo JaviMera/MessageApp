@@ -88,4 +88,17 @@ public class MainActivityPresenterTest {
         // Assert
         Mockito.verify(this.view).requestPermissions(permissions);
     }
+
+    @Test
+    public void setFabIcon() throws Exception {
+
+        // Arrange
+        int icon = 1;
+
+        // Act
+        this.target.setFabIcon(icon);
+
+        // Assert
+        Mockito.verify(this.view).setFabIcon(icon);
+    }
 }

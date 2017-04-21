@@ -264,6 +264,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     }
 
     @Override
+    public void setFabIcon(int icon) {
+
+        this.fab.setImageDrawable(ContextCompat.getDrawable(this, icon));
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
         switch (requestCode) {
@@ -378,7 +384,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     public void showFabMenu() {
 
         fabMenuOpen = true;
-
         Animations.scale(new FabUp(textFab, 1.0f, 500), new ViewAnimationCallback() {
             @Override
             public void onFinish() {
@@ -415,7 +420,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     public void hideFabMenu() {
 
         fabMenuOpen = false;
-
         Animations.scale(new FabDown(textFab, 0.0f, 100), null);
         Animations.alpha(new TextViewAlphaOut(fabTextLabel, 0.0f, 100));
         Animations.scale(new FabDown(pictureFab, 0.0f, 200), null);

@@ -42,4 +42,9 @@ public class MainActivityPresenter {
 
         this.view.requestPermissions(permissions);
     }
+
+    public void setFabIcon(int icon) {
+
+        this.view.setFabIcon(icon);
+    }
 }
