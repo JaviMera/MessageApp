@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.UploadTask;
 
 /**
@@ -16,42 +15,19 @@ import com.google.firebase.storage.UploadTask;
 public class MessageStorage {
 
     public static final String IMAGES_NODE = "images";
+    private static final String VIDEOS_NODE = "videos";
 
-    public static void insertPicture(String userId, Uri uri, final ImageStorageCallback callback) {
+    public static void insertPicture(String userId, Uri uri, final MultimediaStorageCallback callback) {
 
-        FirebaseStorage
-            .getInstance()
-            .getReference()
-            .child(IMAGES_NODE)
-            .child(userId)
-            .child(uri.getLastPathSegment())
-            .putFile(uri)
-            .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                }
-            })
-            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-
-                @Override
-                @SuppressWarnings("VisibleForTests")
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                    String url = taskSnapshot.getMetadata().getDownloadUrl().toString();
-                    String path = taskSnapshot.getMetadata().getPath();
-                    callback.onSuccess(url, path);
-                }
-            })
-            .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-
-                    callback.onFailure();
-                }
-            });
+        insertMultimediaFile(IMAGES_NODE, userId, uri, callback);
     }
 
-    public static void deletePicture(String path, final DeletePictureCallback callback) {
+    public static void insertVideo(String userId, Uri uri, final MultimediaStorageCallback callback) {
+
+        insertMultimediaFile(VIDEOS_NODE, userId, uri, callback);
+    }
+
+    public static void deleteMiltumediaFile(String path, final DeleteMultimediaFileCallback callback) {
 
         FirebaseStorage
             .getInstance()
@@ -74,26 +50,32 @@ public class MessageStorage {
             });
     }
 
-    public static void deleteVideo(String path, final DeleteVideoCallback callback){
+    private static void insertMultimediaFile(String node, String userId, Uri uri, final MultimediaStorageCallback callback) {
 
         FirebaseStorage
-            .getInstance()
-            .getReference()
-            .child(path)
-            .delete()
-            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
+                .getInstance()
+                .getReference()
+                .child(VIDEOS_NODE)
+                .child(userId)
+                .child(uri.getLastPathSegment())
+                .putFile(uri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
 
-                    callback.onSuccess();
-                }
-            })
-            .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
+                    @Override
+                    @SuppressWarnings("VisibleForTests")
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                    callback.onFailure(e.getMessage());
-                }
-            });
+                        String url = taskSnapshot.getMetadata().getDownloadUrl().toString();
+                        String path = taskSnapshot.getMetadata().getPath();
+                        callback.onSuccess(url, path);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                        callback.onFailure();
+                    }
+                });
     }
 }

@@ -41,6 +41,7 @@ import com.teamtreehouse.ribbit.ui.activities.intents.VideoPickResultIntent;
 import com.teamtreehouse.ribbit.animations.FabDown;
 import com.teamtreehouse.ribbit.animations.FabUp;
 import com.teamtreehouse.ribbit.ui.activities.messages.MessageActivity;
+import com.teamtreehouse.ribbit.ui.activities.messages.MessageService;
 import com.teamtreehouse.ribbit.ui.activities.messages.TextMessageActivity;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentPager;
 import com.teamtreehouse.ribbit.ui.fragments.friends.FragmentFriends;
@@ -206,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     public void onResume() {
         super.onResume();
 
-        IntentFilter filter = new IntentFilter("message_send");
+        IntentFilter filter = new IntentFilter(MessageService.MESSAGE_ACTION_VIEW);
         LocalBroadcastManager.getInstance(this).registerReceiver(messageBroadcast, filter);
     }
 

@@ -15,7 +15,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.teamtreehouse.ribbit.R;
-import com.teamtreehouse.ribbit.database.DeletePictureCallback;
+import com.teamtreehouse.ribbit.database.DeleteMultimediaFileCallback;
 import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.database.MessageStorage;
 import com.teamtreehouse.ribbit.models.messages.DefaultDuration;
@@ -97,11 +97,11 @@ public class ViewImageMessageFragment extends ViewFragmentMessage implements Vie
     public void onFinish() {
 
         // Delete the image from storage reference
-        MessageStorage.deletePicture(message.getPath(), new DeletePictureCallback() {
+        MessageStorage.deleteMiltumediaFile(message.getPath(), new DeleteMultimediaFileCallback() {
             @Override
             public void onSuccess() {
 
-                MessageDB.deleteImageMessage(message, new DeletePictureCallback() {
+                MessageDB.deleteImageMessage(currentUser.getId(), message, new DeleteMultimediaFileCallback() {
 
                     @Override
                     public void onSuccess() {

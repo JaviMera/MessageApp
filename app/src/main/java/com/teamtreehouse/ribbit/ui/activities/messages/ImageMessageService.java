@@ -1,13 +1,11 @@
 package com.teamtreehouse.ribbit.ui.activities.messages;
 
-import android.app.NotificationManager;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.teamtreehouse.ribbit.database.MultimediaInsertCallback;
-import com.teamtreehouse.ribbit.database.ImageStorageCallback;
+import com.teamtreehouse.ribbit.database.MultimediaStorageCallback;
 import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.database.MessageStorage;
 import com.teamtreehouse.ribbit.models.Auth;
@@ -34,7 +32,7 @@ public class ImageMessageService extends MessageService {
 
         for (final User user : recipients) {
 
-            MessageStorage.insertPicture(user.getId(), pictureUri, new ImageStorageCallback() {
+            MessageStorage.insertPicture(user.getId(), pictureUri, new MultimediaStorageCallback() {
                 @Override
                 public void onSuccess(String url, String path) {
 
@@ -55,7 +53,7 @@ public class ImageMessageService extends MessageService {
                             if(recipients.indexOf(user) == recipients.size() - 1) {
 
                                 // Notify main activity about all messages sent
-                                Intent responseIntent = new Intent("message_send");
+                                Intent responseIntent = new Intent(MESSAGE_ACTION_VIEW);
                                 responseIntent.putExtra(Message.KEY, "Message Sent!");
                                 LocalBroadcastManager
                                     .getInstance(ImageMessageService.this).sendBroadcast(responseIntent);

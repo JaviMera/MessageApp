@@ -13,6 +13,7 @@ import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.messages.ImageMessage;
+import com.teamtreehouse.ribbit.models.messages.MultimediaMessage;
 import com.teamtreehouse.ribbit.models.messages.TextMessage;
 import com.teamtreehouse.ribbit.models.users.User;
 import com.teamtreehouse.ribbit.models.users.UserCurrent;
@@ -42,7 +43,7 @@ public class MessageDB {
     public static final String MESSAGES_NODE = "messages";
     public static final String TEXT_MESSAGES_NODE = "text";
     public static final String IMAGES_NODE = "images";
-    public static final String IMAGE_PATH_PROPERTY = "path";
+    public static final String MULTIMEDIA_PATH_PROP = "path";
     public static final String TEXT_MESSAGE_ID_PROPERTY = "id";
     private static final String VIDEOS_NODE = "videos";
 
@@ -407,6 +408,48 @@ public class MessageDB {
             });
     }
 
+    public static void deleteTextMessage(String userId, final String messageId, final DeleteTextCallback callback) {
+
+        FirebaseDatabase
+                .getInstance()
+                .getReference()
+                .child(MESSAGES_NODE)
+                .child(TEXT_MESSAGES_NODE)
+                .child(userId)
+                .runTransaction(new Transaction.Handler() {
+                    @Override
+                    public Transaction.Result doTransaction(MutableData mutableData) {
+
+                        for(MutableData md : mutableData.getChildren()) {
+
+                            HashMap<String, String> map = (HashMap<String, String>) md.getValue();
+
+                            if(map.get(TEXT_MESSAGE_ID_PROPERTY).equals(messageId)) {
+
+                                md.setValue(null);
+                                return Transaction.success(mutableData);
+                            }
+                        }
+
+                        return Transaction.abort();
+                    }
+
+                    @Override
+                    public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+
+                        if(databaseError == null) {
+
+                            callback.onSuccess();
+                        }
+                        else {
+
+                            callback.onFailure(databaseError.getMessage());
+                        }
+
+                    }
+                });
+    }
+
     public static void readMessages(String userId, String messageNode, ChildEventListener listener) {
 
         FirebaseDatabase
@@ -414,18 +457,28 @@ public class MessageDB {
             .getReference()
             .child(MESSAGES_NODE)
             .child(messageNode)
-            .child(Auth.getInstance().getId())
+            .child(userId)
             .addChildEventListener(listener);
     }
 
-    public static void deleteImageMessage(final ImageMessage message, final DeletePictureCallback callback) {
+    public static void deleteImageMessage(String userId, final ImageMessage message, final DeleteMultimediaFileCallback callback) {
+
+        deleteMultimediaMessage(userId, IMAGES_NODE, message, callback);
+    }
+
+    public static void deleteVideoMessage(String userId, final VideoMessage message, final DeleteMultimediaFileCallback callback) {
+
+        deleteMultimediaMessage(userId, VIDEOS_NODE, message, callback);
+    }
+
+    private static void deleteMultimediaMessage( String userId, String node, final MultimediaMessage message, final DeleteMultimediaFileCallback callback) {
 
         FirebaseDatabase
             .getInstance()
             .getReference()
             .child(MESSAGES_NODE)
-            .child(IMAGES_NODE)
-            .child(Auth.getInstance().getId())
+            .child(node)
+            .child(userId)
             .addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -433,81 +486,7 @@ public class MessageDB {
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
                         HashMap<String, String> currentMessage = (HashMap<String, String>) ds.getValue();
-                        if (currentMessage.get(IMAGE_PATH_PROPERTY).equals(message.getPath())) {
-
-                            ds.getRef().setValue(null);
-                            break;
-                        }
-                    }
-
-                    callback.onSuccess();
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                    callback.onFailure(databaseError.getMessage());
-                }
-            });
-    }
-
-    public static void deleteTextMessage(final String messageId, final DeleteTextCallback callback) {
-
-        FirebaseDatabase
-            .getInstance()
-            .getReference()
-            .child(MESSAGES_NODE)
-            .child(TEXT_MESSAGES_NODE)
-            .child(Auth.getInstance().getId())
-            .runTransaction(new Transaction.Handler() {
-                @Override
-                public Transaction.Result doTransaction(MutableData mutableData) {
-
-                    for(MutableData md : mutableData.getChildren()) {
-
-                        HashMap<String, String> map = (HashMap<String, String>) md.getValue();
-
-                        if(map.get(TEXT_MESSAGE_ID_PROPERTY).equals(messageId)) {
-
-                            md.setValue(null);
-                            return Transaction.success(mutableData);
-                        }
-                    }
-
-                    return Transaction.abort();
-                }
-
-                @Override
-                public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
-
-                    if(databaseError == null) {
-
-                        callback.onSuccess();
-                    }
-                    else {
-
-                        callback.onFailure(databaseError.getMessage());
-                    }
-
-                }
-            });
-    }
-
-    public static void deleteVideoMessage(final VideoMessage message, final DeleteVideoCallback callback) {
-        FirebaseDatabase
-            .getInstance()
-            .getReference()
-            .child(MESSAGES_NODE)
-            .child(VIDEOS_NODE)
-            .child(Auth.getInstance().getId())
-            .addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-
-                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
-
-                        HashMap<String, String> currentMessage = (HashMap<String, String>) ds.getValue();
-                        if (currentMessage.get(IMAGE_PATH_PROPERTY).equals(message.getPath())) {
+                        if (currentMessage.get(MULTIMEDIA_PATH_PROP).equals(message.getPath())) {
 
                             ds.getRef().setValue(null);
                             break;

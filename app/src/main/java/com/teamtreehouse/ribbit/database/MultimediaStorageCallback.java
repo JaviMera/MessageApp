@@ -6,7 +6,7 @@ import com.google.firebase.storage.UploadTask;
  * Created by javie on 4/15/2017.
  */
 
-public interface ImageStorageCallback {
+public interface MultimediaStorageCallback {
 
     void onSuccess(String url, String path);
     void onFailure();

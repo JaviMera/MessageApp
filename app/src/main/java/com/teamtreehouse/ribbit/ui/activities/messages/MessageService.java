@@ -22,7 +22,9 @@ import java.util.ArrayList;
  * Created by javie on 4/21/2017.
  */
 
-public abstract class MessageService extends IntentService {
+public abstract class MessageService<TMessage extends Message> extends IntentService {
+
+    public static final String MESSAGE_ACTION_VIEW = "message_sent";
 
     protected abstract void handle(Intent intent);
 

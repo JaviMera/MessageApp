@@ -77,7 +77,7 @@ public abstract class MessageActivity extends AppCompatActivity implements Messa
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            String data = intent.getStringExtra("message_sent");
+            String data = intent.getStringExtra(Message.KEY);
             Toast.makeText(MessageActivity.this, data, Toast.LENGTH_SHORT).show();
             finish();
         }
@@ -160,7 +160,7 @@ public abstract class MessageActivity extends AppCompatActivity implements Messa
     protected void onResume() {
         super.onResume();
 
-        IntentFilter intentFilter = new IntentFilter("message_send");
+        IntentFilter intentFilter = new IntentFilter(MessageService.MESSAGE_ACTION_VIEW);
         LocalBroadcastManager
             .getInstance(this)
             .registerReceiver(this.messageBroadcast, intentFilter);

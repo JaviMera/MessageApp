@@ -35,11 +35,11 @@ public class TextMessageService extends MessageService{
                     if(recipients.indexOf(user) == recipients.size() - 1) {
 
                         // Notify main activity about messages successfully sent
-                        Intent responseIntent = new Intent("message_send");
-                        responseIntent.putExtra(Message.KEY, "success");
+                        Intent responseIntent = new Intent(MESSAGE_ACTION_VIEW);
+                        responseIntent.putExtra(Message.KEY, "Message Sent!");
                         LocalBroadcastManager
-                                .getInstance(TextMessageService.this)
-                                .sendBroadcast(responseIntent);
+                            .getInstance(TextMessageService.this)
+                            .sendBroadcast(responseIntent);
                     }
                 }
 

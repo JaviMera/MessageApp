@@ -14,7 +14,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.teamtreehouse.ribbit.R;
-import com.teamtreehouse.ribbit.database.DeleteVideoCallback;
+import com.teamtreehouse.ribbit.database.DeleteMultimediaFileCallback;
 import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.database.MessageStorage;
 import com.teamtreehouse.ribbit.models.messages.Message;
@@ -108,11 +108,11 @@ public class ViewVideoMessageFragment extends ViewFragmentMessage implements Vie
     public void onFinish() {
 
         // Delete the video from firebase storage
-        MessageStorage.deleteVideo(message.getPath(), new DeleteVideoCallback() {
+        MessageStorage.deleteMiltumediaFile(message.getPath(), new DeleteMultimediaFileCallback() {
             @Override
             public void onSuccess() {
 
-                MessageDB.deleteVideoMessage(message, new DeleteVideoCallback() {
+                MessageDB.deleteVideoMessage(currentUser.getId(), message, new DeleteMultimediaFileCallback() {
                     @Override
                     public void onSuccess() {
 

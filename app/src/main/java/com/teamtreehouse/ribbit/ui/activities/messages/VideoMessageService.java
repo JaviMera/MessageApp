@@ -11,7 +11,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.UploadTask;
 import com.teamtreehouse.ribbit.database.MessageDB;
+import com.teamtreehouse.ribbit.database.MessageStorage;
 import com.teamtreehouse.ribbit.database.MultimediaInsertCallback;
+import com.teamtreehouse.ribbit.database.MultimediaStorageCallback;
 import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.messages.ImageMessage;
 import com.teamtreehouse.ribbit.models.messages.Message;
@@ -36,57 +38,42 @@ public class VideoMessageService extends MessageService {
 
         for(final User user : recipients) {
 
-            FirebaseStorage
-                .getInstance()
-                .getReference()
-                .child("videos")
-                .child(user.getId())
-                .child(videoUri.getLastPathSegment())
-                .putFile(videoUri)
-                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                    }
-                })
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            MessageStorage.insertVideo(user.getId(), videoUri, new MultimediaStorageCallback() {
 
-                    @Override
-                    @SuppressWarnings("VisibleForTests")
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                @Override
+                public void onSuccess(String url, String path) {
 
-                        String url = taskSnapshot.getMetadata().getDownloadUrl().toString();
-                        String path = taskSnapshot.getMetadata().getPath();
-                        ImageMessage message = new ImageMessage(
-                                UUID.randomUUID().toString(),
-                                Auth.getInstance().getUsername(),
-                                url,
-                                path,
-                                new Date().getTime()
-                        );
+                    ImageMessage message = new ImageMessage(
+                            UUID.randomUUID().toString(),
+                            Auth.getInstance().getUsername(),
+                            url,
+                            path,
+                            new Date().getTime()
+                    );
 
-                        MessageDB.insertVideoMessage(user.getId(), message, new MultimediaInsertCallback() {
-                            @Override
-                            public void onSuccess() {
 
-                                // Check if its the last message that was sent successfully
-                                if(recipients.indexOf(user) == recipients.size() - 1) {
+                    MessageDB.insertVideoMessage(user.getId(), message, new MultimediaInsertCallback() {
+                        @Override
+                        public void onSuccess() {
 
-                                    // Notify main activity about all messages sent
-                                    Intent responseIntent = new Intent("message_send");
-                                    responseIntent.putExtra(Message.KEY, "Message Sent!");
-                                    LocalBroadcastManager
-                                        .getInstance(VideoMessageService.this).sendBroadcast(responseIntent);
-                                }
-                            }
-                        });
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
+                        // Check if its the last message that was sent successfully
+                        if(recipients.indexOf(user) == recipients.size() - 1) {
 
-                    }
-                });
+                            // Notify main activity about all messages sent
+                            Intent responseIntent = new Intent(MESSAGE_ACTION_VIEW);
+                            responseIntent.putExtra(Message.KEY, "Message Sent!");
+                            LocalBroadcastManager
+                                    .getInstance(VideoMessageService.this).sendBroadcast(responseIntent);
+                        }
+                        }
+                    });
+                }
+
+                @Override
+                public void onFailure() {
+
+                }
+            });
         }
     }
 }

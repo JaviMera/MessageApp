@@ -71,7 +71,7 @@ public class ViewTextFragment extends ViewFragmentMessage implements ViewMessage
     @Override
     public void onFinish() {
 
-        MessageDB.deleteTextMessage(this.friendMessage.getId(), new DeleteTextCallback() {
+        MessageDB.deleteTextMessage(currentUser.getId(), this.friendMessage.getId(), new DeleteTextCallback() {
             @Override
             public void onSuccess() {
 
