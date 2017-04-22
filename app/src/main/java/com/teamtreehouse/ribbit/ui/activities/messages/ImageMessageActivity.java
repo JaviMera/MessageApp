@@ -33,16 +33,6 @@ public class ImageMessageActivity extends MessageActivity {
         replaceFragment(R.id.messageContainer, FragmentImageMessage.newInstance(pictureUri));
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     @OnClick(R.id.sendTextImage)
     public void onSendMessageClick(View view) {
 

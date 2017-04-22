@@ -22,10 +22,9 @@ import java.util.ArrayList;
  * Created by javie on 4/21/2017.
  */
 
-public abstract class MessageService<TMessage extends Message> extends IntentService {
+public abstract class MessageService extends IntentService {
 
-    protected int PROGRESS_MAX = 100;
-    protected abstract void handle(Intent message);
+    protected abstract void handle(Intent intent);
 
     public MessageService(){
 

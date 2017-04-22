@@ -18,7 +18,7 @@ import java.util.ArrayList;
  * Created by javie on 4/21/2017.
  */
 
-public class TextMessageService extends MessageService<TextMessage>{
+public class TextMessageService extends MessageService{
 
     @Override
     protected void handle(Intent intent) {

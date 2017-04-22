@@ -1,5 +1,6 @@
 package com.teamtreehouse.ribbit.ui.activities.messages;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,9 +18,11 @@ import com.teamtreehouse.ribbit.database.MultimediaInsertCallback;
 import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.messages.ImageMessage;
 import com.teamtreehouse.ribbit.models.messages.MultimediaMessage;
+import com.teamtreehouse.ribbit.models.messages.VideoMessage;
 import com.teamtreehouse.ribbit.models.users.User;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentVideoMessage;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 
@@ -51,52 +54,9 @@ public class VideoMessageActivity extends MessageActivity {
         FragmentVideoMessage fragment = findFragmentById(R.id.messageContainer);
         Uri videoUri = fragment.getValue();
 
-        for(final User user : recipients) {
-
-            FirebaseStorage
-                .getInstance()
-                .getReference()
-                .child("videos")
-                .child(user.getId())
-                .child(videoUri.getLastPathSegment())
-                .putFile(videoUri)
-                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                    }
-                })
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-
-                    @Override
-                    @SuppressWarnings("VisibleForTests")
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                        String url = taskSnapshot.getMetadata().getDownloadUrl().toString();
-                        String path = taskSnapshot.getMetadata().getPath();
-                        ImageMessage message = new ImageMessage(
-                            UUID.randomUUID().toString(),
-                            Auth.getInstance().getUsername(),
-                            url,
-                            path,
-                            new Date().getTime()
-                        );
-
-                        MessageDB.insertVideoMessage(user.getId(), message, new MultimediaInsertCallback() {
-                            @Override
-                            public void onSuccess() {
-
-                            }
-                        });
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-
-                    }
-                });
-        }
-
-        finish();
+        Intent intent = new Intent(this, VideoMessageService.class);
+        intent.putExtra(VideoMessage.KEY, videoUri);
+        intent.putParcelableArrayListExtra(User.KEY, new ArrayList<>(this.recipients));
+        startService(intent);
     }
 }

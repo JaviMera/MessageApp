@@ -13,6 +13,7 @@ import com.teamtreehouse.ribbit.database.MessageStorage;
 import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.messages.ImageMessage;
 import com.teamtreehouse.ribbit.models.messages.Message;
+import com.teamtreehouse.ribbit.models.messages.VideoMessage;
 import com.teamtreehouse.ribbit.models.users.User;
 
 import java.util.ArrayList;
@@ -23,12 +24,12 @@ import java.util.UUID;
  * Created by javie on 4/21/2017.
  */
 
-public class ImageMessageService extends MessageService<ImageMessage> {
+public class ImageMessageService extends MessageService {
 
     @Override
     protected void handle(Intent intent) {
 
-        Uri pictureUri = intent.getParcelableExtra(ImageMessage.KEY);
+        Uri pictureUri = intent.getParcelableExtra(VideoMessage.KEY);
         final ArrayList<User> recipients = intent.getParcelableArrayListExtra(User.KEY);
 
         for (final User user : recipients) {
