@@ -10,8 +10,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.teamtreehouse.ribbit.FirebaseImageLoader;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.models.users.UserFriend;
+import com.teamtreehouse.ribbit.ui.fragments.FragmentRecycler;
 import com.teamtreehouse.ribbit.ui.fragments.suggestions.FragmentSuggestionsView;
 import com.teamtreehouse.ribbit.utils.Resources;
 
@@ -24,17 +29,31 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class FragmentSuggestionsVH extends FragmentRecyclerVH<FragmentSuggestionsView,UserFriend> {
 
     private TextView usernameTextView;
-    private CircleImageView userImageView;
+    private CircleImageView friendProfilePicture;
 
     public FragmentSuggestionsVH(FragmentSuggestionsView parent, View itemView) {
         super(parent, itemView);
 
         this.usernameTextView = (TextView) itemView.findViewById(R.id.usernameTextView);
-        this.userImageView = (CircleImageView) itemView.findViewById(R.id.userImageView);
+        this.friendProfilePicture = (CircleImageView) itemView.findViewById(R.id.profilePictureView);
     }
 
     @Override
     public void bind(final UserFriend friend) {
+
+        StorageReference ref = FirebaseStorage
+            .getInstance()
+            .getReference()
+            .child("profile_pictures")
+            .child(friend.getId());
+
+        Glide
+            .with(((FragmentRecycler)fragment).getActivity())
+            .using(new FirebaseImageLoader())
+            .load(ref)
+            .error(R.drawable.person)
+            .fitCenter()
+            .into(friendProfilePicture);
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override

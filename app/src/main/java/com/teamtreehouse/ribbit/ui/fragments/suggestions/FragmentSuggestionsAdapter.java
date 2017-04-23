@@ -26,6 +26,6 @@ public class FragmentSuggestionsAdapter extends RecyclerAdapter<User, FragmentSu
     @Override
     protected int getItemLayout() {
 
-        return R.layout.friends_select_item;
+        return R.layout.suggestion_item;
     }
 }

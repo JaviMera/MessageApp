@@ -196,6 +196,13 @@
         <item name="android:background">@drawable/fab_label</item>
         <item name="android:visibility">gone</item>
     </style>
+
+    <style name="profilePicture">
+        <item name="android:layout_width">55dp</item>
+        <item name="android:layout_height">55dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_margin">10dp</item>
+    </style>
 </resources>
 
 

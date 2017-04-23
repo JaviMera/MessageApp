@@ -1,61 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/contactPicture"
-        android:layout_width="80dp"
+        <include
+            layout="@layout/profile_picture" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
         android:layout_height="80dp"
-        app:civ_border_width="1dp"
-        app:civ_border_color="@color/apptheme_color"/>
+        android:layout_gravity="center">
 
-    <TextView
-        android:id="@+id/userEmailTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        tools:text="javier_mera88@hotmail.com"
-        android:gravity="center"
-        android:layout_gravity="top"
-        android:layout_margin="5dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="end">
+            <TextView
+                android:id="@+id/userEmailTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:gravity="center"
+                tools:text="javier_mera88" />
 
-        <Button
-            android:id="@+id/negativeButtonView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Friend Request"
-            android:textSize="12sp"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="end">
 
-        <Button
-            android:id="@+id/positiveButtonView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Friend Request"
-            android:textSize="12sp"/>
+                <Button
+                    android:id="@+id/negativeButtonView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Friend Request"
+                    android:textSize="12sp"
+                    android:layout_gravity="center"/>
 
-        <ImageView
-            android:id="@+id/editContactImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_contact_edit"
-            android:scaleType="fitCenter"
-            android:layout_gravity="center|end"
-            android:padding="10dp"
-            android:adjustViewBounds="true"
-            android:maxHeight="50dp"
-            android:maxWidth="50dp"/>
-    </LinearLayout>
+                <Button
+                    android:id="@+id/positiveButtonView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Friend Request"
+                    android:textSize="12sp"
+                    android:layout_gravity="center"/>
+
+                <ImageView
+                    android:id="@+id/editContactImageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|end"
+                    android:adjustViewBounds="true"
+                    android:maxHeight="50dp"
+                    android:maxWidth="50dp"
+                    android:padding="10dp"
+                    android:scaleType="fitCenter"
+                    android:src="@mipmap/ic_contact_edit" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/light_purple_background" />
+    </RelativeLayout>
 </LinearLayout>

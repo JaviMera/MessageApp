@@ -8,8 +8,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.teamtreehouse.ribbit.FirebaseImageLoader;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.dialogs.DialogFragmentError;
@@ -33,6 +38,9 @@ public class EditFriendActivity extends AppCompatActivity implements DialogInter
     @BindView(R.id.username)
     TextView username;
 
+    @BindView(R.id.friendImageView)
+    ImageView friendProfilePicture;
+
     private User friend;
 
     @Override
@@ -47,6 +55,21 @@ public class EditFriendActivity extends AppCompatActivity implements DialogInter
 
         friend = getIntent().getParcelableExtra(EDIT_FRIEND_KEY);
         username.setText(friend.getUsername());
+
+        StorageReference ref = FirebaseStorage
+            .getInstance()
+            .getReference()
+            .child("profile_pictures")
+            .child(friend.getId());
+
+        Glide
+            .with(this)
+            .using(new FirebaseImageLoader())
+            .load(ref)
+            .error(R.drawable.person)
+            .fitCenter()
+            .into(friendProfilePicture);
+
     }
 
     @Override

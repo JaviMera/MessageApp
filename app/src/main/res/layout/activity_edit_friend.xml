@@ -32,10 +32,10 @@
         <ImageView
             android:id="@+id/friendImageView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="400dp"
             android:adjustViewBounds="true"
-            android:src="@drawable/person"
-            android:scaleType="fitCenter" />
+            android:scaleType="fitCenter"
+            tools:src="@drawable/person"/>
 
         <TextView
             android:id="@+id/username"
