@@ -86,7 +86,7 @@ public class MessageDB {
             .child(RECIPIENTS_NODE)
             .child(otherUser.getId())
             .push()
-            .setValue(new UserRecipient(currentUser.getId(), currentUser.getUsername(), status));
+            .setValue(new UserRecipient(currentUser.getId(), currentUser.getEmail(), currentUser.getUsername(), status));
 
         FirebaseDatabase
             .getInstance()
@@ -95,7 +95,7 @@ public class MessageDB {
             .child(SENDERS_NODE)
             .child(currentUser.getId())
             .push()
-            .setValue(new UserSender(otherUser.getId(), otherUser.getUsername(), status));
+            .setValue(new UserSender(otherUser.getId(), otherUser.getEmail(), otherUser.getUsername(), status));
     }
 
     public static void readUser(final String username, final UserReadCallback userReadCallback) {
@@ -216,8 +216,8 @@ public class MessageDB {
     public static void updateInvites(final User currentUser, final User otherUser, final int status, final UpdateInviteCallback cb) {
 
         final HashMap<String, User> map = new HashMap<>();
-        map.put(RECIPIENTS_NODE + "/" + currentUser.getId(), new UserRecipient(otherUser.getId(), otherUser.getUsername(), status));
-        map.put(SENDERS_NODE + "/" + otherUser.getId(), new UserSender(currentUser.getId(), currentUser.getUsername(), status));
+        map.put(RECIPIENTS_NODE + "/" + currentUser.getId(), new UserRecipient(otherUser.getId(), otherUser.getEmail(), otherUser.getUsername(), status));
+        map.put(SENDERS_NODE + "/" + otherUser.getId(), new UserSender(currentUser.getId(), currentUser.getEmail(), currentUser.getUsername(), status));
         FirebaseDatabase
             .getInstance()
             .getReference()
@@ -253,13 +253,13 @@ public class MessageDB {
             .child("friends")
             .child(currentUser.getId())
             .push()
-            .setValue(new UserFriend(otherUser.getId(), otherUser.getUsername()));
+            .setValue(new UserFriend(otherUser.getId(), otherUser.getEmail(), otherUser.getUsername()));
 
         FirebaseDatabase.getInstance().getReference()
             .child("friends")
             .child(otherUser.getId())
             .push()
-            .setValue(new UserFriend(currentUser.getId(), currentUser.getUsername()));
+            .setValue(new UserFriend(currentUser.getId(), currentUser.getEmail(), currentUser.getUsername()));
     }
 
     public static void deleteInvites(User currentUser, User otherUser) {

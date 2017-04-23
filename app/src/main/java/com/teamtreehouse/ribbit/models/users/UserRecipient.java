@@ -12,9 +12,9 @@ public class UserRecipient extends UserInvite {
         super();
     }
 
-    public UserRecipient(String uId, String username, int status) {
-        super(uId, username, status);
+    public UserRecipient(String uId, String email, String username, int status) {
 
+        super(uId, email, username, status);
     }
 
     public static final Creator<UserRecipient> CREATOR = new Creator<UserRecipient>() {

@@ -27,13 +27,6 @@ public abstract class User extends Item implements Parcelable, Comparable<User> 
         this.username = username;
     }
 
-    public User(String uId, String username) {
-
-        this.uId = uId;
-        this.username = username;
-        this.email = "";
-    }
-
     protected User(Parcel in) {
         uId = in.readString();
         email = in.readString();

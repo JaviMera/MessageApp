@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -24,7 +26,18 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.UploadTask;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.SectionsPagerAdapter;
 import com.teamtreehouse.ribbit.animations.TextViewAlphaIn;
@@ -32,6 +45,8 @@ import com.teamtreehouse.ribbit.animations.TextViewAlphaOut;
 import com.teamtreehouse.ribbit.animations.ViewAnimationCallback;
 import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.messages.Message;
+import com.teamtreehouse.ribbit.models.users.User;
+import com.teamtreehouse.ribbit.models.users.UserCurrent;
 import com.teamtreehouse.ribbit.ui.activities.intents.MultimediaResultIntent;
 import com.teamtreehouse.ribbit.models.messages.MultimediaMessage;
 import com.teamtreehouse.ribbit.ui.activities.intents.PictureCaptureResultIntent;
@@ -40,19 +55,20 @@ import com.teamtreehouse.ribbit.ui.activities.intents.VideoCaptureResultIntent;
 import com.teamtreehouse.ribbit.ui.activities.intents.VideoPickResultIntent;
 import com.teamtreehouse.ribbit.animations.FabDown;
 import com.teamtreehouse.ribbit.animations.FabUp;
-import com.teamtreehouse.ribbit.ui.activities.messages.MessageActivity;
 import com.teamtreehouse.ribbit.ui.activities.messages.MessageService;
 import com.teamtreehouse.ribbit.ui.activities.messages.TextMessageActivity;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentPager;
 import com.teamtreehouse.ribbit.ui.fragments.friends.FragmentFriends;
 import com.teamtreehouse.ribbit.ui.fragments.inbox.FragmentInbox;
 import com.teamtreehouse.ribbit.utils.Animations;
+import com.teamtreehouse.ribbit.utils.FileHelper;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -72,10 +88,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
 
-    public static final int TAKE_PHOTO_REQUEST = 0;
+    public static final int TAKE_PHOTO_REQUEST_MESSAGE = 0;
     public static final int TAKE_VIDEO_REQUEST = 1;
     public static final int PICK_PHOTO_REQUEST = 2;
     public static final int PICK_VIDEO_REQUEST = 3;
+    public static final int TAKE_PHOTO_REQUEST_PROFILE = 4;
 
     private HashMap<Integer, MultimediaResultIntent> intentTypes;
 
@@ -135,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         this.intentTypes = new HashMap<>();
         this.intentTypes.put(PICK_PHOTO_REQUEST, new PicturePickResultIntent());
         this.intentTypes.put(PICK_VIDEO_REQUEST, new VideoPickResultIntent());
-        this.intentTypes.put(TAKE_PHOTO_REQUEST, new PictureCaptureResultIntent());
+        this.intentTypes.put(TAKE_PHOTO_REQUEST_MESSAGE, new PictureCaptureResultIntent());
         this.intentTypes.put(TAKE_VIDEO_REQUEST, new VideoCaptureResultIntent());
 
         ButterKnife.bind(this);
@@ -220,15 +237,35 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
 
         if (resultCode == RESULT_OK) {
 
-            MultimediaResultIntent intentType = this.intentTypes.get(requestCode);
+            if(requestCode == TAKE_PHOTO_REQUEST_PROFILE) {
 
-            Intent intent = new Intent(MainActivity.this, intentType.getActivity());
-            intent.putExtra(MultimediaMessage.KEY, intentType.getUri(data, this));
-            startActivity(intent);
+                Uri uri = Uri.parse(FileHelper.getPath((Bitmap) data.getExtras().get("data"), this));
+
+                FirebaseStorage
+                    .getInstance()
+                    .getReference()
+                    .child("profile_pictures")
+                    .child(Auth.getInstance().getId())
+                    .putFile(uri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        @SuppressWarnings("VisibleForTests")
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        }
+                    });
+            }
+            else {
+
+                MultimediaResultIntent intentType = this.intentTypes.get(requestCode);
+
+                Intent intent = new Intent(MainActivity.this, intentType.getActivity());
+                intent.putExtra(MultimediaMessage.KEY, intentType.getUri(data, this));
+                startActivity(intent);
+            }
         }
     }
 
@@ -257,6 +294,30 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
         switch (item.getItemId()) {
 
+            case R.id.action_camera:
+
+                if (isExternalStorageAvailable()) {
+                    // getValue the URI
+
+                    // 1. Get the external storage directory
+                    File mediaStorageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+                    // 2. Create a unique file name
+                    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                    String fileName = "IMG_" + timeStamp;
+
+                    try {
+                        File.createTempFile(fileName, ".jpg", mediaStorageDir);
+                        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST_PROFILE);
+                    } catch (IOException e) {
+
+                        Toast.makeText(this, "Error creating file: " +
+                            mediaStorageDir.getAbsolutePath() + fileName + ".jpg", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                break;
+
             case R.id.action_logout:
                 navigateToLogin();
                 break;
@@ -271,8 +332,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
         if (isFinishing()) {
 
             FirebaseAuth
-                    .getInstance()
-                    .signOut();
+                .getInstance()
+                .signOut();
         }
     }
 
@@ -297,22 +358,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     public void setFabIcon(int icon) {
 
         this.fab.setImageDrawable(ContextCompat.getDrawable(this, icon));
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-
-        switch (requestCode) {
-
-            case REQUEST_EXTERNAL_STORAGE:
-
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED
-                        && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                }
-
-                break;
-        }
     }
 
     private boolean isExternalStorageAvailable() {
@@ -360,7 +405,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             try {
                 File.createTempFile(fileName, ".jpg", mediaStorageDir);
                 Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST);
+                startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST_MESSAGE);
             } catch (IOException e) {
 
                 Toast.makeText(this, "Error creating file: " +

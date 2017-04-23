@@ -10,9 +10,9 @@ public abstract class UserInvite extends User {
 
     private int status;
 
-    public UserInvite(String uId, String username, int status) {
-        super(uId, username);
+    public UserInvite(String uId, String email, String username, int status) {
 
+        super(uId, email, username);
         this.status = status;
     }
 
