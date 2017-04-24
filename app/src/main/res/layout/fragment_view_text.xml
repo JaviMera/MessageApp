@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<TextView
+<TextView xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/messageTextView"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     tools:text="This is an amazing message"
-    android:padding="10dp"
-    android:textSize="20sp"/>
+    style="@style/ViewTextMessage" />

@@ -8,16 +8,11 @@
     tools:context=".ui.activities.LoginActivity">
 
     <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        style="@style/BarLayout">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+            style="@style/Toolbar">
 
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
@@ -50,14 +45,8 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:scaleType="center"
-            android:layout_alignParentRight="true"
-            tools:src="@mipmap/ic_add_contact"
-            app:useCompatPadding="true"
-            app:fabSize="normal"/>
+            style="@style/PagerFab"
+            tools:src="@mipmap/ic_add_contact"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -68,10 +57,7 @@
             android:layout_alignParentRight="true">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
-                android:gravity="right">
+                style="@style/FabMenuContainer">
 
                 <TextView
                     android:id="@+id/fabTextLabel"
@@ -81,15 +67,11 @@
                 <android.support.design.widget.FloatingActionButton
                     android:id="@+id/fabTextMesssage"
                     android:src="@mipmap/ic_text_message"
-                    app:fabSize="mini"
-                    style="@style/fabMenu"/>
+                    style="@style/fabMenuButton"/>
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
-                android:gravity="right">
+                style="@style/FabMenuContainer">
 
                 <TextView
                     android:id="@+id/fabPictureLabel"
@@ -99,15 +81,11 @@
                 <android.support.design.widget.FloatingActionButton
                     android:id="@+id/fabPictureMessage"
                     android:src="@mipmap/ic_pictures"
-                    app:fabSize="mini"
-                    style="@style/fabMenu" />
+                    style="@style/fabMenuButton" />
             </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="15dp"
-            android:gravity="right">
+            style="@style/FabMenuContainer">
 
             <TextView
                 android:id="@+id/fabCapturePictureLabel"
@@ -117,16 +95,12 @@
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/fabCapturePictureMessage"
                 android:src="@mipmap/ic_capture_pictures"
-                app:fabSize="mini"
-                style="@style/fabMenu" />
+                style="@style/fabMenuButton" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="15dp"
-            android:gravity="right">
+            style="@style/FabMenuContainer">
 
             <TextView
                 android:id="@+id/fabVideoLabel"
@@ -136,14 +110,11 @@
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/fabVideoMessage"
                 android:src="@mipmap/ic_video"
-                app:fabSize="mini"
-                style="@style/fabMenu" />
+                style="@style/fabMenuButton" />
             </LinearLayout>
+
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="15dp"
-            android:gravity="right">
+            style="@style/FabMenuContainer">
 
             <TextView
                 android:id="@+id/fabCaptureVideoLabel"
@@ -153,9 +124,12 @@
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/fabCaptureVideoMessage"
                 android:src="@mipmap/ic_capture_video"
-                app:fabSize="mini"
-                style="@style/fabMenu" />
+                style="@style/fabMenuButton" />
+
             </LinearLayout>
+
         </LinearLayout>
+
     </RelativeLayout>
+
 </android.support.design.widget.CoordinatorLayout>

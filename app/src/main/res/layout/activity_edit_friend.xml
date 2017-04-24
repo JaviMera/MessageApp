@@ -9,16 +9,11 @@
     tools:context=".ui.activities.LoginActivity">
 
     <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        style="@style/BarLayout">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/apptheme_color"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+            style="@style/Toolbar">
 
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
@@ -34,8 +29,8 @@
             android:layout_width="match_parent"
             android:layout_height="400dp"
             android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            tools:src="@drawable/person"/>
+            android:scaleType="fitXY"
+            tools:src="@drawable/dummy"/>
 
         <TextView
             android:id="@+id/username"
@@ -45,4 +40,5 @@
             android:padding="10dp"
             android:textSize="28sp"/>
     </LinearLayout>
+
 </android.support.design.widget.CoordinatorLayout>

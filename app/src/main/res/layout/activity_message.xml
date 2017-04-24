@@ -9,16 +9,11 @@
     tools:context=".ui.activities.LoginActivity">
 
     <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        style="@style/BarLayout">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/apptheme_color"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+            style="@style/Toolbar">
 
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
@@ -37,21 +32,11 @@
 
         <EditText
             android:id="@+id/recipientsEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="To"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:textSize="20sp"/>
+            style="@style/EditTextRecipients"/>
 
         <RelativeLayout
             android:id="@+id/root"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp">
+            style="@style/ContainerMessage">
 
                 <FrameLayout
                     android:id="@+id/messageContainer"
@@ -75,28 +60,16 @@
 
             <EditText
                 android:id="@+id/textInput"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_gravity="center"/>
+                style="@style/EditTextMessage"/>
 
             <ImageView
                 android:id="@+id/sendTextImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_gravity="center"
-                android:src="@mipmap/ic_send"
-                android:scaleType="fitCenter"/>
+                style="@style/ImageSendMessage"/>
         </LinearLayout>
 
         <ProgressBar
             android:id="@+id/progressBar"
-            android:layout_margin="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            style="@android:style/Widget.Holo.ProgressBar.Horizontal"
+            style="@style/DownloadMessageProgress"
             />
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

@@ -17,7 +17,8 @@
      limitations under the License.
 -->
 
-<resources xmlns:android="http://schemas.android.com/apk/res/android">
+<resources
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="Theme.Ribbit" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="windowActionBar">false</item>
@@ -175,13 +176,14 @@
         <item name="android:layout_alignParentTop">true</item>
     </style>
 
-    <style name="fabMenu">
+    <style name="fabMenuButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:layout_margin">5dp</item>
         <item name="android:tint">@android:color/white</item>
         <item name="android:visibility">gone</item>
+        <item name="fabSize">mini</item>
     </style>
 
     <style name="fabMenuLabel">
@@ -231,6 +233,193 @@
         <item name="android:scaleType">fitCenter</item>
         <item name="android:src">@mipmap/ic_contact_edit</item>
         <item name="android:adjustViewBounds">true</item>
+    </style>
+
+    <style name="UserTextSuggestion">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:layout_alignParentStart">true</item>
+    </style>
+
+    <style name="RecipientItem">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="UserTextRecipient" parent="RecipientItem">
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="UserImageRecipient" parent="RecipientItem">
+        <item name="android:src">@mipmap/ic_recipient_delete</item>
+        <item name="android:scaleType">fitCenter</item>
+    </style>
+
+    <style name="MessageItem">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="UsernameMessage" parent="MessageItem">
+        <item name="android:layout_alignParentStart">true</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TimeMessage" parent="MessageItem">
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/light_gray</item>
+    </style>
+
+    <style name="ViewTextMessage">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="ViewImageMessage">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:scaleType">fitCenter</item>
+    </style>
+
+    <style name="VideoMessage">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
+    <style name="RecyclerBase">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_margin">5dp</item>
+    </style>
+
+    <style name="RecyclerMessage">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:text">@string/empty_recycper_message</item>
+        <item name="android:padding">@dimen/activity_horizontal_margin</item>
+    </style>
+
+    <style name="ImageMessage">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:layout_centerInParent">true</item>
+    </style>
+
+    <style name="BarLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+    </style>
+
+    <style name="Toolbar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="android:background">@color/apptheme_color</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+    </style>
+
+    <style name="TimeCardView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="cardCornerRadius">10dp</item>
+    </style>
+
+    <style name="TimeText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentStart">true</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:textColor">@color/apptheme_color</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="TimeProgress" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="DownloadMessageProgress" parent="@android:style/Widget.Holo.ProgressBar.Horizontal">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:indeterminate">true</item>
+        <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="SignProgressBar">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">end</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:indeterminateTint">@android:color/white</item>
+    </style>
+
+    <style name="EditTextRecipients">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:hint">@string/edit_text_recipients_hint</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="ContainerMessage">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+    </style>
+
+    <style name="EditTextMessage">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
+    <style name="ImageSendMessage">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:src">@mipmap/ic_send</item>
+        <item name="android:scaleType">fitCenter</item>
+    </style>
+
+    <style name="PagerFab">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:scaleType">center</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="useCompatPadding">true</item>
+        <item name="fabSize">normal</item>
+    </style>
+
+    <style name="FabMenuContainer">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginEnd">15dp</item>
+        <item name="android:gravity">end</item>
     </style>
 </resources>
 

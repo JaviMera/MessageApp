@@ -43,9 +43,6 @@ public class FragmentInbox
     private ImageMessagesCallback imageMessagesCallback;
     private VideoMessagesCallback videoMessagesCallback;
 
-    @BindView(R.id.swipeRefreshLayout)
-    SwipeRefreshLayout swipeRefreshLayout;
-
     @BindView(R.id.emptyMessagesTextView)
     TextView textView;
 
@@ -71,18 +68,6 @@ public class FragmentInbox
     protected int getLayout() {
 
         return R.layout.fragment_inbox;
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-
-        // Initialize the refresher layout
-        presenter.setRefresherListener();
-        presenter.setRefresherTheme(Resources.getRefresherColors());
-
-        return rootView;
     }
 
     @Override
@@ -179,23 +164,6 @@ public class FragmentInbox
             ? View.VISIBLE
             : View.GONE
         );
-    }
-
-    @Override
-    public void setRefresherColors(int[] colors) {
-
-        swipeRefreshLayout.setColorSchemeResources(colors);
-    }
-
-    @Override
-    public void setRefresherListener() {
-
-        swipeRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-//                retrieveMessages();
-            }
-        });
     }
 
     @Override

@@ -20,7 +20,7 @@
     <string name="login_error_empty_password_message">Please make sure you enter a password!</string>
     <string name="login_error_title">Oops!</string>
     <string name="menu_logout_label">Logout</string>
-    <string name="empty_inbox_label">No new messages!</string>
+    <string name="empty_recycper_message">No new messages!</string>
     <string name="empty_friends_label">Add friends to begin!</string>
     <string name="menu_edit_friends_label">Edit Friends</string>
     <string name="title_activity_edit_friends">Edit Friends</string>
@@ -72,5 +72,5 @@
     <string name="fab_label_capture_picture">Capture Picture</string>
     <string name="fab_label_video">Video</string>
     <string name="fab_label_capture_video">Capture Video</string>
-
+    <string name="edit_text_recipients_hint">To</string>
 </resources>

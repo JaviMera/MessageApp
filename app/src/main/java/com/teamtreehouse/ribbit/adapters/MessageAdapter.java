@@ -73,7 +73,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
             super(itemView);
 
 //            iconImageView = (ImageView) itemView.findViewById(R.id.messageIcon);
-            nameLabel = (TextView) itemView.findViewById(R.id.messageLabel);
+            nameLabel = (TextView) itemView.findViewById(R.id.usernameLabel);
             timeLabel = (TextView) itemView.findViewById(R.id.timeLabel);
         }
 

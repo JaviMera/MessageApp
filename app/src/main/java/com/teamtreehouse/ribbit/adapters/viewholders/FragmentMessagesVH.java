@@ -35,7 +35,7 @@ public class FragmentMessagesVH extends FragmentRecyclerVH<FragmentInboxView, Me
 
         super(parent, view);
 
-        this.messageTextView = (TextView) view.findViewById(R.id.messageLabel);
+        this.messageTextView = (TextView) view.findViewById(R.id.usernameLabel);
         this.dateTextView = (TextView) view.findViewById(R.id.timeLabel);
     }
 }

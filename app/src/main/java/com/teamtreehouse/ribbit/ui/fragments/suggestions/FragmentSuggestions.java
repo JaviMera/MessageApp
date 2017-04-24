@@ -47,7 +47,7 @@ public class FragmentSuggestions
     @Override
     protected int getLayout() {
 
-        return R.layout.fragment_suggestions;
+        return R.layout.fragment_recycler;
     }
 
     @Override

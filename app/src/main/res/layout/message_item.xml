@@ -1,31 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginLeft="@dimen/inbox_horizontal_margin"
     android:layout_marginRight="@dimen/inbox_horizontal_margin"
     android:layout_marginTop="@dimen/inbox_vertical_margin"
-    android:background="@android:color/white" >
+    android:background="@android:color/white">
 
     <TextView
-        android:id="@+id/messageLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:text="Test Name"
-        android:padding="10dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textSize="16sp" />
+        android:id="@+id/usernameLabel"
+        tools:text="Javier99"
+        style="@style/UsernameMessage" />
 
     <TextView
         android:id="@+id/timeLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:padding="10dp"
-        android:text="TextView"
-        android:textSize="12sp"
-        android:textColor="@color/light_gray" />
+        style="@style/TimeMessage"
+        tools:text="a month ago" />
 
 </RelativeLayout>

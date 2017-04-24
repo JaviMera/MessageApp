@@ -3,31 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefreshLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" >
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:clipToPadding="false"
-            android:paddingBottom="@dimen/inbox_vertical_margin" >
-        </android.support.v7.widget.RecyclerView>
-    </android.support.v4.widget.SwipeRefreshLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_alignParentTop="true"
+        style="@style/RecyclerBase"/>
 
     <TextView
         android:id="@+id/emptyMessagesTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/activity_horizontal_margin"
-        android:text="@string/empty_inbox_label"
-        android:layout_centerInParent="true"
-        android:gravity="center"/>
+        style="@style/RecyclerMessage"/>
 
 </RelativeLayout>

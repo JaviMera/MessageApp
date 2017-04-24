@@ -10,7 +10,5 @@ import com.teamtreehouse.ribbit.ui.fragments.FragmentRecyclerView;
 public interface FragmentInboxView extends FragmentRecyclerView {
 
     void setEmptyTextViewVisibility(boolean visible);
-    void setRefresherColors(int[] colors);
-    void setRefresherListener();
     void onItemSelected(Message message);
 }
