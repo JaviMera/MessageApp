@@ -9,22 +9,9 @@
     <include
         layout="@layout/profile_picture" />
 
-    <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_height="80dp"
-        android:layout_weight="1"
-        android:layout_gravity="center">
-
-        <TextView
-            android:id="@+id/usernameTextView"
-            tools:text="someuser"
-            style="@style/UserTextSuggestion"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/light_purple_background"
-            android:layout_alignParentBottom="true"/>
-    </RelativeLayout>
+    <TextView
+        android:id="@+id/usernameTextView"
+        tools:text="someuser"
+        style="@style/UserTextSuggestion"/>
 
 </LinearLayout>

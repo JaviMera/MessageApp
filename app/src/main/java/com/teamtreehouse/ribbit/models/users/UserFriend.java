@@ -10,8 +10,8 @@ public class UserFriend extends User {
 
     public UserFriend(){super();}
 
-    public UserFriend(String uId, String email, String username) {
-        super(uId, email, username);
+    public UserFriend(String uId, String email, String username, String photoUrl) {
+        super(uId, email, username, photoUrl);
     }
 
     public static final Creator<UserFriend> CREATOR = new Creator<UserFriend>() {

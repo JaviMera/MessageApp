@@ -137,7 +137,7 @@ public class FragmentSearch
         RecyclerAdapter adapter = getAdapter();
         int position = adapter.getPosition(userFriend);
 
-        adapter.changeItem(new UserRequest(userFriend.getId(), userFriend.getEmail(), userFriend.getUsername()), position);
+        adapter.changeItem(new UserRequest(userFriend.getId(), userFriend.getEmail(), userFriend.getUsername(), userFriend.getPhotoUrl()), position);
     }
 
     public void addUsers(List<User> users){
@@ -177,11 +177,11 @@ public class FragmentSearch
         if(user.getStatus() == InviteStatus.Accepted.ordinal()) {
 
             // When an invitation is accepted, change the current item to a UserFriend type
-            adapter.changeItem(new UserFriend(user.getId(), user.getEmail(), user.getUsername()), position);
+            adapter.changeItem(new UserFriend(user.getId(), user.getEmail(), user.getUsername(), user.getPhotoUrl()), position);
         }
         else if(user.getStatus() == InviteStatus.Rejected.ordinal()) {
 
-            adapter.changeItem(new UserRequest(user.getId(), user.getEmail(), user.getUsername()), position);
+            adapter.changeItem(new UserRequest(user.getId(), user.getEmail(), user.getUsername(), user.getPhotoUrl()), position);
         }
     }
 

@@ -17,20 +17,23 @@ public abstract class User extends Item implements Parcelable, Comparable<User> 
     private String uId;
     private String email;
     private String username;
+    private String photoUrl;
 
     public User() {}
 
-    public User(String uId, String email, String username) {
+    public User(String uId, String email, String username, String photoUrl) {
 
         this.uId = uId;
         this.email = email;
         this.username = username;
+        this.photoUrl = photoUrl;
     }
 
     protected User(Parcel in) {
         uId = in.readString();
         email = in.readString();
         username = in.readString();
+        photoUrl = in.readString();
     }
 
     public String getId() {
@@ -47,6 +50,11 @@ public abstract class User extends Item implements Parcelable, Comparable<User> 
         return this.username;
     }
 
+    public String getPhotoUrl() {
+
+        return this.photoUrl;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -58,6 +66,7 @@ public abstract class User extends Item implements Parcelable, Comparable<User> 
         parcel.writeString(this.uId);
         parcel.writeString(this.email);
         parcel.writeString(this.username);
+        parcel.writeString(this.photoUrl);
     }
 
     public void setId(String id) {

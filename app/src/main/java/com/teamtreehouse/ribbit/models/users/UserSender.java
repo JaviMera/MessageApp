@@ -12,8 +12,8 @@ public class UserSender extends UserInvite {
         super();
     }
 
-    public UserSender(String uId, String email, String username, int status) {
-        super(uId, email, username, status);
+    public UserSender(String uId, String email, String username, String photoUrl, int status) {
+        super(uId, email, username, photoUrl, status);
 
     }
 

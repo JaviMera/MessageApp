@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,6 +35,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -47,6 +49,7 @@ import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.messages.Message;
 import com.teamtreehouse.ribbit.models.users.User;
 import com.teamtreehouse.ribbit.models.users.UserCurrent;
+import com.teamtreehouse.ribbit.models.users.UserRequest;
 import com.teamtreehouse.ribbit.ui.activities.intents.MultimediaResultIntent;
 import com.teamtreehouse.ribbit.models.messages.MultimediaMessage;
 import com.teamtreehouse.ribbit.ui.activities.intents.PictureCaptureResultIntent;
@@ -254,7 +257,34 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         @SuppressWarnings("VisibleForTests")
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
+
+                            final HashMap<String, Object> map = new HashMap<String, Object>();
+                            map.put("photoUrl", taskSnapshot.getMetadata().getDownloadUrl().toString());
+                            FirebaseDatabase
+                                .getInstance()
+                                .getReference()
+                                .child("users")
+                                .orderByChild("username")
+                                .startAt(Auth.getInstance().getUsername())
+                                .endAt(Auth.getInstance().getUsername()+"\uf8ff")
+                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                        DataSnapshot result = dataSnapshot
+                                            .getChildren()
+                                            .iterator()
+                                            .next();
+
+                                        result.getRef().updateChildren(map);
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
                         }
                     });
             }

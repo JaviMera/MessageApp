@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -34,7 +35,7 @@ public class SignUpActivity extends AppCompatActivity implements UserInsertCallb
     Toolbar toolbar;
 
     @BindView(R.id.progressBar)
-    ContentLoadingProgressBar progressBar;
+    ProgressBar progressBar;
 
     @BindView(R.id.usernameField)
     protected EditText usernameView;
@@ -111,7 +112,8 @@ public class SignUpActivity extends AppCompatActivity implements UserInsertCallb
                             User newUser = new UserCurrent(
                                 firebaseUser.getUid(),
                                 email,
-                                username
+                                username,
+                                ""
                             );
 
                             MessageDB.insertUser(newUser, SignUpActivity.this);

@@ -6,8 +6,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 import com.teamtreehouse.ribbit.FirebaseImageLoader;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.RecyclerItemType;
@@ -44,18 +49,12 @@ public abstract class FragmentUsersVH extends FragmentRecyclerVH<FragmentUsersVi
     @Override
     public void bind(final User user) {
 
-        StorageReference ref = FirebaseStorage
-            .getInstance()
-            .getReference()
-            .child("profile_pictures")
-            .child(user.getId());
-
-        Glide
+        Picasso
             .with(((FragmentRecycler)fragment).getActivity())
-            .using(new FirebaseImageLoader())
-            .load(ref)
+            .load(user.getPhotoUrl())
+            .memoryPolicy(MemoryPolicy.NO_CACHE)
+            .networkPolicy(NetworkPolicy.NO_CACHE)
             .error(R.mipmap.ic_person)
-            .fitCenter()
             .into(userProfilePicture);
 
         userEmailTextView.setText(user.getUsername());

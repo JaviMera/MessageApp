@@ -161,7 +161,7 @@ public class FragmentFriends extends FragmentPager<ActivityView, FragmentUsersPr
         if(user.getStatus() == InviteStatus.Accepted.ordinal()) {
 
             // When an invitation is accepted, change the current item to a UserFriend type
-            adapter.changeItem(new UserFriend(user.getId(), user.getEmail(), user.getUsername()), position);
+            adapter.changeItem(new UserFriend(user.getId(), user.getEmail(), user.getUsername(), user.getPhotoUrl()), position);
         }
         else if(user.getStatus() == InviteStatus.Rejected.ordinal()) {
 

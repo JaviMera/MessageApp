@@ -11,11 +11,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 import com.teamtreehouse.ribbit.FirebaseImageLoader;
 import com.teamtreehouse.ribbit.R;
+import com.teamtreehouse.ribbit.models.Auth;
+import com.teamtreehouse.ribbit.models.users.User;
 import com.teamtreehouse.ribbit.models.users.UserFriend;
+import com.teamtreehouse.ribbit.models.users.UserRequest;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentRecycler;
 import com.teamtreehouse.ribbit.ui.fragments.suggestions.FragmentSuggestionsView;
 import com.teamtreehouse.ribbit.utils.Resources;
@@ -29,40 +39,59 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class FragmentSuggestionsVH extends FragmentRecyclerVH<FragmentSuggestionsView,UserFriend> {
 
     private TextView usernameTextView;
-    private CircleImageView friendProfilePicture;
+    private CircleImageView userProfilePicture;
 
     public FragmentSuggestionsVH(FragmentSuggestionsView parent, View itemView) {
         super(parent, itemView);
 
         this.usernameTextView = (TextView) itemView.findViewById(R.id.usernameTextView);
-        this.friendProfilePicture = (CircleImageView) itemView.findViewById(R.id.profilePictureView);
+        this.userProfilePicture = (CircleImageView) itemView.findViewById(R.id.profilePictureView);
     }
 
     @Override
-    public void bind(final UserFriend friend) {
+    public void bind(final UserFriend user) {
 
-        StorageReference ref = FirebaseStorage
+        FirebaseDatabase
             .getInstance()
             .getReference()
-            .child("profile_pictures")
-            .child(friend.getId());
+            .child("users")
+            .orderByChild("username")
+            .startAt(user.getUsername())
+            .endAt(user.getUsername()+"\uf8ff")
+            .addListenerForSingleValueEvent(new ValueEventListener() {
 
-        Glide
-            .with(((FragmentRecycler)fragment).getActivity())
-            .using(new FirebaseImageLoader())
-            .load(ref)
-            .error(R.drawable.person)
-            .fitCenter()
-            .into(friendProfilePicture);
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    DataSnapshot child = dataSnapshot
+                        .getChildren()
+                        .iterator()
+                        .next();
+
+                    User userInfo = child.getValue(UserRequest.class);
+                    Picasso
+                        .with(((FragmentRecycler)fragment).getActivity())
+                        .load(userInfo.getPhotoUrl())
+                        .memoryPolicy(MemoryPolicy.NO_CACHE)
+                        .networkPolicy(NetworkPolicy.NO_CACHE)
+                        .error(R.mipmap.ic_person)
+                        .into(userProfilePicture);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                fragment.onItemSelected(friend);
+                fragment.onItemSelected(user);
             }
         });
 
-        this.usernameTextView.setText(friend.getUsername());
+        this.usernameTextView.setText(user.getUsername());
     }
 }

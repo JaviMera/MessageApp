@@ -10,8 +10,8 @@ public class UserCurrent extends User {
 
     public UserCurrent(){super();}
 
-    public UserCurrent(String uId, String email, String username) {
-        super(uId, email, username);
+    public UserCurrent(String uId, String email, String username, String photoUrl) {
+        super(uId, email, username, photoUrl);
     }
 
     public static final Creator<UserCurrent> CREATOR = new Creator<UserCurrent>() {
