@@ -6,63 +6,36 @@
     android:layout_height="wrap_content"
     android:layout_margin="10dp">
 
-        <include
-            layout="@layout/profile_picture" />
+    <include
+        layout="@layout/profile_picture" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="80dp"
         android:layout_gravity="center">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/userEmailTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="5dp"
-                android:gravity="center"
-                tools:text="javier_mera88" />
-
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="end">
+                android:layout_centerInParent="true">
+
+                <TextView
+                    android:id="@+id/userEmailTextView"
+                    style="@style/UserTextView"
+                    tools:text="javier_mera88" />
 
                 <Button
                     android:id="@+id/negativeButtonView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Friend Request"
-                    android:textSize="12sp"
-                    android:layout_gravity="center"/>
+                    style="@style/ButtonBase"/>
 
                 <Button
                     android:id="@+id/positiveButtonView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Friend Request"
-                    android:textSize="12sp"
-                    android:layout_gravity="center"/>
+                    style="@style/ButtonBase"/>
 
                 <ImageView
                     android:id="@+id/editContactImageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center|end"
-                    android:adjustViewBounds="true"
-                    android:maxHeight="50dp"
-                    android:maxWidth="50dp"
-                    android:padding="10dp"
-                    android:scaleType="fitCenter"
-                    android:src="@mipmap/ic_contact_edit" />
+                    style="@style/EditImageView" />
             </LinearLayout>
-        </LinearLayout>
 
         <View
             android:layout_width="match_parent"

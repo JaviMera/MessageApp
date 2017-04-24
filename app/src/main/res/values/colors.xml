@@ -12,4 +12,6 @@
     <color name="swipeRefresh3">#dcadf4</color>
     <color name="swipeRefresh4">#ad78d9</color>
     <color name="fab_menu_label">#e7d9f9</color>
+    <color name="user_button_enabled">#9A7EC1</color>
+    <color name="user_button_disabled">#8F8D92</color>
 </resources>
