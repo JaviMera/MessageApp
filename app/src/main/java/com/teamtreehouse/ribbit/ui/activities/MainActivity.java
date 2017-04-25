@@ -326,6 +326,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
             case R.id.action_camera:
 
+                boolean granted = checkPermissions(PERMISSIONS_STORAGE);
+
+                if(!granted) {
+
+                    requestPermissions(PERMISSIONS_STORAGE);
+                    return true;
+                }
+
                 if (isExternalStorageAvailable()) {
                     // getValue the URI
 

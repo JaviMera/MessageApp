@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -22,13 +23,19 @@ import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.teamtreehouse.ribbit.FirebaseImageLoader;
 import com.teamtreehouse.ribbit.R;
+import com.teamtreehouse.ribbit.database.MessageDB;
+import com.teamtreehouse.ribbit.database.UserReadCallback;
 import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.users.User;
 import com.teamtreehouse.ribbit.models.users.UserFriend;
 import com.teamtreehouse.ribbit.models.users.UserRequest;
+import com.teamtreehouse.ribbit.ui.activities.EditFriendActivity;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentRecycler;
 import com.teamtreehouse.ribbit.ui.fragments.suggestions.FragmentSuggestionsView;
+import com.teamtreehouse.ribbit.utils.GlideUtils;
 import com.teamtreehouse.ribbit.utils.Resources;
+
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -51,38 +58,23 @@ public class FragmentSuggestionsVH extends FragmentRecyclerVH<FragmentSuggestion
     @Override
     public void bind(final UserFriend user) {
 
-        FirebaseDatabase
-            .getInstance()
-            .getReference()
-            .child("users")
-            .orderByChild("username")
-            .startAt(user.getUsername())
-            .endAt(user.getUsername()+"\uf8ff")
-            .addListenerForSingleValueEvent(new ValueEventListener() {
+        MessageDB.readUser(user.getUsername(), new UserReadCallback() {
+            @Override
+            public void onUserRead(List<User> users) {
 
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+                User userInfo = users.get(0);
 
-                    DataSnapshot child = dataSnapshot
-                        .getChildren()
-                        .iterator()
-                        .next();
+                if(userInfo.getPhotoUrl().isEmpty()) {
 
-                    User userInfo = child.getValue(UserRequest.class);
-                    Picasso
-                        .with(((FragmentRecycler)fragment).getActivity())
-                        .load(userInfo.getPhotoUrl())
-                        .memoryPolicy(MemoryPolicy.NO_CACHE)
-                        .networkPolicy(NetworkPolicy.NO_CACHE)
-                        .error(R.mipmap.ic_person)
-                        .into(userProfilePicture);
+                    GlideUtils.loadDefault(((FragmentRecycler)fragment).getActivity(), userProfilePicture);
                 }
+                else {
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
+                    StorageReference ref = FirebaseStorage.getInstance().getReferenceFromUrl(userInfo.getPhotoUrl());
+                    GlideUtils.loadFromServer(((FragmentRecycler)fragment).getActivity(), ref, userProfilePicture);
                 }
-            });
+            }
+        });
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override

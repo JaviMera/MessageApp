@@ -7,12 +7,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.MemoryPolicy;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
 import com.teamtreehouse.ribbit.FirebaseImageLoader;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.RecyclerItemType;
@@ -20,6 +16,9 @@ import com.teamtreehouse.ribbit.models.UserFactory;
 import com.teamtreehouse.ribbit.models.users.User;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentRecycler;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentUsersView;
+import com.teamtreehouse.ribbit.utils.GlideUtils;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by javie on 4/3/2017.
@@ -27,10 +26,24 @@ import com.teamtreehouse.ribbit.ui.fragments.FragmentUsersView;
 
 public abstract class FragmentUsersVH extends FragmentRecyclerVH<FragmentUsersView, User> {
 
-    protected ImageView userProfilePicture;
+    protected CircleImageView userProfilePicture;
     protected TextView userEmailTextView;
     protected Button negativeButtonView;
     protected Button positiveButtonView;
+
+    protected void setProfilePic(User user) {
+
+        if(user.getPhotoUrl().isEmpty()) {
+
+            GlideUtils.loadDefault(((FragmentRecycler)fragment).getActivity(), userProfilePicture);
+        }
+        else {
+
+            StorageReference ref = FirebaseStorage.getInstance().getReferenceFromUrl(user.getPhotoUrl());
+            GlideUtils.loadFromServer(((FragmentRecycler)fragment).getActivity(), ref, userProfilePicture);
+        }
+    }
+
     private ImageView editContactImageView;
 
     UserFactory factory = new UserFactory();
@@ -38,7 +51,7 @@ public abstract class FragmentUsersVH extends FragmentRecyclerVH<FragmentUsersVi
     public FragmentUsersVH(FragmentUsersView fragment, View itemView) {
         super(fragment, itemView);
 
-        userProfilePicture = (ImageView) itemView.findViewById(R.id.profilePictureView);
+        userProfilePicture = (CircleImageView) itemView.findViewById(R.id.profilePictureView);
         userEmailTextView = (TextView) itemView.findViewById(R.id.userEmailTextView);
         negativeButtonView = (Button) itemView.findViewById(R.id.negativeButtonView);
         positiveButtonView = (Button) itemView.findViewById(R.id.positiveButtonView);
@@ -49,13 +62,7 @@ public abstract class FragmentUsersVH extends FragmentRecyclerVH<FragmentUsersVi
     @Override
     public void bind(final User user) {
 
-        Picasso
-            .with(((FragmentRecycler)fragment).getActivity())
-            .load(user.getPhotoUrl())
-            .memoryPolicy(MemoryPolicy.NO_CACHE)
-            .networkPolicy(NetworkPolicy.NO_CACHE)
-            .error(R.mipmap.ic_person)
-            .into(userProfilePicture);
+        setProfilePic(user);
 
         userEmailTextView.setText(user.getUsername());
 

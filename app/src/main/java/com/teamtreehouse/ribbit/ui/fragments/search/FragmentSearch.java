@@ -10,6 +10,8 @@ import android.view.View;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.RecyclerAdapter;
 import com.teamtreehouse.ribbit.adapters.actions.ButtonAction;
+import com.teamtreehouse.ribbit.database.MessageDB;
+import com.teamtreehouse.ribbit.database.UserReadCallback;
 import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.InviteStatus;
 import com.teamtreehouse.ribbit.models.users.User;
@@ -128,7 +130,14 @@ public class FragmentSearch
     @Override
     public void onFriendAdded(UserFriend userFriend) {
 
-        friends.put(userFriend.getId(), userFriend);
+        MessageDB.readUser(userFriend.getUsername(), new UserReadCallback() {
+            @Override
+            public void onUserRead(List<User> users) {
+
+                User user = users.get(0);
+                friends.put(user.getId(), user);
+            }
+        });
     }
 
     @Override
@@ -138,6 +147,8 @@ public class FragmentSearch
         int position = adapter.getPosition(userFriend);
 
         adapter.changeItem(new UserRequest(userFriend.getId(), userFriend.getEmail(), userFriend.getUsername(), userFriend.getPhotoUrl()), position);
+
+        friends.remove(userFriend.getId());
     }
 
     public void addUsers(List<User> users){
@@ -183,6 +194,8 @@ public class FragmentSearch
 
             adapter.changeItem(new UserRequest(user.getId(), user.getEmail(), user.getUsername(), user.getPhotoUrl()), position);
         }
+
+        invites.remove(user.getId());
     }
 
     @Override
