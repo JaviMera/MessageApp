@@ -1,5 +1,6 @@
 package com.teamtreehouse.ribbit.ui.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -29,7 +30,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SignUpActivity extends AppCompatActivity implements UserInsertCallback {
+public class SignUpActivity extends AppCompatActivity implements UserInsertCallback, DialogInterface.OnClickListener {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -149,5 +150,10 @@ public class SignUpActivity extends AppCompatActivity implements UserInsertCallb
                 message);
 
         dialog.show(getSupportFragmentManager(), "dialog_signup");
+    }
+
+    @Override
+    public void onClick(DialogInterface dialogInterface, int i) {
+
     }
 }
