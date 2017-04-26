@@ -1,136 +1,153 @@
-<android.support.design.widget.CoordinatorLayout
+<android.support.v4.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    tools:openDrawer="start"
     tools:context=".ui.activities.LoginActivity">
 
-    <android.support.design.widget.AppBarLayout
-        style="@style/BarLayout">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:background="@android:color/black"
-            style="@style/Toolbar">
-
-        </android.support.v7.widget.Toolbar>
-    </android.support.design.widget.AppBarLayout>
-
-    <LinearLayout
-        android:id="@+id/rootLayout"
-        android:orientation="vertical"
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize">
+        android:fitsSystemWindows="true">
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tabLayout"
+        <android.support.design.widget.AppBarLayout
+            style="@style/BarLayout">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:background="@android:color/black"
+                style="@style/Toolbar">
+
+            </android.support.v7.widget.Toolbar>
+        </android.support.design.widget.AppBarLayout>
+
+        <LinearLayout
+            android:id="@+id/rootLayout"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/background_purple"
-            app:tabGravity="fill"/>
+            android:layout_height="match_parent"
+            android:layout_marginTop="?attr/actionBarSize">
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/pager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/background_purple"
+                app:tabGravity="fill"/>
 
-    </LinearLayout>
+            <android.support.v4.view.ViewPager
+                android:id="@+id/pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
-    <RelativeLayout
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom|right">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab"
+                style="@style/PagerFab"
+                tools:src="@mipmap/ic_add_contact"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/fab"
+                android:layout_centerInParent="true"
+                android:orientation="vertical"
+                android:layout_alignParentRight="true">
+
+                <LinearLayout
+                    style="@style/FabMenuContainer">
+
+                    <TextView
+                        android:id="@+id/fabTextLabel"
+                        android:text="@string/fab_label_text"
+                        style="@style/fabMenuLabel"/>
+
+                    <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/fabTextMesssage"
+                        android:src="@mipmap/ic_text_message"
+                        style="@style/fabMenuButton"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/FabMenuContainer">
+
+                    <TextView
+                        android:id="@+id/fabPictureLabel"
+                        android:text="@string/fab_label_picture"
+                        style="@style/fabMenuLabel"/>
+
+                    <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/fabPictureMessage"
+                        android:src="@mipmap/ic_pictures"
+                        style="@style/fabMenuButton" />
+                </LinearLayout>
+
+            <LinearLayout
+                style="@style/FabMenuContainer">
+
+                <TextView
+                    android:id="@+id/fabCapturePictureLabel"
+                    android:text="@string/fab_label_capture_picture"
+                    style="@style/fabMenuLabel"/>
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fabCapturePictureMessage"
+                    android:src="@mipmap/ic_capture_pictures"
+                    style="@style/fabMenuButton" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/FabMenuContainer">
+
+                <TextView
+                    android:id="@+id/fabVideoLabel"
+                    android:text="@string/fab_label_video"
+                    style="@style/fabMenuLabel"/>
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fabVideoMessage"
+                    android:src="@mipmap/ic_video"
+                    style="@style/fabMenuButton" />
+                </LinearLayout>
+
+            <LinearLayout
+                style="@style/FabMenuContainer">
+
+                <TextView
+                    android:id="@+id/fabCaptureVideoLabel"
+                    android:text="@string/fab_label_capture_video"
+                    style="@style/fabMenuLabel"/>
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fabCaptureVideoMessage"
+                    android:src="@mipmap/ic_capture_video"
+                    style="@style/fabMenuButton" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="bottom|right">
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            style="@style/PagerFab"
-            tools:src="@mipmap/ic_add_contact"/>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/fab"
-            android:layout_centerInParent="true"
-            android:orientation="vertical"
-            android:layout_alignParentRight="true">
-
-            <LinearLayout
-                style="@style/FabMenuContainer">
-
-                <TextView
-                    android:id="@+id/fabTextLabel"
-                    android:text="@string/fab_label_text"
-                    style="@style/fabMenuLabel"/>
-
-                <android.support.design.widget.FloatingActionButton
-                    android:id="@+id/fabTextMesssage"
-                    android:src="@mipmap/ic_text_message"
-                    style="@style/fabMenuButton"/>
-            </LinearLayout>
-
-            <LinearLayout
-                style="@style/FabMenuContainer">
-
-                <TextView
-                    android:id="@+id/fabPictureLabel"
-                    android:text="@string/fab_label_picture"
-                    style="@style/fabMenuLabel"/>
-
-                <android.support.design.widget.FloatingActionButton
-                    android:id="@+id/fabPictureMessage"
-                    android:src="@mipmap/ic_pictures"
-                    style="@style/fabMenuButton" />
-            </LinearLayout>
-
-        <LinearLayout
-            style="@style/FabMenuContainer">
-
-            <TextView
-                android:id="@+id/fabCapturePictureLabel"
-                android:text="@string/fab_label_capture_picture"
-                style="@style/fabMenuLabel"/>
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fabCapturePictureMessage"
-                android:src="@mipmap/ic_capture_pictures"
-                style="@style/fabMenuButton" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            style="@style/FabMenuContainer">
-
-            <TextView
-                android:id="@+id/fabVideoLabel"
-                android:text="@string/fab_label_video"
-                style="@style/fabMenuLabel"/>
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fabVideoMessage"
-                android:src="@mipmap/ic_video"
-                style="@style/fabMenuButton" />
-            </LinearLayout>
-
-        <LinearLayout
-            style="@style/FabMenuContainer">
-
-            <TextView
-                android:id="@+id/fabCaptureVideoLabel"
-                android:text="@string/fab_label_capture_video"
-                style="@style/fabMenuLabel"/>
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fabCaptureVideoMessage"
-                android:src="@mipmap/ic_capture_video"
-                style="@style/fabMenuButton" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </RelativeLayout>
-
-</android.support.design.widget.CoordinatorLayout>
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header_main">
+    </android.support.design.widget.NavigationView>
+</android.support.v4.widget.DrawerLayout>

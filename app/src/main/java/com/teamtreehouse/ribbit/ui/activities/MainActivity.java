@@ -6,18 +6,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -39,6 +44,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.SectionsPagerAdapter;
@@ -61,10 +67,12 @@ import com.teamtreehouse.ribbit.animations.FabUp;
 import com.teamtreehouse.ribbit.ui.activities.messages.MessageService;
 import com.teamtreehouse.ribbit.ui.activities.messages.TextMessageActivity;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentPager;
+import com.teamtreehouse.ribbit.ui.fragments.FragmentRecycler;
 import com.teamtreehouse.ribbit.ui.fragments.friends.FragmentFriends;
 import com.teamtreehouse.ribbit.ui.fragments.inbox.FragmentInbox;
 import com.teamtreehouse.ribbit.utils.Animations;
 import com.teamtreehouse.ribbit.utils.FileHelper;
+import com.teamtreehouse.ribbit.utils.GlideUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -76,8 +84,9 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainActivity extends AppCompatActivity implements MainActivityView {
+public class MainActivity extends AppCompatActivity implements MainActivityView, ViewPager.OnPageChangeListener, NavigationView.OnNavigationItemSelectedListener {
 
     public static final int ITEM_SELECT_CODE = 1000;
     private static int[] fabIcons = new int[]{
@@ -98,8 +107,17 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     public static final int TAKE_PHOTO_REQUEST_PROFILE = 4;
 
     private HashMap<Integer, MultimediaResultIntent> intentTypes;
+    private CircleImageView userProfilePictureView;
+    private TextView usernameTextView;
 
     SectionsPagerAdapter viewPagerAdapter;
+
+    @BindView(R.id.drawerLayout)
+    DrawerLayout drawerLayout;
+
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
+
 
     @BindView(R.id.tabLayout)
     TabLayout tabLayout;
@@ -146,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     private MainActivityPresenter presenter;
     private FragmentPager currentFragment;
     private boolean fabMenuOpen;
+    private ActionBarDrawerToggle toggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,28 +204,81 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             }
         }
 
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-                hideFabMenu();
-                fab.setImageResource(fabIcons[position]);
-                currentFragment = viewPagerAdapter.getItem(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
+        viewPager.addOnPageChangeListener(this);
 
         fab.setImageResource(fabIcons[0]);
         this.currentFragment = this.viewPagerAdapter.getItem(0);
+
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
+        toggle.setDrawerIndicatorEnabled(true);
+        drawerLayout.addDrawerListener(toggle);
+
+        navigationView.setNavigationItemSelectedListener(this);
+
+        this.usernameTextView = (TextView)this.navigationView.getHeaderView(0).findViewById(R.id.usernameText);
+        this.userProfilePictureView = (CircleImageView) this.navigationView.getHeaderView(0).findViewById(R.id.profilePictureView);
+        this.usernameTextView.setText(Auth.getInstance().getUsername());
+
+        User currentUser = Auth.getInstance().getUser();
+        if(currentUser.getPhotoUrl().isEmpty()) {
+
+            GlideUtils.loadDefault(this, userProfilePictureView);
+        }
+        else {
+
+            StorageReference ref = FirebaseStorage.getInstance().getReferenceFromUrl(currentUser.getPhotoUrl());
+            GlideUtils.loadFromServer(this, ref, userProfilePictureView);
+        }
+
+        this.navigationView
+            .getHeaderView(0)
+            .findViewById(R.id.capturePicture)
+            .setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    boolean granted = checkPermissions(PERMISSIONS_STORAGE);
+
+                    if(!granted) {
+
+                        requestPermissions(PERMISSIONS_STORAGE);
+                        return;
+                    }
+
+                    if (isExternalStorageAvailable()) {
+                        // getValue the URI
+
+                        // 1. Get the external storage directory
+                        File mediaStorageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+                        // 2. Create a unique file name
+                        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                        String fileName = "IMG_" + timeStamp;
+
+                        try {
+                            File.createTempFile(fileName, ".jpg", mediaStorageDir);
+                            Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST_PROFILE);
+                        } catch (IOException e) {
+
+                            Toast.makeText(MainActivity.this, "Error creating file: " +
+                                    mediaStorageDir.getAbsolutePath() + fileName + ".jpg", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            });
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        toggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        toggle.syncState();
     }
 
     private BroadcastReceiver messageBroadcast = new BroadcastReceiver() {
@@ -246,7 +318,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
             if(requestCode == TAKE_PHOTO_REQUEST_PROFILE) {
 
-                Uri uri = Uri.parse(FileHelper.getPath((Bitmap) data.getExtras().get("data"), this));
+                final Bitmap picture = (Bitmap) data.getExtras().get("data");
+                Uri uri = Uri.parse(FileHelper.getPath(picture, this));
 
                 FirebaseStorage
                     .getInstance()
@@ -278,6 +351,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
                                             .next();
 
                                         result.getRef().updateChildren(map);
+
+                                        userProfilePictureView.setImageBitmap(picture);
                                     }
 
                                     @Override
@@ -323,38 +398,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-
-            case R.id.action_camera:
-
-                boolean granted = checkPermissions(PERMISSIONS_STORAGE);
-
-                if(!granted) {
-
-                    requestPermissions(PERMISSIONS_STORAGE);
-                    return true;
-                }
-
-                if (isExternalStorageAvailable()) {
-                    // getValue the URI
-
-                    // 1. Get the external storage directory
-                    File mediaStorageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-
-                    // 2. Create a unique file name
-                    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                    String fileName = "IMG_" + timeStamp;
-
-                    try {
-                        File.createTempFile(fileName, ".jpg", mediaStorageDir);
-                        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST_PROFILE);
-                    } catch (IOException e) {
-
-                        Toast.makeText(this, "Error creating file: " +
-                            mediaStorageDir.getAbsolutePath() + fileName + ".jpg", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                break;
 
             case R.id.action_logout:
                 navigateToLogin();
@@ -563,6 +606,30 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
                 return false;
             }
         }
+
+        return true;
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+
+        hideFabMenu();
+        fab.setImageResource(fabIcons[position]);
+        currentFragment = viewPagerAdapter.getItem(position);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         return true;
     }

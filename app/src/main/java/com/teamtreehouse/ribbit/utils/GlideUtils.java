@@ -43,6 +43,7 @@ public class GlideUtils {
             .load(ref)
             .diskCacheStrategy(DiskCacheStrategy.NONE)
             .skipMemoryCache(true)
+            .fitCenter()
             .into(view);
     }
 
