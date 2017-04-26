@@ -10,6 +10,8 @@ import android.view.View;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.RecyclerAdapter;
 import com.teamtreehouse.ribbit.adapters.actions.ButtonAction;
+import com.teamtreehouse.ribbit.database.MessageDB;
+import com.teamtreehouse.ribbit.database.UserReadCallback;
 import com.teamtreehouse.ribbit.models.InviteStatus;
 import com.teamtreehouse.ribbit.models.users.User;
 import com.teamtreehouse.ribbit.models.users.UserFriend;
@@ -113,17 +115,17 @@ public class FragmentFriends extends FragmentPager<ActivityView, FragmentUsersPr
     }
 
     @Override
-    public void onFriendAdded(UserFriend userFriend) {
+    public void onFriendAdded(final UserFriend userFriend) {
 
-        RecyclerAdapter adapter = getAdapter();
-        int position = adapter.getPosition(userFriend);
+        final RecyclerAdapter adapter = getAdapter();
+        MessageDB.readUser(userFriend.getUsername(), new UserReadCallback() {
+            @Override
+            public void onUserRead(List<User> users) {
 
-        if(position > -1) {
-
-            adapter.removeItem(position);
-        }
-
-        adapter.add(userFriend);
+                UserFriend newFriend = new UserFriend(users.get(0));
+                adapter.add(newFriend);
+            }
+        });
     }
 
     @Override
@@ -131,10 +133,6 @@ public class FragmentFriends extends FragmentPager<ActivityView, FragmentUsersPr
 
         RecyclerAdapter adapter = getAdapter();
         int position = adapter.getPosition(userFriend);
-
-        if(position == -1)
-            return;
-
         adapter.removeItem(position);
     }
 
@@ -153,20 +151,11 @@ public class FragmentFriends extends FragmentPager<ActivityView, FragmentUsersPr
     }
 
     @Override
-    public void onInviteChanged(UserInvite user) {
+    public void onInviteChanged(final UserInvite user) {
 
         RecyclerAdapter adapter = getAdapter();
         int position = adapter.getPosition(user);
-
-        if(user.getStatus() == InviteStatus.Accepted.ordinal()) {
-
-            // When an invitation is accepted, change the current item to a UserFriend type
-            adapter.changeItem(new UserFriend(user.getId(), user.getEmail(), user.getUsername(), user.getPhotoUrl()), position);
-        }
-        else if(user.getStatus() == InviteStatus.Rejected.ordinal()) {
-
-            adapter.removeItem(position);
-        }
+        adapter.removeItem(position);
     }
 
     @Override

@@ -17,6 +17,11 @@ public class UserRecipient extends UserInvite {
         super(uId, email, username, photoUrl, status);
     }
 
+    public UserRecipient(String uId, String username, int status) {
+
+        super(uId, "", username, "", status);
+    }
+
     public static final Creator<UserRecipient> CREATOR = new Creator<UserRecipient>() {
         @Override
         public UserRecipient createFromParcel(Parcel in) {

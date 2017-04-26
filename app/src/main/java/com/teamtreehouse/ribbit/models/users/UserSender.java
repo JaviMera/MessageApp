@@ -14,7 +14,10 @@ public class UserSender extends UserInvite {
 
     public UserSender(String uId, String email, String username, String photoUrl, int status) {
         super(uId, email, username, photoUrl, status);
+    }
 
+    public UserSender(String uId, String username, int status) {
+        super(uId, "", username, "", status);
     }
 
     public static final Creator<UserSender> CREATOR = new Creator<UserSender>() {

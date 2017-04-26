@@ -10,8 +10,23 @@ public class UserFriend extends User {
 
     public UserFriend(){super();}
 
+    public UserFriend(User copyUser){
+
+        super(
+            copyUser.getId(),
+            copyUser.getEmail(),
+            copyUser.getUsername(),
+            copyUser.getPhotoUrl()
+        );
+    }
+
     public UserFriend(String uId, String email, String username, String photoUrl) {
         super(uId, email, username, photoUrl);
+    }
+
+    public UserFriend(String uId, String username) {
+
+        super(uId, "", username, "");
     }
 
     public static final Creator<UserFriend> CREATOR = new Creator<UserFriend>() {

@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Toast;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.RecyclerAdapter;
@@ -134,19 +135,27 @@ public class FragmentSearch
             @Override
             public void onUserRead(List<User> users) {
 
-                User user = users.get(0);
-                friends.put(user.getId(), user);
+            User user = users.get(0);
+            friends.put(user.getId(), new UserFriend(user.getId(), user.getEmail(), user.getUsername(), user.getPhotoUrl()));
             }
         });
     }
 
     @Override
-    public void onFriendRemoved(UserFriend userFriend) {
+    public void onFriendRemoved(final UserFriend userFriend) {
 
-        RecyclerAdapter adapter = getAdapter();
-        int position = adapter.getPosition(userFriend);
 
-        adapter.changeItem(new UserRequest(userFriend.getId(), userFriend.getEmail(), userFriend.getUsername(), userFriend.getPhotoUrl()), position);
+        MessageDB.readUser(userFriend.getUsername(), new UserReadCallback() {
+            @Override
+            public void onUserRead(List<User> users) {
+
+                RecyclerAdapter adapter = getAdapter();
+                int position = adapter.getPosition(userFriend);
+
+                User user = users.get(0);
+                adapter.changeItem(new UserRequest(user.getId(), user.getEmail(), user.getUsername(), user.getPhotoUrl()), position);
+            }
+        });
 
         friends.remove(userFriend.getId());
     }
@@ -180,22 +189,31 @@ public class FragmentSearch
     }
 
     @Override
-    public void onInviteChanged(UserInvite user) {
+    public void onInviteChanged(final UserInvite userInvite) {
 
-        RecyclerAdapter adapter = getAdapter();
-        int position = adapter.getPosition(user);
+        final RecyclerAdapter adapter = getAdapter();
+        final int position = adapter.getPosition(userInvite);
 
-        if(user.getStatus() == InviteStatus.Accepted.ordinal()) {
+        MessageDB.readUser(userInvite.getUsername(), new UserReadCallback() {
+            @Override
+            public void onUserRead(List<User> users) {
 
-            // When an invitation is accepted, change the current item to a UserFriend type
-            adapter.changeItem(new UserFriend(user.getId(), user.getEmail(), user.getUsername(), user.getPhotoUrl()), position);
-        }
-        else if(user.getStatus() == InviteStatus.Rejected.ordinal()) {
+                User newUser = users.get(0);
 
-            adapter.changeItem(new UserRequest(user.getId(), user.getEmail(), user.getUsername(), user.getPhotoUrl()), position);
-        }
+                // When an invitation is accepted, change the current item to a UserFriend type
+                if(userInvite.getStatus() == InviteStatus.Accepted.ordinal()) {
 
-        invites.remove(user.getId());
+                    adapter.changeItem(new UserFriend(newUser), position);
+                }
+                // When an invitation is declined, change the current item to a UserRequest type
+                else if(userInvite.getStatus() == InviteStatus.Rejected.ordinal()) {
+
+                    adapter.changeItem(new UserRequest(newUser.getId(), newUser.getEmail(), newUser.getUsername(), newUser.getPhotoUrl()), position);
+                }
+
+                invites.remove(newUser.getId());
+            }
+        });
     }
 
     @Override

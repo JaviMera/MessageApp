@@ -22,6 +22,7 @@ import com.teamtreehouse.ribbit.models.users.UserRecipient;
 import com.teamtreehouse.ribbit.models.users.UserSender;
 import com.teamtreehouse.ribbit.models.users.UserRequest;
 import com.teamtreehouse.ribbit.models.messages.VideoMessage;
+import com.teamtreehouse.ribbit.ui.callbacks.InviteDeleteCallback;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -256,19 +257,19 @@ public class MessageDB {
     public static void insertFriends(User currentUser, User otherUser) {
 
         FirebaseDatabase.getInstance().getReference()
-            .child("friends")
+            .child(FRIENDS_NODE)
             .child(currentUser.getId())
             .push()
-            .setValue(new UserFriend(otherUser.getId(), otherUser.getEmail(), otherUser.getUsername(), otherUser.getPhotoUrl()));
+            .setValue(new UserFriend(otherUser.getId(), otherUser.getUsername()));
 
         FirebaseDatabase.getInstance().getReference()
-            .child("friends")
+            .child(FRIENDS_NODE)
             .child(otherUser.getId())
             .push()
-            .setValue(new UserFriend(currentUser.getId(), currentUser.getEmail(), currentUser.getUsername(), currentUser.getPhotoUrl()));
+            .setValue(new UserFriend(currentUser.getId(), currentUser.getUsername()));
     }
 
-    public static void deleteInvites(User currentUser, User otherUser) {
+    public static void deleteInvites(User currentUser, User otherUser, final InviteDeleteCallback callback) {
 
         final HashMap<String, String> map = new HashMap<String, String>();
         map.put(RECIPIENTS_NODE + "/" + currentUser.getId(), otherUser.getUsername());
@@ -299,12 +300,14 @@ public class MessageDB {
                     public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
 
                         if(databaseError == null) {
+
+                            callback.onInviteDeleted();
                         }
                     }
                 });
     }
 
-    public static void deleteFriend(User currentUser, User otherUser) {
+    public static void deleteFriend(User currentUser, User otherUser, final DeleteFriendCallback callback) {
 
         final HashMap<String, String> paths = new HashMap<>();
         paths.put(currentUser.getId(), otherUser.getUsername());
@@ -329,6 +332,8 @@ public class MessageDB {
                             }
                         }
                     }
+
+                    callback.onDeleteFriend();
                 }
 
                 @Override

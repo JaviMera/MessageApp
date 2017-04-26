@@ -22,6 +22,7 @@ import com.google.firebase.storage.StorageReference;
 import com.teamtreehouse.ribbit.FirebaseImageLoader;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.viewholders.FragmentFriendsVH;
+import com.teamtreehouse.ribbit.database.DeleteFriendCallback;
 import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.database.UserReadCallback;
 import com.teamtreehouse.ribbit.dialogs.DialogFragmentError;
@@ -124,7 +125,12 @@ public class EditFriendActivity extends AppCompatActivity implements DialogInter
     @Override
     public void onClick(DialogInterface dialogInterface, int i) {
 
-        MessageDB.deleteFriend(Auth.getInstance().getUser(), friend);
-        NavUtils.navigateUpFromSameTask(this);
+        MessageDB.deleteFriend(Auth.getInstance().getUser(), friend, new DeleteFriendCallback() {
+            @Override
+            public void onDeleteFriend() {
+
+                NavUtils.navigateUpFromSameTask(EditFriendActivity.this);
+            }
+        });
     }
 }
