@@ -16,6 +16,16 @@ public class UserSender extends User {
         super(uId, email, username, photoUrl);
     }
 
+    public UserSender(User copyUser) {
+
+        super(
+            copyUser.getId(),
+            copyUser.getEmail(),
+            copyUser.getUsername(),
+            copyUser.getPhotoUrl()
+        );
+    }
+
     public UserSender(String uId, String username) {
         super(uId, "", username, "");
     }

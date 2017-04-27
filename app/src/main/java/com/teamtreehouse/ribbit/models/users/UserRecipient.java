@@ -22,6 +22,16 @@ public class UserRecipient extends User {
         super(uId, "", username, "");
     }
 
+    public UserRecipient(User copyUser) {
+
+        super(
+            copyUser.getId(),
+            copyUser.getEmail(),
+            copyUser.getUsername(),
+            copyUser.getPhotoUrl()
+        );
+    }
+
     public static final Creator<UserRecipient> CREATOR = new Creator<UserRecipient>() {
         @Override
         public UserRecipient createFromParcel(Parcel in) {

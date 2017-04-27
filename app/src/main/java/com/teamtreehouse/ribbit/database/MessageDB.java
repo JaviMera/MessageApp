@@ -24,6 +24,9 @@ import com.teamtreehouse.ribbit.models.users.UserRequest;
 import com.teamtreehouse.ribbit.models.messages.VideoMessage;
 import com.teamtreehouse.ribbit.ui.callbacks.InviteDeleteCallback;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -48,57 +51,6 @@ public class MessageDB {
     public static final String TEXT_MESSAGE_ID_PROPERTY = "id";
     private static final String VIDEOS_NODE = "videos";
 
-    public static void insertUser(final User newUser, final UserInsertCallback listener) {
-
-        FirebaseDatabase
-            .getInstance()
-            .getReference()
-            .child(USERS_NODE)
-            .push()
-            .runTransaction(new Transaction.Handler() {
-                @Override
-                public Transaction.Result doTransaction(MutableData mutableData) {
-
-                    mutableData.setValue(newUser);
-                    return Transaction.success(mutableData);
-                }
-
-                @Override
-                public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
-
-                    if(databaseError == null){
-
-                        listener.onSuccess(newUser);
-                    }
-                    else {
-
-                        listener.onFailure(databaseError.getMessage());
-                    }
-                }
-            });
-    }
-
-    public static void insertInvite(final User currentUser, final User otherUser) {
-
-        FirebaseDatabase
-            .getInstance()
-            .getReference()
-            .child(INVITES_NODE)
-            .child(RECIPIENTS_NODE)
-            .child(otherUser.getId())
-            .push()
-            .setValue(new UserRecipient(currentUser.getId(), currentUser.getEmail(), currentUser.getUsername(), currentUser.getPhotoUrl()));
-
-        FirebaseDatabase
-            .getInstance()
-            .getReference()
-            .child(INVITES_NODE)
-            .child(SENDERS_NODE)
-            .child(currentUser.getId())
-            .push()
-            .setValue(new UserSender(otherUser.getId(), otherUser.getEmail(), otherUser.getUsername(), otherUser.getPhotoUrl()));
-    }
-
     public static void readUser(final String username, final UserReadCallback userReadCallback) {
 
         FirebaseDatabase
@@ -121,6 +73,49 @@ public class MessageDB {
 
                 }
             });
+    }
+
+    public static void readSenderInvites(String userId, ChildEventListener listener) {
+
+        FirebaseDatabase
+                .getInstance()
+                .getReference()
+                .child(INVITES_NODE)
+                .child(RECIPIENTS_NODE)
+                .child(userId)
+                .addChildEventListener(listener);
+    }
+
+    public static void readRecipientInvites(String userId, ChildEventListener listener) {
+
+        FirebaseDatabase
+                .getInstance()
+                .getReference()
+                .child(INVITES_NODE)
+                .child(SENDERS_NODE)
+                .child(userId)
+                .addChildEventListener(listener);
+    }
+
+    public static void readFriends(String userId, ChildEventListener listener) {
+
+        FirebaseDatabase
+                .getInstance()
+                .getReference()
+                .child(FRIENDS_NODE)
+                .child(userId)
+                .addChildEventListener(listener);
+    }
+
+    public static void readMessages(String userId, String messageNode, ChildEventListener listener) {
+
+        FirebaseDatabase
+                .getInstance()
+                .getReference()
+                .child(MESSAGES_NODE)
+                .child(messageNode)
+                .child(userId)
+                .addChildEventListener(listener);
     }
 
     public static void filterFriends(String currentUserId, String username, final UserReadCallback filterUserCallback){
@@ -182,38 +177,6 @@ public class MessageDB {
             });
     }
 
-    public static void readSenderInvites(String userId, ChildEventListener listener) {
-
-        FirebaseDatabase
-            .getInstance()
-            .getReference()
-            .child(INVITES_NODE)
-            .child(RECIPIENTS_NODE)
-            .child(userId)
-            .addChildEventListener(listener);
-    }
-
-    public static void readRecipientInvites(String userId, ChildEventListener listener) {
-
-        FirebaseDatabase
-            .getInstance()
-            .getReference()
-            .child(INVITES_NODE)
-            .child(SENDERS_NODE)
-            .child(userId)
-            .addChildEventListener(listener);
-    }
-
-    public static void readFriends(String userId, ChildEventListener listener) {
-
-        FirebaseDatabase
-            .getInstance()
-            .getReference()
-            .child(FRIENDS_NODE)
-            .child(userId)
-            .addChildEventListener(listener);
-    }
-
     public static void insertFriends(User currentUser, User otherUser) {
 
         FirebaseDatabase.getInstance().getReference()
@@ -227,6 +190,122 @@ public class MessageDB {
             .child(otherUser.getId())
             .push()
             .setValue(new UserFriend(currentUser.getId(), currentUser.getUsername()));
+    }
+
+    public static void insertTextMessage(final String recipientId, TextMessage message, final TextInsertCallback callback) {
+
+        FirebaseDatabase
+                .getInstance()
+                .getReference()
+                .child(MESSAGES_NODE)
+                .child(TEXT_MESSAGES_NODE)
+                .child(recipientId)
+                .push()
+                .setValue(message)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                        callback.onSuccess();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                        callback.onFailure();
+                    }
+                });
+    }
+
+    public static void insertImageMessage(String recipientId, ImageMessage message, final MultimediaInsertCallback callback) {
+
+        FirebaseDatabase
+                .getInstance()
+                .getReference()
+                .child(MESSAGES_NODE)
+                .child(IMAGES_NODE)
+                .child(recipientId)
+                .push()
+                .setValue(message)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                        callback.onSuccess();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+    }
+
+    public static void insertVideoMessage(String recipientId, ImageMessage message, final MultimediaInsertCallback callback) {
+
+        FirebaseDatabase
+                .getInstance()
+                .getReference()
+                .child(MESSAGES_NODE)
+                .child(VIDEOS_NODE)
+                .child(recipientId)
+                .push()
+                .setValue(message)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                        callback.onSuccess();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+    }
+
+    public static void insertUser(final User newUser, final UserInsertCallback listener) {
+
+        FirebaseDatabase
+                .getInstance()
+                .getReference()
+                .child(USERS_NODE)
+                .push()
+                .runTransaction(new Transaction.Handler() {
+                    @Override
+                    public Transaction.Result doTransaction(MutableData mutableData) {
+
+                        mutableData.setValue(newUser);
+                        return Transaction.success(mutableData);
+                    }
+
+                    @Override
+                    public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+
+                        if(databaseError == null){
+
+                            listener.onSuccess(newUser);
+                        }
+                        else {
+
+                            listener.onFailure(databaseError.getMessage());
+                        }
+                    }
+                });
+    }
+
+    public static void insertSenderInvite(User sender, User recipient) {
+
+        insertInvite(sender, recipient, SENDERS_NODE, UserSender.class);
+    }
+
+    public static void insertRecipientInvite(User sender, User recipient) {
+
+        insertInvite(sender, recipient, RECIPIENTS_NODE, UserRecipient.class);
     }
 
     public static void deleteInvites(User currentUser, User otherUser, final InviteDeleteCallback callback) {
@@ -303,82 +382,6 @@ public class MessageDB {
             });
     }
 
-    public static void insertTextMessage(final String recipientId, TextMessage message, final TextInsertCallback callback) {
-
-        FirebaseDatabase
-            .getInstance()
-            .getReference()
-            .child(MESSAGES_NODE)
-            .child(TEXT_MESSAGES_NODE)
-            .child(recipientId)
-            .push()
-            .setValue(message)
-            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-
-                    callback.onSuccess();
-                }
-            })
-            .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-
-                    callback.onFailure();
-                }
-            });
-    }
-
-    public static void insertImageMessage(String recipientId, ImageMessage message, final MultimediaInsertCallback callback) {
-
-        FirebaseDatabase
-            .getInstance()
-            .getReference()
-            .child(MESSAGES_NODE)
-            .child(IMAGES_NODE)
-            .child(recipientId)
-            .push()
-            .setValue(message)
-            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-
-                    callback.onSuccess();
-                }
-            })
-            .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-
-                }
-            });
-    }
-
-    public static void insertVideoMessage(String recipientId, ImageMessage message, final MultimediaInsertCallback callback) {
-
-        FirebaseDatabase
-            .getInstance()
-            .getReference()
-            .child(MESSAGES_NODE)
-            .child(VIDEOS_NODE)
-            .child(recipientId)
-            .push()
-            .setValue(message)
-            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-
-                    callback.onSuccess();
-                }
-            })
-            .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-
-                }
-            });
-    }
-
     public static void deleteTextMessage(String userId, final String messageId, final DeleteTextCallback callback) {
 
         FirebaseDatabase
@@ -421,17 +424,6 @@ public class MessageDB {
                 });
     }
 
-    public static void readMessages(String userId, String messageNode, ChildEventListener listener) {
-
-        FirebaseDatabase
-            .getInstance()
-            .getReference()
-            .child(MESSAGES_NODE)
-            .child(messageNode)
-            .child(userId)
-            .addChildEventListener(listener);
-    }
-
     public static void deleteImageMessage(String userId, final ImageMessage message, final DeleteMultimediaFileCallback callback) {
 
         deleteMultimediaMessage(userId, IMAGES_NODE, message, callback);
@@ -442,7 +434,7 @@ public class MessageDB {
         deleteMultimediaMessage(userId, VIDEOS_NODE, message, callback);
     }
 
-    private static void deleteMultimediaMessage( String userId, String node, final MultimediaMessage message, final DeleteMultimediaFileCallback callback) {
+    private static void deleteMultimediaMessage(String userId, String node, final MultimediaMessage message, final DeleteMultimediaFileCallback callback) {
 
         FirebaseDatabase
             .getInstance()
@@ -473,5 +465,23 @@ public class MessageDB {
                     callback.onFailure(databaseError.getMessage());
                 }
             });
+    }
+
+    private static <T extends User> void insertInvite(User sender, User recipient, String node, Class<T> clazz) {
+
+        try {
+            FirebaseDatabase
+                    .getInstance()
+                    .getReference()
+                    .child(INVITES_NODE)
+                    .child(node)
+                    .child(sender.getId())
+                    .push()
+                    .setValue(clazz.getDeclaredConstructor(clazz).newInstance(recipient));
+
+        }
+        catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            e.printStackTrace();
+        }
     }
 }

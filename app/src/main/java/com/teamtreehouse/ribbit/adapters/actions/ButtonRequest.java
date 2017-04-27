@@ -13,6 +13,7 @@ public class ButtonRequest extends ButtonAction {
     @Override
     public void execute(User user) {
 
-        MessageDB.insertInvite(Auth.getInstance().getUser(), user);
+        MessageDB.insertSenderInvite(Auth.getInstance().getUser(), user);
+        MessageDB.insertRecipientInvite(user, Auth.getInstance().getUser());
     }
 }
