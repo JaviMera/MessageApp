@@ -2,9 +2,7 @@ package com.teamtreehouse.ribbit.adapters.actions;
 
 import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.models.Auth;
-import com.teamtreehouse.ribbit.models.InviteStatus;
 import com.teamtreehouse.ribbit.models.users.User;
-import com.teamtreehouse.ribbit.database.UpdateInviteCallback;
 import com.teamtreehouse.ribbit.ui.callbacks.InviteDeleteCallback;
 
 /**
@@ -16,17 +14,11 @@ public class ButtonAccept extends ButtonAction {
     @Override
     public void execute(final User user) {
 
-        MessageDB.updateInvites(Auth.getInstance().getUser(), user, InviteStatus.Accepted.ordinal(), new UpdateInviteCallback() {
+        MessageDB.deleteInvites(Auth.getInstance().getUser(), user, new InviteDeleteCallback() {
             @Override
-            public void onSuccess() {
+            public void onInviteDeleted() {
 
-                MessageDB.deleteInvites(Auth.getInstance().getUser(), user, new InviteDeleteCallback() {
-                    @Override
-                    public void onInviteDeleted() {
-
-                        MessageDB.insertFriends(Auth.getInstance().getUser(), user);
-                    }
-                });
+                MessageDB.insertFriends(Auth.getInstance().getUser(), user);
             }
         });
     }

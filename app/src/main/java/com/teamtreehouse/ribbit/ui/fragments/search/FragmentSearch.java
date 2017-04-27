@@ -6,20 +6,18 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Toast;
 
 import com.teamtreehouse.ribbit.R;
-import com.teamtreehouse.ribbit.adapters.RecyclerAdapter;
 import com.teamtreehouse.ribbit.adapters.actions.ButtonAction;
 import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.database.UserReadCallback;
 import com.teamtreehouse.ribbit.models.Auth;
-import com.teamtreehouse.ribbit.models.InviteStatus;
 import com.teamtreehouse.ribbit.models.users.User;
 import com.teamtreehouse.ribbit.models.users.UserCurrent;
 import com.teamtreehouse.ribbit.models.users.UserFriend;
-import com.teamtreehouse.ribbit.models.users.UserInvite;
+import com.teamtreehouse.ribbit.models.users.UserRecipient;
 import com.teamtreehouse.ribbit.models.users.UserRequest;
+import com.teamtreehouse.ribbit.models.users.UserSender;
 import com.teamtreehouse.ribbit.ui.activities.ActivityView;
 import com.teamtreehouse.ribbit.ui.activities.EditFriendActivity;
 import com.teamtreehouse.ribbit.ui.callbacks.EditableFriendsCallback;
@@ -94,11 +92,11 @@ public class FragmentSearch
     }
 
     @Override
-    public void onPendingAdded(User user) {
+    public void onPendingAdded(UserSender user) {
 
         invites.put(user.getId(), user);
 
-        RecyclerAdapter adapter = getAdapter();
+        FragmentSearchAdapter adapter = getAdapter();
         int position = adapter.getPosition(user);
 
         if(position == -1)
@@ -112,13 +110,19 @@ public class FragmentSearch
     }
 
     @Override
-    public void onInvitesAdded(User userInvite) {
+    public void onPendingRemoved(UserSender userInvite) {
+
+        removeInvite(userInvite);
+    }
+
+    @Override
+    public void onInvitesAdded(UserRecipient userInvite) {
 
         invites.put(userInvite.getId(), userInvite);
 
         // When the current user sends an invite, check if the receiver of this invite
         // also happens to be looking for the sender user.
-        RecyclerAdapter adapter = getAdapter();
+        FragmentSearchAdapter adapter = getAdapter();
         if(adapter.contains(userInvite)) {
 
             // If so, then update their screen by displaying the sender user as a User Invite type,
@@ -136,7 +140,15 @@ public class FragmentSearch
             public void onUserRead(List<User> users) {
 
             User user = users.get(0);
-            friends.put(user.getId(), new UserFriend(user.getId(), user.getEmail(), user.getUsername(), user.getPhotoUrl()));
+
+            FragmentSearchAdapter adapter = getAdapter();
+            if(adapter.contains(user)) {
+
+                int position = adapter.getPosition(user);
+                adapter.changeItem(new UserFriend(user), position);
+            }
+
+            friends.put(user.getId(), new UserFriend(user));
             }
         });
     }
@@ -144,26 +156,29 @@ public class FragmentSearch
     @Override
     public void onFriendRemoved(final UserFriend userFriend) {
 
-
         MessageDB.readUser(userFriend.getUsername(), new UserReadCallback() {
             @Override
             public void onUserRead(List<User> users) {
 
-                RecyclerAdapter adapter = getAdapter();
-                int position = adapter.getPosition(userFriend);
+                FragmentSearchAdapter adapter = getAdapter();
 
                 User user = users.get(0);
-                adapter.changeItem(new UserRequest(user.getId(), user.getEmail(), user.getUsername(), user.getPhotoUrl()), position);
+
+                if(adapter.contains(user)) {
+
+                    int position = adapter.getPosition(user);
+                    adapter.changeItem(new UserRequest(user.getId(), user.getEmail(), user.getUsername(), user.getPhotoUrl()), position);
+                }
+
+                friends.remove(userFriend.getId());
             }
         });
-
-        friends.remove(userFriend.getId());
     }
 
     public void addUsers(List<User> users){
 
         UserCurrent userCurrent = (UserCurrent) Auth.getInstance().getUser();
-        RecyclerAdapter adapter = getAdapter();
+        FragmentSearchAdapter adapter = getAdapter();
 
         // For every new letter the user types in, clear the recycler to show the newest search result
         adapter.clear();
@@ -189,34 +204,6 @@ public class FragmentSearch
     }
 
     @Override
-    public void onInviteChanged(final UserInvite userInvite) {
-
-        final RecyclerAdapter adapter = getAdapter();
-        final int position = adapter.getPosition(userInvite);
-
-        MessageDB.readUser(userInvite.getUsername(), new UserReadCallback() {
-            @Override
-            public void onUserRead(List<User> users) {
-
-                User newUser = users.get(0);
-
-                // When an invitation is accepted, change the current item to a UserFriend type
-                if(userInvite.getStatus() == InviteStatus.Accepted.ordinal()) {
-
-                    adapter.changeItem(new UserFriend(newUser), position);
-                }
-                // When an invitation is declined, change the current item to a UserRequest type
-                else if(userInvite.getStatus() == InviteStatus.Rejected.ordinal()) {
-
-                    adapter.changeItem(new UserRequest(newUser.getId(), newUser.getEmail(), newUser.getUsername(), newUser.getPhotoUrl()), position);
-                }
-
-                invites.remove(newUser.getId());
-            }
-        });
-    }
-
-    @Override
     public void onInviteClick(List<ButtonAction> buttonActions, int position) {
 
         FragmentSearchAdapter adapter = getAdapter();
@@ -234,5 +221,30 @@ public class FragmentSearch
         Intent intent = new Intent(this.getActivity(), EditFriendActivity.class);
         intent.putExtra(EditFriendActivity.EDIT_FRIEND_KEY, user);
         this.parent.itemSelect(intent);
+    }
+
+    @Override
+    public void onInviteRemoved(final UserRecipient userInvite) {
+
+        removeInvite(userInvite);
+    }
+
+    private void removeInvite(final User userInvite) {
+
+        final FragmentSearchAdapter adapter = getAdapter();
+
+        if(adapter.contains(userInvite)) {
+
+            MessageDB.readUser(userInvite.getUsername(), new UserReadCallback() {
+                @Override
+                public void onUserRead(List<User> users) {
+
+                    User user = users.get(0);
+                    int position = adapter.getPosition(userInvite);
+                    adapter.changeItem(new UserRequest(user.getId(), user.getEmail(), user.getUsername(), user.getPhotoUrl()), position);
+                    invites.remove(userInvite.getId());
+                }
+            });
+        }
     }
 }

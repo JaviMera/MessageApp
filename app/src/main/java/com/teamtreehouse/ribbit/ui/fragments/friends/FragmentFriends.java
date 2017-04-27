@@ -12,10 +12,9 @@ import com.teamtreehouse.ribbit.adapters.RecyclerAdapter;
 import com.teamtreehouse.ribbit.adapters.actions.ButtonAction;
 import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.database.UserReadCallback;
-import com.teamtreehouse.ribbit.models.InviteStatus;
 import com.teamtreehouse.ribbit.models.users.User;
 import com.teamtreehouse.ribbit.models.users.UserFriend;
-import com.teamtreehouse.ribbit.models.users.UserInvite;
+import com.teamtreehouse.ribbit.models.users.UserRecipient;
 import com.teamtreehouse.ribbit.ui.activities.ActivityView;
 import com.teamtreehouse.ribbit.ui.activities.EditFriendActivity;
 import com.teamtreehouse.ribbit.ui.activities.UsersActivity;
@@ -137,7 +136,7 @@ public class FragmentFriends extends FragmentPager<ActivityView, FragmentUsersPr
     }
 
     @Override
-    public void onInvitesAdded(User userInvite) {
+    public void onInvitesAdded(UserRecipient userInvite) {
 
         RecyclerAdapter adapter = getAdapter();
         adapter.add(userInvite, 0);
@@ -151,7 +150,7 @@ public class FragmentFriends extends FragmentPager<ActivityView, FragmentUsersPr
     }
 
     @Override
-    public void onInviteChanged(final UserInvite user) {
+    public void onInviteRemoved(UserRecipient user) {
 
         RecyclerAdapter adapter = getAdapter();
         int position = adapter.getPosition(user);

@@ -78,7 +78,7 @@ public class MessageDB {
             });
     }
 
-    public static void insertInvite(final User currentUser, final User otherUser, int status) {
+    public static void insertInvite(final User currentUser, final User otherUser) {
 
         FirebaseDatabase
             .getInstance()
@@ -87,7 +87,7 @@ public class MessageDB {
             .child(RECIPIENTS_NODE)
             .child(otherUser.getId())
             .push()
-            .setValue(new UserRecipient(currentUser.getId(), currentUser.getEmail(), currentUser.getUsername(), currentUser.getPhotoUrl(), status));
+            .setValue(new UserRecipient(currentUser.getId(), currentUser.getEmail(), currentUser.getUsername(), currentUser.getPhotoUrl()));
 
         FirebaseDatabase
             .getInstance()
@@ -96,7 +96,7 @@ public class MessageDB {
             .child(SENDERS_NODE)
             .child(currentUser.getId())
             .push()
-            .setValue(new UserSender(otherUser.getId(), otherUser.getEmail(), otherUser.getUsername(), otherUser.getPhotoUrl(), status));
+            .setValue(new UserSender(otherUser.getId(), otherUser.getEmail(), otherUser.getUsername(), otherUser.getPhotoUrl()));
     }
 
     public static void readUser(final String username, final UserReadCallback userReadCallback) {
@@ -212,46 +212,6 @@ public class MessageDB {
             .child(FRIENDS_NODE)
             .child(userId)
             .addChildEventListener(listener);
-    }
-
-    public static void updateInvites(final User currentUser, final User otherUser, final int status, final UpdateInviteCallback cb) {
-
-        final HashMap<String, User> map = new HashMap<>();
-        map.put(
-            RECIPIENTS_NODE + "/" + currentUser.getId(),
-            new UserRecipient(otherUser.getId(), otherUser.getEmail(), otherUser.getUsername(), otherUser.getPhotoUrl(), status));
-
-        map.put(
-            SENDERS_NODE + "/" + otherUser.getId(),
-                new UserSender(currentUser.getId(), currentUser.getEmail(), currentUser.getUsername(), currentUser.getPhotoUrl(), status));
-
-        FirebaseDatabase
-            .getInstance()
-            .getReference()
-            .child(INVITES_NODE)
-            .addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-
-                    for(Map.Entry<String, User> entry : map.entrySet()) {
-
-                        dataSnapshot
-                            .child(entry.getKey())
-                            .getChildren()
-                            .iterator()
-                            .next()
-                            .getRef()
-                            .setValue(entry.getValue());
-                    }
-
-                    cb.onSuccess();
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
     }
 
     public static void insertFriends(User currentUser, User otherUser) {

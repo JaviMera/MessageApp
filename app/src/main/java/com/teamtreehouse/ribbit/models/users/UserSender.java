@@ -6,18 +6,18 @@ import android.os.Parcel;
  * Created by javie on 3/29/2017.
  */
 
-public class UserSender extends UserInvite {
+public class UserSender extends User {
 
     public UserSender(){
         super();
     }
 
-    public UserSender(String uId, String email, String username, String photoUrl, int status) {
-        super(uId, email, username, photoUrl, status);
+    public UserSender(String uId, String email, String username, String photoUrl) {
+        super(uId, email, username, photoUrl);
     }
 
-    public UserSender(String uId, String username, int status) {
-        super(uId, "", username, "", status);
+    public UserSender(String uId, String username) {
+        super(uId, "", username, "");
     }
 
     public static final Creator<UserSender> CREATOR = new Creator<UserSender>() {

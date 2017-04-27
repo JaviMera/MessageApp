@@ -31,12 +31,12 @@ public class InvitesCallback implements ChildEventListener {
     @Override
     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-        this.listener.onInviteChanged(dataSnapshot.getValue(UserRecipient.class));
     }
 
     @Override
     public void onChildRemoved(DataSnapshot dataSnapshot) {
 
+        this.listener.onInviteRemoved(dataSnapshot.getValue(UserRecipient.class));
     }
 
     @Override

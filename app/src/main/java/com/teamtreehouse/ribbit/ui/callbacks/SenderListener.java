@@ -1,12 +1,13 @@
 package com.teamtreehouse.ribbit.ui.callbacks;
 
-import com.teamtreehouse.ribbit.models.users.User;
+import com.teamtreehouse.ribbit.models.users.UserSender;
 
 /**
  * Created by javie on 4/6/2017.
  */
 
-public interface SenderListener extends InvitesListener{
+public interface SenderListener {
 
-    void onPendingAdded(User user);
+    void onPendingAdded(UserSender user);
+    void onPendingRemoved(UserSender user);
 }
