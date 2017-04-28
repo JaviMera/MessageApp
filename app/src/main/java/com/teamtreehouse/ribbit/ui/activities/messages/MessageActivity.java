@@ -113,7 +113,9 @@ public abstract class MessageActivity extends AppCompatActivity implements Messa
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                String input = String.valueOf(charSequence);
+                String input = String
+                    .valueOf(charSequence)
+                    .toLowerCase();
 
                 final FragmentSuggestionsView fragment = findFragmentById(R.id.suggestionsContainer);
 

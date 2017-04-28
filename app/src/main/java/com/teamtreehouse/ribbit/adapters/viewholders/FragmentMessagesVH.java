@@ -27,7 +27,7 @@ public class FragmentMessagesVH extends FragmentRecyclerVH<FragmentInboxView, Me
                 fragment.onItemSelected(message);
             }
         });
-        this.messageTextView.setText(message.getUsername());
+        this.messageTextView.setText(message.getDisplayName());
         this.dateTextView.setText(MessageUtils.getTimeAgo(message.getDate()));
     }
 

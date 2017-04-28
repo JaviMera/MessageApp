@@ -45,17 +45,18 @@ public class UsersActivity extends AppCompatActivity implements ActivityView {
             @Override
             public boolean onQueryTextChange(String username) {
 
+                String usernameLowercase = username.toLowerCase();
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 final FragmentSearch fragmentSearch = (FragmentSearch) fragmentManager.findFragmentById(R.id.container);
 
-                if (username.isEmpty()) {
+                if (usernameLowercase.isEmpty()) {
 
                     // Pass in an empty list of users, when an empty string is typed in the search view
                     fragmentSearch.addUsers(new LinkedList<User>());
                     return false;
                 }
 
-                MessageDB.filterUsers(username, new UserReadCallback() {
+                MessageDB.filterUsers(usernameLowercase, new UserReadCallback() {
 
                     @Override
                     public void onUserRead(List<User> users) {

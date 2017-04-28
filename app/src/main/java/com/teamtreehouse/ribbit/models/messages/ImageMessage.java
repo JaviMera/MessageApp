@@ -11,8 +11,8 @@ public class ImageMessage extends MultimediaMessage {
 
     public ImageMessage() {};
 
-    public ImageMessage(String id, String username, String url, String path, long time){
-        super(id, username, url, path, time);
+    public ImageMessage(String id, String username, String displayName, String url, String path, long time){
+        super(id, username, displayName, url, path, time);
     }
 
     protected ImageMessage(Parcel in) {

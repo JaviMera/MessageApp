@@ -12,22 +12,9 @@ public class UserSender extends User {
         super();
     }
 
-    public UserSender(String uId, String email, String username, String photoUrl) {
-        super(uId, email, username, photoUrl);
-    }
-
     public UserSender(User copyUser) {
 
-        super(
-            copyUser.getId(),
-            copyUser.getEmail(),
-            copyUser.getUsername(),
-            copyUser.getPhotoUrl()
-        );
-    }
-
-    public UserSender(String uId, String username) {
-        super(uId, "", username, "");
+        super(copyUser);
     }
 
     public static final Creator<UserSender> CREATOR = new Creator<UserSender>() {

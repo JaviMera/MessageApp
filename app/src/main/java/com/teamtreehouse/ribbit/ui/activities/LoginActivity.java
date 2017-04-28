@@ -67,8 +67,14 @@ public class LoginActivity extends AppCompatActivity implements DialogInterface.
     @OnClick(R.id.loginButton)
     public void onLoginClick(View view) {
 
-        String username = mUsername.getText().toString();
-        String password = mPassword.getText().toString();
+        String username = mUsername
+            .getText()
+            .toString()
+            .toLowerCase();
+
+        String password = mPassword
+            .getText()
+            .toString();
 
         username = username.trim();
         password = password.trim();
@@ -96,9 +102,7 @@ public class LoginActivity extends AppCompatActivity implements DialogInterface.
 
         // Login
         mProgressBar.setVisibility(View.VISIBLE);
-
-
-        final String finalUsername = username;
+        final String usernameTemp = username;
         FirebaseAuth
             .getInstance()
             .signInWithEmailAndPassword(username + "@harambe.com", password)
@@ -118,7 +122,8 @@ public class LoginActivity extends AppCompatActivity implements DialogInterface.
                     }
                     else{
 
-                        MessageDB.readUser(finalUsername, new UserReadCallback() {
+                        MessageDB.readUser(usernameTemp, new UserReadCallback() {
+
                             @Override
                             public void onUserRead(List<User> user) {
 

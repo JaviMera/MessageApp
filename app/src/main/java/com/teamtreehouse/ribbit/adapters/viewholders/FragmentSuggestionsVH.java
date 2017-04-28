@@ -84,6 +84,6 @@ public class FragmentSuggestionsVH extends FragmentRecyclerVH<FragmentSuggestion
             }
         });
 
-        this.usernameTextView.setText(user.getUsername());
+        this.usernameTextView.setText(user.getDisplayName());
     }
 }

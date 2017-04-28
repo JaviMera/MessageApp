@@ -15,12 +15,16 @@ public abstract class Message extends Item implements Parcelable {
 
     private String id;
     private String username;
+    private String displayName;
     private long date;
 
-    protected Message(String id, String username, long date) {
+    protected Message(){}
+
+    protected Message(String id, String username, String displayName, long date) {
 
         this.id = id;
         this.username = username;
+        this.displayName = displayName;
         this.date = date;
     }
 
@@ -28,6 +32,7 @@ public abstract class Message extends Item implements Parcelable {
 
         this.id = in.readString();
         username = in.readString();
+        displayName = in.readString();
         date = in.readLong();
     }
 
@@ -36,6 +41,7 @@ public abstract class Message extends Item implements Parcelable {
 
         parcel.writeString(this.id);
         parcel.writeString(username);
+        parcel.writeString(displayName);
         parcel.writeLong(date);
     }
 
@@ -73,4 +79,8 @@ public abstract class Message extends Item implements Parcelable {
         return this.username;
     }
 
+    public String getDisplayName() {
+
+        return this.displayName;
+    }
 }

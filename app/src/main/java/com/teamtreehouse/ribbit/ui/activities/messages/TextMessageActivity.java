@@ -48,6 +48,7 @@ public class TextMessageActivity extends MessageActivity {
         TextMessage message = new TextMessage(
             UUID.randomUUID().toString(),
             Auth.getInstance().getUsername(),
+            Auth.getInstance().getDisplayName(),
             messageEditText.getText().toString(),
             new Date().getTime()
         );

@@ -13,7 +13,7 @@ public class UserRequest extends User {
     }
 
     public UserRequest(String uId, String email, String userName, String photoUrl) {
-        super(uId, email, userName, photoUrl);
+        super(uId, email, userName, "", photoUrl);
     }
 
     public static final Creator<UserRequest> CREATOR = new Creator<UserRequest>() {

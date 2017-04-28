@@ -15,12 +15,12 @@ public abstract class MultimediaMessage extends Message {
     private String url;
     private String path;
     public MultimediaMessage(){
-        super("", "", 0);
+        super();
     }
 
-    public MultimediaMessage(String id, String username, String url, String path, long date) {
+    public MultimediaMessage(String id, String username, String displayName, String url, String path, long date) {
 
-        super(id, username, date);
+        super(id, username, displayName, date);
         this.url = url;
         this.path = path;
     }

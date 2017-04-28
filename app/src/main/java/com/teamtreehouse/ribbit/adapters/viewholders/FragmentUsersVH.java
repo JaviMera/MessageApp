@@ -64,7 +64,7 @@ public abstract class FragmentUsersVH extends FragmentRecyclerVH<FragmentUsersVi
 
         setProfilePic(user);
 
-        userEmailTextView.setText(user.getUsername());
+        userEmailTextView.setText(user.getDisplayName());
 
         final RecyclerItemType viewHolder = factory.getViewHolder(user);
 

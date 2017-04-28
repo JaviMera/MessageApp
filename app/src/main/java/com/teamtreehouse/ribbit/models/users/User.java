@@ -14,30 +14,44 @@ public abstract class User extends Item implements Parcelable, Comparable<User> 
 
     public static final String KEY = "users";
 
-    private String uId;
+    private String id;
     private String email;
     private String username;
+    private String displayName;
     private String photoUrl;
 
     public User() {}
 
-    public User(String uId, String email, String username, String photoUrl) {
+    public User(User copyUser) {
 
-        this.uId = uId;
+        this(
+            copyUser.getId(),
+            copyUser.getEmail(),
+            copyUser.getUsername(),
+            copyUser.getDisplayName(),
+            copyUser.getPhotoUrl()
+        );
+    }
+
+    public User(String uId, String email, String username, String displayName, String photoUrl) {
+
+        this.id = uId;
         this.email = email;
         this.username = username;
         this.photoUrl = photoUrl;
+        this.displayName = displayName;
     }
 
     protected User(Parcel in) {
-        uId = in.readString();
+        id = in.readString();
         email = in.readString();
         username = in.readString();
         photoUrl = in.readString();
+        displayName = in.readString();
     }
 
     public String getId() {
-        return uId;
+        return id;
     }
 
     public String getEmail() {
@@ -55,6 +69,11 @@ public abstract class User extends Item implements Parcelable, Comparable<User> 
         return this.photoUrl;
     }
 
+    public String getDisplayName() {
+
+        return this.displayName;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -63,22 +82,18 @@ public abstract class User extends Item implements Parcelable, Comparable<User> 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
 
-        parcel.writeString(this.uId);
+        parcel.writeString(this.id);
         parcel.writeString(this.email);
         parcel.writeString(this.username);
         parcel.writeString(this.photoUrl);
-    }
-
-    public void setId(String id) {
-
-        this.uId = id;
+        parcel.writeString(this.displayName);
     }
 
     @Override
     public int hashCode() {
 
         final int prime = 31;
-        return prime + this.uId.hashCode();
+        return prime + this.id.hashCode();
     }
 
     @Override
@@ -91,7 +106,7 @@ public abstract class User extends Item implements Parcelable, Comparable<User> 
             return false;
 
         User other = (User) obj;
-        return this.uId.equals(other.getId());
+        return this.id.equals(other.getId());
     }
 
     @Override

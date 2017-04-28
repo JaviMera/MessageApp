@@ -12,24 +12,9 @@ public class UserRecipient extends User {
         super();
     }
 
-    public UserRecipient(String uId, String email, String username, String photoUrl) {
-
-        super(uId, email, username, photoUrl);
-    }
-
-    public UserRecipient(String uId, String username) {
-
-        super(uId, "", username, "");
-    }
-
     public UserRecipient(User copyUser) {
 
-        super(
-            copyUser.getId(),
-            copyUser.getEmail(),
-            copyUser.getUsername(),
-            copyUser.getPhotoUrl()
-        );
+        super(copyUser);
     }
 
     public static final Creator<UserRecipient> CREATOR = new Creator<UserRecipient>() {

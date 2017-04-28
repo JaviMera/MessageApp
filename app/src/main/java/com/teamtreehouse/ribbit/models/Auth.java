@@ -42,4 +42,9 @@ public class Auth {
 
         return this.currentUser;
     }
+
+    public String getDisplayName() {
+
+        return this.currentUser.getDisplayName();
+    }
 }

@@ -39,6 +39,7 @@ public class ImageMessageService extends MessageService {
                     ImageMessage message = new ImageMessage(
                         UUID.randomUUID().toString(),
                         Auth.getInstance().getUsername(),
+                        Auth.getInstance().getDisplayName(),
                         url,
                         path,
                         new Date().getTime()

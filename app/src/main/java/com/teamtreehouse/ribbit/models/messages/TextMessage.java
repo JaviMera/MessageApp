@@ -11,12 +11,13 @@ public class TextMessage extends Message {
     private String text;
 
     public TextMessage(){
-        super("", "",0);
+
+        super();
     }
 
-    public TextMessage(String id, String username, String text, long date) {
+    public TextMessage(String id, String username, String displayName, String text, long date) {
 
-        super(id, username, date);
+        super(id, username, displayName, date);
         this.text = text;
     }
 

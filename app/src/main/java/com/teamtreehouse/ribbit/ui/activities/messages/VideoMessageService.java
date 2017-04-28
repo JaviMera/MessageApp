@@ -43,9 +43,10 @@ public class VideoMessageService extends MessageService {
                 @Override
                 public void onSuccess(String url, String path) {
 
-                    ImageMessage message = new ImageMessage(
+                    VideoMessage message = new VideoMessage(
                             UUID.randomUUID().toString(),
                             Auth.getInstance().getUsername(),
+                            Auth.getInstance().getDisplayName(),
                             url,
                             path,
                             new Date().getTime()

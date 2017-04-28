@@ -58,7 +58,8 @@ public class MessageDB {
             .getReference()
             .child(USERS_NODE)
             .orderByChild("username")
-            .equalTo(username)
+            .startAt(username)
+            .endAt(username+"\uf8ff")
             .addListenerForSingleValueEvent(new ValueEventListener() {
 
                 @Override
@@ -183,13 +184,13 @@ public class MessageDB {
             .child(FRIENDS_NODE)
             .child(currentUser.getId())
             .push()
-            .setValue(new UserFriend(otherUser.getId(), otherUser.getUsername()));
+            .setValue(new UserFriend(otherUser.getId(), otherUser.getUsername(), otherUser.getDisplayName()));
 
         FirebaseDatabase.getInstance().getReference()
             .child(FRIENDS_NODE)
             .child(otherUser.getId())
             .push()
-            .setValue(new UserFriend(currentUser.getId(), currentUser.getUsername()));
+            .setValue(new UserFriend(currentUser.getId(), currentUser.getUsername(), currentUser.getDisplayName()));
     }
 
     public static void insertTextMessage(final String recipientId, TextMessage message, final TextInsertCallback callback) {
@@ -243,7 +244,7 @@ public class MessageDB {
                 });
     }
 
-    public static void insertVideoMessage(String recipientId, ImageMessage message, final MultimediaInsertCallback callback) {
+    public static void insertVideoMessage(String recipientId, VideoMessage message, final MultimediaInsertCallback callback) {
 
         FirebaseDatabase
                 .getInstance()
@@ -300,12 +301,12 @@ public class MessageDB {
 
     public static void insertSenderInvite(User sender, User recipient) {
 
-        insertInvite(sender, recipient, SENDERS_NODE, UserSender.class);
+        insertInvite(sender, recipient, SENDERS_NODE, UserRecipient.class);
     }
 
     public static void insertRecipientInvite(User sender, User recipient) {
 
-        insertInvite(sender, recipient, RECIPIENTS_NODE, UserRecipient.class);
+        insertInvite(sender, recipient, RECIPIENTS_NODE, UserSender.class);
     }
 
     public static void deleteInvites(User currentUser, User otherUser, final InviteDeleteCallback callback) {
@@ -471,13 +472,13 @@ public class MessageDB {
 
         try {
             FirebaseDatabase
-                    .getInstance()
-                    .getReference()
-                    .child(INVITES_NODE)
-                    .child(node)
-                    .child(sender.getId())
-                    .push()
-                    .setValue(clazz.getDeclaredConstructor(clazz).newInstance(recipient));
+                .getInstance()
+                .getReference()
+                .child(INVITES_NODE)
+                .child(node)
+                .child(sender.getId())
+                .push()
+                .setValue(clazz.getDeclaredConstructor(User.class).newInstance(recipient));
 
         }
         catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {

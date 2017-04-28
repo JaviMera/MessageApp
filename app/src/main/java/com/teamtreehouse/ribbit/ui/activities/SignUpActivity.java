@@ -1,5 +1,6 @@
 package com.teamtreehouse.ribbit.ui.activities;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,6 +26,8 @@ import com.teamtreehouse.ribbit.dialogs.DialogFragmentError;
 import com.teamtreehouse.ribbit.models.users.User;
 import com.teamtreehouse.ribbit.models.users.UserCurrent;
 import com.teamtreehouse.ribbit.database.UserInsertCallback;
+
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -113,6 +116,7 @@ public class SignUpActivity extends AppCompatActivity implements UserInsertCallb
                             User newUser = new UserCurrent(
                                 firebaseUser.getUid(),
                                 email,
+                                username.toLowerCase(),
                                 username,
                                 ""
                             );
