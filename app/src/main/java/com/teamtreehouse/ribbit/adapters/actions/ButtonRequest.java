@@ -11,9 +11,9 @@ import com.teamtreehouse.ribbit.models.users.User;
 public class ButtonRequest extends ButtonAction {
 
     @Override
-    public void execute(User user) {
+    public void execute(User currentUser, User user) {
 
-        MessageDB.insertSenderInvite(Auth.getInstance().getUser(), user);
-        MessageDB.insertRecipientInvite(user, Auth.getInstance().getUser());
+        MessageDB.insertSenderInvite(currentUser, user);
+        MessageDB.insertRecipientInvite(user, currentUser);
     }
 }

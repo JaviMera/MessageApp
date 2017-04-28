@@ -15,11 +15,11 @@ public class InvitesCallback implements ChildEventListener {
 
     private final RecipientListener listener;
 
-    public InvitesCallback(RecipientListener listener) {
+    public InvitesCallback(String userId, RecipientListener listener) {
 
         this.listener = listener;
 
-        MessageDB.readSenderInvites(Auth.getInstance().getId(), this);
+        MessageDB.readSenderInvites(userId, this);
     }
 
     @Override

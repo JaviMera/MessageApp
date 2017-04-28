@@ -12,13 +12,14 @@ import com.teamtreehouse.ribbit.adapters.RecyclerAdapter;
 import com.teamtreehouse.ribbit.adapters.actions.ButtonAction;
 import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.database.UserReadCallback;
+import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.users.User;
 import com.teamtreehouse.ribbit.models.users.UserFriend;
 import com.teamtreehouse.ribbit.models.users.UserRecipient;
 import com.teamtreehouse.ribbit.ui.activities.ActivityView;
 import com.teamtreehouse.ribbit.ui.activities.EditFriendActivity;
 import com.teamtreehouse.ribbit.ui.activities.UsersActivity;
-import com.teamtreehouse.ribbit.ui.callbacks.EditableFriendsCallback;
+import com.teamtreehouse.ribbit.ui.callbacks.FriendsCallback;
 import com.teamtreehouse.ribbit.ui.callbacks.FriendsListener;
 import com.teamtreehouse.ribbit.ui.callbacks.InvitesCallback;
 import com.teamtreehouse.ribbit.ui.callbacks.RecipientListener;
@@ -32,61 +33,23 @@ public class FragmentFriends extends FragmentPager<ActivityView, FragmentUsersPr
     implements
         FragmentUsersView,
         RecipientListener,
-        FriendsListener<UserFriend> {
+        FriendsListener {
 
     private InvitesCallback invitesCallback;
-    private EditableFriendsCallback editableFriendsCallback;
+    private FriendsCallback friendsCallback;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
-        this.invitesCallback = new InvitesCallback(this);
-        this.editableFriendsCallback = new EditableFriendsCallback(this);
+        User currentUser = Auth.getInstance().getUser();
+
+        this.invitesCallback = new InvitesCallback(currentUser.getId(), this);
+        this.friendsCallback = new FriendsCallback(currentUser.getId(), this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
-//        mCurrentUser = ObsoleteUser.getCurrentUser();
-//        mFriendsRelation = mCurrentUser.getRelation(ObsoleteUser.KEY_FRIENDS_RELATION);
-//
-//        getActivity().setProgressBarIndeterminateVisibility(true);
-//
-//
-//        Query<ObsoleteUser> query = mFriendsRelation.getQuery();
-//        query.addAscendingOrder(ObsoleteUser.KEY_USER_ID);
-//        query.findInBackground(new FindCallback<ObsoleteUser>() {
-//            @Override
-//            public void done(List<ObsoleteUser> friends, Exception e) {
-//                getActivity().setProgressBarIndeterminateVisibility(false);
-//
-//                if (e == null) {
-//                    mFriends = friends;
-//
-//                    String[] usernames = new String[mFriends.size()];
-//                    int i = 0;
-//                    for (ObsoleteUser user : mFriends) {
-//                        usernames[i] = user.getUsername();
-//                        i++;
-//                    }
-//                    if (mGridView.createAdapter() == null) {
-//                        ObseleteUserAdapter adapter = new ObseleteUserAdapter(getActivity(), mFriends);
-//                        mGridView.setAdapter(adapter);
-//                    } else {
-//                        ((ObseleteUserAdapter) mGridView.createAdapter()).refill(mFriends);
-//                    }
-//                } else {
-//                    Log.e(TAG, e.getMessage());
-//                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//                    builder.setMessage(e.getMessage())
-//                            .setTitle(R.string.error_title)
-//                            .setPositiveButton(android.R.string.ok, null);
-//                    AlertDialog dialog = builder.create();
-//                    dialog.show();
-//                }
-//            }
-//        });
     }
 
     @Override
@@ -160,12 +123,13 @@ public class FragmentFriends extends FragmentPager<ActivityView, FragmentUsersPr
     @Override
     public void onInviteClick(List<ButtonAction> buttonActions, int position) {
 
+        User currentUser = Auth.getInstance().getUser();
         FragmentFriendsAdapter adapter = (FragmentFriendsAdapter) recyclerView.getAdapter();
         User user = adapter.getItem(position);
 
         for(ButtonAction buttonAction : buttonActions) {
 
-            buttonAction.execute(user);
+            buttonAction.execute(currentUser, user);
         }
     }
 
@@ -173,7 +137,7 @@ public class FragmentFriends extends FragmentPager<ActivityView, FragmentUsersPr
     public void onItemSelected(User user) {
 
         Intent intent = new Intent(this.getActivity(), EditFriendActivity.class);
-        intent.putExtra("user", user);
+        intent.putExtra(EditFriendActivity.EDIT_FRIEND_KEY, user);
         this.parent.itemSelect(intent);
     }
 }

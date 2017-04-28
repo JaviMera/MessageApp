@@ -8,8 +8,6 @@ import com.teamtreehouse.ribbit.models.messages.ImageMessage;
 
 public class ImageMessagesCallback extends MessageCallback<ImageMessage>{
 
-    private MessageListener<ImageMessage> listener;
-
     public ImageMessagesCallback(String userId, MessageListener<ImageMessage> listener) {
 
         super(userId, listener);

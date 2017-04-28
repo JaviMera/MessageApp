@@ -11,7 +11,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
-import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.messages.ImageMessage;
 import com.teamtreehouse.ribbit.models.messages.MultimediaMessage;
 import com.teamtreehouse.ribbit.models.messages.TextMessage;
@@ -22,11 +21,9 @@ import com.teamtreehouse.ribbit.models.users.UserRecipient;
 import com.teamtreehouse.ribbit.models.users.UserSender;
 import com.teamtreehouse.ribbit.models.users.UserRequest;
 import com.teamtreehouse.ribbit.models.messages.VideoMessage;
-import com.teamtreehouse.ribbit.ui.callbacks.InviteDeleteCallback;
+import com.teamtreehouse.ribbit.ui.callbacks.InviteListener;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -309,7 +306,7 @@ public class MessageDB {
         insertInvite(sender, recipient, RECIPIENTS_NODE, UserSender.class);
     }
 
-    public static void deleteInvites(User currentUser, User otherUser, final InviteDeleteCallback callback) {
+    public static void deleteInvites(User currentUser, User otherUser, final InviteListener callback) {
 
         final HashMap<String, String> map = new HashMap<String, String>();
         map.put(RECIPIENTS_NODE + "/" + currentUser.getId(), otherUser.getUsername());

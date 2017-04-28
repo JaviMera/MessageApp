@@ -12,8 +12,9 @@ public class UserRequest extends User {
         super();
     }
 
-    public UserRequest(String uId, String email, String userName, String photoUrl) {
-        super(uId, email, userName, "", photoUrl);
+    public UserRequest(User copyUser) {
+
+        super(copyUser);
     }
 
     public static final Creator<UserRequest> CREATOR = new Creator<UserRequest>() {

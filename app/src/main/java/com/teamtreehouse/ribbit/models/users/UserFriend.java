@@ -12,17 +12,7 @@ public class UserFriend extends User {
 
     public UserFriend(User copyUser){
 
-        super(
-            copyUser.getId(),
-            copyUser.getEmail(),
-            copyUser.getUsername(),
-            copyUser.getDisplayName(),
-            copyUser.getPhotoUrl()
-        );
-    }
-
-    public UserFriend(String uId, String email, String username, String photoUrl) {
-        super(uId, email, username, "", photoUrl);
+        super(copyUser);
     }
 
     public UserFriend(String uId, String username, String displayName) {

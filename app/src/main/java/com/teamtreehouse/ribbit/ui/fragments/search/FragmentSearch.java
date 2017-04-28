@@ -20,7 +20,7 @@ import com.teamtreehouse.ribbit.models.users.UserRequest;
 import com.teamtreehouse.ribbit.models.users.UserSender;
 import com.teamtreehouse.ribbit.ui.activities.ActivityView;
 import com.teamtreehouse.ribbit.ui.activities.EditFriendActivity;
-import com.teamtreehouse.ribbit.ui.callbacks.EditableFriendsCallback;
+import com.teamtreehouse.ribbit.ui.callbacks.FriendsCallback;
 import com.teamtreehouse.ribbit.ui.callbacks.FriendsListener;
 import com.teamtreehouse.ribbit.ui.callbacks.InvitesCallback;
 import com.teamtreehouse.ribbit.ui.callbacks.PendingCallback;
@@ -45,11 +45,11 @@ public class FragmentSearch
         SenderListener,
         FragmentUsersView,
         RecipientListener,
-        FriendsListener<UserFriend> {
+        FriendsListener {
 
     private PendingCallback pendingCallback;
     private InvitesCallback invitesCallback;
-    private EditableFriendsCallback editableFriendsCallback;
+    private FriendsCallback friendsCallback;
 
     private HashMap<String, User> friends = new LinkedHashMap<>();
     private HashMap<String, User> invites = new LinkedHashMap<>();
@@ -86,9 +86,11 @@ public class FragmentSearch
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
-        pendingCallback = new PendingCallback(this);
-        invitesCallback = new InvitesCallback(this);
-        editableFriendsCallback = new EditableFriendsCallback(this);
+        User currentUser = Auth.getInstance().getUser();
+
+        pendingCallback = new PendingCallback(currentUser.getId(), this);
+        invitesCallback = new InvitesCallback(currentUser.getId(), this);
+        friendsCallback = new FriendsCallback(currentUser.getId(), this);
     }
 
     @Override
@@ -167,7 +169,7 @@ public class FragmentSearch
                 if(adapter.contains(user)) {
 
                     int position = adapter.getPosition(user);
-                    adapter.changeItem(new UserRequest(user.getId(), user.getEmail(), user.getUsername(), user.getPhotoUrl()), position);
+                    adapter.changeItem(new UserRequest(user), position);
                 }
 
                 friends.remove(userFriend.getId());
@@ -206,12 +208,13 @@ public class FragmentSearch
     @Override
     public void onInviteClick(List<ButtonAction> buttonActions, int position) {
 
+        User currentUser = Auth.getInstance().getUser();
         FragmentSearchAdapter adapter = getAdapter();
         User user = adapter.getItem(position);
 
         for(ButtonAction buttonAction : buttonActions) {
 
-            buttonAction.execute(user);
+            buttonAction.execute(currentUser, user);
         }
     }
 
@@ -241,7 +244,7 @@ public class FragmentSearch
 
                     User user = users.get(0);
                     int position = adapter.getPosition(userInvite);
-                    adapter.changeItem(new UserRequest(user.getId(), user.getEmail(), user.getUsername(), user.getPhotoUrl()), position);
+                    adapter.changeItem(new UserRequest(user), position);
                     invites.remove(userInvite.getId());
                 }
             });

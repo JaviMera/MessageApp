@@ -8,5 +8,5 @@ import com.teamtreehouse.ribbit.models.users.User;
 
 public abstract class ButtonAction {
 
-    public abstract void execute(final User user);
+    public abstract void execute(final User currentUser, final User user);
 }

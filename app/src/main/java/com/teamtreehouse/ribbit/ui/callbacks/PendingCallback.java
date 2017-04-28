@@ -15,10 +15,10 @@ public class PendingCallback implements ChildEventListener {
 
     private final SenderListener listener;
 
-    public PendingCallback(SenderListener listener) {
+    public PendingCallback(String userId, SenderListener listener) {
 
         this.listener = listener;
-        MessageDB.readRecipientInvites(Auth.getInstance().getId(), this);
+        MessageDB.readRecipientInvites(userId, this);
     }
 
     @Override

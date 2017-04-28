@@ -4,26 +4,26 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.teamtreehouse.ribbit.database.MessageDB;
-import com.teamtreehouse.ribbit.models.Auth;
+import com.teamtreehouse.ribbit.models.users.UserFriend;
 
 /**
- * Created by javie on 4/9/2017.
+ * Created by javie on 3/31/2017.
  */
 
-public abstract class FriendsCallback implements ChildEventListener {
+public class FriendsCallback implements ChildEventListener {
 
-    public abstract void add(DataSnapshot snapshot);
-    public abstract void delete(DataSnapshot snapshot);
+    private final FriendsListener listener;
 
-    public FriendsCallback() {
+    public FriendsCallback(String userId, FriendsListener listener) {
 
-        MessageDB.readFriends(Auth.getInstance().getId(), this);
+        MessageDB.readFriends(userId, this);
+        this.listener = listener;
     }
 
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-        add(dataSnapshot);
+        this.listener.onFriendAdded(dataSnapshot.getValue(UserFriend.class));
     }
 
     @Override
@@ -34,7 +34,7 @@ public abstract class FriendsCallback implements ChildEventListener {
     @Override
     public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-        delete(dataSnapshot);
+        this.listener.onFriendRemoved(dataSnapshot.getValue(UserFriend.class));
     }
 
     @Override
