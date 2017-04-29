@@ -16,6 +16,41 @@ public class MessageStorage {
 
     public static final String IMAGES_NODE = "images";
     private static final String VIDEOS_NODE = "videos";
+    public static final String PROFILE_PICTURES_NODE = "profile_pictures";
+
+    public static void updateProfilePicture(String userId, Uri uri, final MultimediaStorageCallback callback) {
+
+        FirebaseStorage
+            .getInstance()
+            .getReference()
+            .child(PROFILE_PICTURES_NODE)
+            .child(userId)
+            .putFile(uri)
+            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+
+                @Override
+                @SuppressWarnings("VisibleForTests")
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                    try {
+
+                        String url = taskSnapshot.getMetadata().getDownloadUrl().toString();
+                        callback.onSuccess(url, "");
+                    }
+                    catch(NullPointerException e) {
+
+                        callback.onFailure(e.getMessage());
+                    }
+                }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                    callback.onFailure(e.getMessage());
+                }
+            });
+    }
 
     public static void insertPicture(String userId, Uri uri, final MultimediaStorageCallback callback) {
 
@@ -53,29 +88,29 @@ public class MessageStorage {
     private static void insertMultimediaFile(String node, String userId, Uri uri, final MultimediaStorageCallback callback) {
 
         FirebaseStorage
-                .getInstance()
-                .getReference()
-                .child(VIDEOS_NODE)
-                .child(userId)
-                .child(uri.getLastPathSegment())
-                .putFile(uri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            .getInstance()
+            .getReference()
+            .child(node)
+            .child(userId)
+            .child(uri.getLastPathSegment())
+            .putFile(uri)
+            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
 
-                    @Override
-                    @SuppressWarnings("VisibleForTests")
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                @Override
+                @SuppressWarnings("VisibleForTests")
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                        String url = taskSnapshot.getMetadata().getDownloadUrl().toString();
-                        String path = taskSnapshot.getMetadata().getPath();
-                        callback.onSuccess(url, path);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
+                    String url = taskSnapshot.getMetadata().getDownloadUrl().toString();
+                    String path = taskSnapshot.getMetadata().getPath();
+                    callback.onSuccess(url, path);
+                }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
 
-                        callback.onFailure();
-                    }
-                });
+                    callback.onFailure(e.getMessage());
+                }
+            });
     }
 }

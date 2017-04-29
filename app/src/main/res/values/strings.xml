@@ -76,4 +76,6 @@
     <string name="fab_label_capture_video">Capture Video</string>
     <string name="edit_text_recipients_hint">To</string>
     <string name="signup_upper_case_error">user name can\'t contain upper case letters.</string>
+    <string name="profile_picture_error_message">Something went wrong. Can\'t update profile picture at the moment</string>
+    <string name="profile_picture_error_title">Unable to update picture</string>
 </resources>

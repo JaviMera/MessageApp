@@ -31,31 +31,22 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.SectionsPagerAdapter;
 import com.teamtreehouse.ribbit.animations.TextViewAlphaIn;
 import com.teamtreehouse.ribbit.animations.TextViewAlphaOut;
 import com.teamtreehouse.ribbit.animations.ViewAnimationCallback;
+import com.teamtreehouse.ribbit.database.MessageDB;
+import com.teamtreehouse.ribbit.database.MessageStorage;
+import com.teamtreehouse.ribbit.database.MultimediaStorageCallback;
+import com.teamtreehouse.ribbit.database.UpdatePictureCallback;
+import com.teamtreehouse.ribbit.dialogs.DialogFragmentError;
 import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.messages.Message;
 import com.teamtreehouse.ribbit.models.users.User;
-import com.teamtreehouse.ribbit.models.users.UserCurrent;
-import com.teamtreehouse.ribbit.models.users.UserRequest;
 import com.teamtreehouse.ribbit.ui.activities.intents.MultimediaResultIntent;
 import com.teamtreehouse.ribbit.models.messages.MultimediaMessage;
 import com.teamtreehouse.ribbit.ui.activities.intents.PictureCaptureResultIntent;
@@ -67,7 +58,6 @@ import com.teamtreehouse.ribbit.animations.FabUp;
 import com.teamtreehouse.ribbit.ui.activities.messages.MessageService;
 import com.teamtreehouse.ribbit.ui.activities.messages.TextMessageActivity;
 import com.teamtreehouse.ribbit.ui.fragments.FragmentPager;
-import com.teamtreehouse.ribbit.ui.fragments.FragmentRecycler;
 import com.teamtreehouse.ribbit.ui.fragments.friends.FragmentFriends;
 import com.teamtreehouse.ribbit.ui.fragments.inbox.FragmentInbox;
 import com.teamtreehouse.ribbit.utils.Animations;
@@ -79,7 +69,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -239,32 +228,20 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
 
                     boolean granted = checkPermissions(PERMISSIONS_STORAGE);
 
+                    // Check if permissions to read/write from/to external storage are granted
                     if(!granted) {
 
+                        // Request permissions to the user
                         requestPermissions(PERMISSIONS_STORAGE);
                         return;
                     }
 
-                    if (isExternalStorageAvailable()) {
-                        // getValue the URI
-
-                        // 1. Get the external storage directory
-                        File mediaStorageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-
-                        // 2. Create a unique file name
-                        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                        String fileName = "IMG_" + timeStamp;
-
-                        try {
-                            File.createTempFile(fileName, ".jpg", mediaStorageDir);
-                            Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST_PROFILE);
-                        } catch (IOException e) {
-
-                            Toast.makeText(MainActivity.this, "Error creating file: " +
-                                    mediaStorageDir.getAbsolutePath() + fileName + ".jpg", Toast.LENGTH_SHORT).show();
-                        }
+                    // Check if an external storage of any type is mounted on the device
+                    if (!isExternalStorageAvailable()) {
+                        return;
                     }
+
+                    launchCameraActivity();
                 }
             });
     }
@@ -319,49 +296,47 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
             if(requestCode == TAKE_PHOTO_REQUEST_PROFILE) {
 
                 final Bitmap picture = (Bitmap) data.getExtras().get("data");
+                final User user = Auth.getInstance().getUser();
                 Uri uri = Uri.parse(FileHelper.getPath(picture, this));
 
-                FirebaseStorage
-                    .getInstance()
-                    .getReference()
-                    .child("profile_pictures")
-                    .child(Auth.getInstance().getId())
-                    .putFile(uri)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        @SuppressWarnings("VisibleForTests")
-                        public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
+                MessageStorage.updateProfilePicture(user.getId(), uri, new MultimediaStorageCallback() {
+                    @Override
+                    public void onSuccess(String url, String path) {
 
-                            final HashMap<String, Object> map = new HashMap<String, Object>();
-                            map.put("photoUrl", taskSnapshot.getMetadata().getDownloadUrl().toString());
-                            FirebaseDatabase
-                                .getInstance()
-                                .getReference()
-                                .child("users")
-                                .orderByChild("username")
-                                .startAt(Auth.getInstance().getUsername())
-                                .endAt(Auth.getInstance().getUsername()+"\uf8ff")
-                                .addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        final HashMap<String, Object> map = new HashMap<String, Object>();
+                        map.put("photoUrl", url);
 
-                                        DataSnapshot result = dataSnapshot
-                                            .getChildren()
-                                            .iterator()
-                                            .next();
+                        MessageDB.updateProfilePicture(user.getUsername(), map, new UpdatePictureCallback() {
+                            @Override
+                            public void onSuccess() {
 
-                                        result.getRef().updateChildren(map);
+                                userProfilePictureView.setImageBitmap(picture);
+                            }
 
-                                        userProfilePictureView.setImageBitmap(picture);
-                                    }
+                            @Override
+                            public void onFailure() {
 
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
+                                DialogFragmentError dialog = DialogFragmentError.newInstance(
+                                    getString(R.string.profile_picture_error_message),
+                                    getString(R.string.profile_picture_error_title)
+                                );
 
-                                    }
-                                });
-                        }
-                    });
+                                dialog.show(getSupportFragmentManager(), "error_dialog");
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+
+                        DialogFragmentError dialog = DialogFragmentError.newInstance(
+                                getString(R.string.profile_picture_error_message),
+                                getString(R.string.profile_picture_error_title)
+                        );
+
+                        dialog.show(getSupportFragmentManager(), "error_dialog");
+                    }
+                });
             }
             else {
 
@@ -400,6 +375,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         switch (item.getItemId()) {
 
             case R.id.action_logout:
+
+                FirebaseAuth
+                    .getInstance()
+                    .signOut();
+
                 navigateToLogin();
                 break;
         }
@@ -409,13 +389,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     @Override
     protected void onStop() {
         super.onStop();
-
-        if (isFinishing()) {
-
-            FirebaseAuth
-                .getInstance()
-                .signOut();
-        }
     }
 
     @Override
@@ -474,24 +447,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         this.hideFabMenu();
         this.setFabIcon(R.mipmap.ic_message);
         if (isExternalStorageAvailable()) {
-            // getValue the URI
 
-            // 1. Get the external storage directory
-            File mediaStorageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-
-            // 2. Create a unique file name
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-            String fileName = "IMG_" + timeStamp;
-
-            try {
-                File.createTempFile(fileName, ".jpg", mediaStorageDir);
-                Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST_MESSAGE);
-            } catch (IOException e) {
-
-                Toast.makeText(this, "Error creating file: " +
-                        mediaStorageDir.getAbsolutePath() + fileName + ".jpg", Toast.LENGTH_SHORT).show();
-            }
+           launchCameraActivity();
         }
     }
 
@@ -632,6 +589,26 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         return true;
+    }
+
+    private void launchCameraActivity() {
+
+        // 1. Get the external storage directory
+        File mediaStorageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+        // 2. Create a unique file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String fileName = "IMG_" + timeStamp;
+
+        try {
+            File.createTempFile(fileName, ".jpg", mediaStorageDir);
+            Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST_PROFILE);
+        } catch (IOException e) {
+
+            Toast.makeText(MainActivity.this, "Error creating file: " +
+                    mediaStorageDir.getAbsolutePath() + fileName + ".jpg", Toast.LENGTH_SHORT).show();
+        }
     }
 }
 

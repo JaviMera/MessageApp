@@ -64,7 +64,7 @@ public class ImageMessageService extends MessageService {
                 }
 
                 @Override
-                public void onFailure() {
+                public void onFailure(String message) {
 
                 }
             });

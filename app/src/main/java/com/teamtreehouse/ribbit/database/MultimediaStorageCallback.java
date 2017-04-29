@@ -9,5 +9,5 @@ import com.google.firebase.storage.UploadTask;
 public interface MultimediaStorageCallback {
 
     void onSuccess(String url, String path);
-    void onFailure();
+    void onFailure(String message);
 }

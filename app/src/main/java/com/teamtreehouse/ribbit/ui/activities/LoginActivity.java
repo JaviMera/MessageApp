@@ -10,11 +10,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.dialogs.DialogFragmentError;
@@ -55,6 +60,16 @@ public class LoginActivity extends AppCompatActivity implements DialogInterface.
         setSupportActionBar(mToolbar);
 
         mProgressBar.setVisibility(View.INVISIBLE);
+
+        FirebaseUser user = FirebaseAuth
+            .getInstance()
+            .getCurrentUser();
+
+        if(user != null) {
+
+            String username = user.getEmail().split("@")[0];
+            login(username);
+        }
     }
 
     @OnClick(R.id.signUpText)
@@ -122,48 +137,32 @@ public class LoginActivity extends AppCompatActivity implements DialogInterface.
                     }
                     else{
 
-                        MessageDB.readUser(usernameTemp, new UserReadCallback() {
-
-                            @Override
-                            public void onUserRead(List<User> user) {
-
-                                Auth.getInstance().setUser(user.get(0));
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
-                            }
-                        });
+                        login(usernameTemp);
                     }
 
                 }
             });
-//        ObsoleteUser.logInInBackground(username, password, new LogInCallback() {
-//            @Override
-//            public void done(ObsoleteUser usernameText, Exception e) {
-//
-//                mProgressBar.setVisibility(View.INVISIBLE);
-//
-//                if (e == null) {
-//                    // Success!
-//                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                    startActivity(intent);
-//                } else {
-//
-//                    DialogFragmentError dialog = DialogFragmentError.newInstance(
-//                        e.getMessage(),
-//                        getString(R.string.login_error_title));
-//
-//                    dialog.show(getSupportFragmentManager(), "dialog_error");
-//                }
-//            }
-//        });
     }
 
     @Override
     public void onClick(DialogInterface dialogInterface, int i) {
 
+    }
+
+    private void login(String username) {
+
+        MessageDB.readUser(username, new UserReadCallback() {
+
+            @Override
+            public void onUserRead(List<User> user) {
+
+                Auth.getInstance().setUser(user.get(0));
+
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+        });
     }
 }

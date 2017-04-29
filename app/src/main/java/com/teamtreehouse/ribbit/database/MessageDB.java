@@ -11,6 +11,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
+import com.teamtreehouse.ribbit.models.Auth;
 import com.teamtreehouse.ribbit.models.messages.ImageMessage;
 import com.teamtreehouse.ribbit.models.messages.MultimediaMessage;
 import com.teamtreehouse.ribbit.models.messages.TextMessage;
@@ -430,6 +431,50 @@ public class MessageDB {
     public static void deleteVideoMessage(String userId, final VideoMessage message, final DeleteMultimediaFileCallback callback) {
 
         deleteMultimediaMessage(userId, VIDEOS_NODE, message, callback);
+    }
+
+    public static void updateProfilePicture(String userId, final HashMap<String, Object> map, final UpdatePictureCallback callback) {
+
+        FirebaseDatabase
+            .getInstance()
+            .getReference()
+            .child(USERS_NODE)
+            .orderByChild(USERNAME_PROP)
+            .startAt(userId)
+            .endAt(userId+"\uf8ff")
+            .addListenerForSingleValueEvent(new ValueEventListener(){
+
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    dataSnapshot
+                        .getChildren()
+                        .iterator()
+                        .next()
+                        .getRef()
+                        .updateChildren(map)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+
+                                callback.onSuccess();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+                                callback.onFailure();
+                            }
+                        });
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                    callback.onFailure();
+                }
+            });
     }
 
     private static void deleteMultimediaMessage(String userId, String node, final MultimediaMessage message, final DeleteMultimediaFileCallback callback) {
