@@ -45,7 +45,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public abstract class MessageActivity extends AppCompatActivity implements MessageActivityView {
+public abstract class MessageActivity extends AppCompatActivity implements MessageActivityView, TextWatcher {
+
+    protected abstract int getHint();
 
     @BindView(R.id.root)
     RelativeLayout rootLayout;
@@ -97,66 +99,20 @@ public abstract class MessageActivity extends AppCompatActivity implements Messa
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         progressBar.getIndeterminateDrawable().setColorFilter(
-                ContextCompat.getColor(this, R.color.apptheme_color),
-                PorterDuff.Mode.SRC_IN
+            ContextCompat.getColor(this, R.color.apptheme_color),
+            PorterDuff.Mode.SRC_IN
         );
 
         this.presenter.setSendImageVisibility(View.INVISIBLE);
         this.presenter.setMessageEditTextVisibility(View.INVISIBLE);
+        this.recipientsEditText.addTextChangedListener(this);
 
-        recipientsEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                String input = String
-                    .valueOf(charSequence)
-                    .toLowerCase();
-
-                final FragmentSuggestionsView fragment = findFragmentById(R.id.suggestionsContainer);
-
-                if (input.isEmpty()) {
-
-                    // Pass in an empty list of users, when an empty string is typed in the search view
-                    fragment.setItems(new LinkedList<User>());
-                    return;
-                }
-
-                MessageDB.filterFriends(Auth.getInstance().getId(), input, new UserReadCallback() {
-
-                    @Override
-                    public void onUserRead(List<User> user) {
-
-                        // After getting the filtered friends, check if any of the results contains
-                        // recipients that the user may have already added.
-                        for(User recipient : recipients) {
-
-                            if(user.contains(recipient)) {
-
-                                // If the new set of results contains a recipient, then remove it
-                                // as we don't want to give the option to add the same user twice.
-                                user.remove(recipient);
-                            }
-                        }
-
-                        fragment.setItems(user);
-                    }
-                });
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
+        this.messageEditText.setHint(getHint());
 
         replaceFragment(R.id.recipientsContainer, FragmentRecipient.newInstance());
         replaceFragment(R.id.suggestionsContainer, FragmentSuggestions.newInstance());
     }
+
 
     @Override
     protected void onResume() {
@@ -260,5 +216,54 @@ public abstract class MessageActivity extends AppCompatActivity implements Messa
     public void setMessageEditTextAnimation(Animation anim) {
 
         this.messageEditText.setAnimation(anim);
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        String input = String
+            .valueOf(charSequence)
+            .toLowerCase()
+            .trim();
+
+        final FragmentSuggestionsView fragment = findFragmentById(R.id.suggestionsContainer);
+
+        if (input.isEmpty()) {
+
+            // Pass in an empty list of users, when an empty string is typed in the search view
+            fragment.setItems(new LinkedList<User>());
+            return;
+        }
+
+        MessageDB.filterFriends(Auth.getInstance().getId(), input, new UserReadCallback() {
+
+            @Override
+            public void onUserRead(List<User> user) {
+
+                // After getting the filtered friends, check if any of the results contains
+                // recipients that the user may have already added.
+                for(User recipient : recipients) {
+
+                    if(user.contains(recipient)) {
+
+                        // If the new set of results contains a recipient, then remove it
+                        // as we don't want to give the option to add the same user twice.
+                        user.remove(recipient);
+                    }
+                }
+
+                fragment.setItems(user);
+            }
+        });
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+
     }
 }

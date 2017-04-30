@@ -18,9 +18,9 @@ public abstract class MultimediaMessage extends Message {
         super();
     }
 
-    public MultimediaMessage(String id, String username, String displayName, String url, String path, long date) {
+    public MultimediaMessage(String id, String username, String displayName, String text, String url, String path, long date) {
 
-        super(id, username, displayName, date);
+        super(id, username, displayName, text, date);
         this.url = url;
         this.path = path;
     }

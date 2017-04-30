@@ -33,6 +33,12 @@ import butterknife.OnClick;
 public class TextMessageActivity extends MessageActivity {
 
     @Override
+    protected int getHint() {
+
+        return R.string.text_message_hint;
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 

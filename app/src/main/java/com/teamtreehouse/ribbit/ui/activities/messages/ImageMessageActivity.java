@@ -26,6 +26,12 @@ import butterknife.OnClick;
 public class ImageMessageActivity extends MessageActivity {
 
     @Override
+    protected int getHint() {
+
+        return R.string.image_message_hint;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -43,6 +49,7 @@ public class ImageMessageActivity extends MessageActivity {
         Uri pictureUri = fragment.getValue();
 
         Intent serviceIntent = new Intent(this, ImageMessageService.class);
+        serviceIntent.putExtra("text", this.messageEditText.getText().toString());
         serviceIntent.putExtra(ImageMessage.KEY, pictureUri);
         serviceIntent.putParcelableArrayListExtra(User.KEY, new ArrayList<>(this.recipients));
         startService(serviceIntent);

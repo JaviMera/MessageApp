@@ -26,6 +26,7 @@ public class VideoMessageService extends MessageService {
     @Override
     protected void handle(Intent intent) {
 
+        final String text = intent.getStringExtra("text");
         Uri videoUri = intent.getParcelableExtra(VideoMessage.KEY);
         final ArrayList<User> recipients = intent.getParcelableArrayListExtra(User.KEY);
 
@@ -37,12 +38,13 @@ public class VideoMessageService extends MessageService {
                 public void onSuccess(String url, String path) {
 
                     VideoMessage message = new VideoMessage(
-                            UUID.randomUUID().toString(),
-                            Auth.getInstance().getUsername(),
-                            Auth.getInstance().getDisplayName(),
-                            url,
-                            path,
-                            new Date().getTime()
+                        UUID.randomUUID().toString(),
+                        Auth.getInstance().getUsername(),
+                        Auth.getInstance().getDisplayName(),
+                        text,
+                        url,
+                        path,
+                        new Date().getTime()
                     );
 
 

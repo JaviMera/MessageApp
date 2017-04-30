@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -36,6 +37,9 @@ public class ViewImageMessageFragment extends ViewFragmentMessage implements Vie
 
     @BindView(R.id.imageView)
     ImageView image;
+
+    @BindView(R.id.textView)
+    TextView text;
 
     private ImageMessage message;
 
@@ -71,6 +75,8 @@ public class ViewImageMessageFragment extends ViewFragmentMessage implements Vie
 
                     Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                     image.setImageBitmap(bitmap);
+                    text.setText(message.getText());
+
                     parent.setProgressbarVisibility(View.GONE);
                     parent.setCardViewVisibility(View.VISIBLE);
                     parent.start();

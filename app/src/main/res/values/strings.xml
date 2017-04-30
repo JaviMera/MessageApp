@@ -87,4 +87,7 @@
     <string name="image_type">image/*</string>
     <string name="picture_file_name">IMG_</string>
     <string name="picture_file_format">.jpg</string>
+    <string name="image_message_hint">Add caption...</string>
+    <string name="video_message_hint">Add caption...</string>
+    <string name="text_message_hint">Type message...</string>
 </resources>

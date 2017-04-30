@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -38,6 +39,9 @@ public class ViewVideoMessageFragment extends ViewFragmentMessage implements Vie
     @BindView(R.id.videoView)
     VideoView videoView;
 
+    @BindView(R.id.textView)
+    TextView text;
+
     private VideoMessage message;
 
     public static ViewVideoMessageFragment newInstance(VideoMessage message) {
@@ -54,7 +58,7 @@ public class ViewVideoMessageFragment extends ViewFragmentMessage implements Vie
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        final View view = inflater.inflate(R.layout.fragment_video_message, container, false);
+        final View view = inflater.inflate(R.layout.fragment_view_video, container, false);
 
         ButterKnife.bind(this, view);
         message = getArguments().getParcelable(Message.KEY);
@@ -74,6 +78,8 @@ public class ViewVideoMessageFragment extends ViewFragmentMessage implements Vie
                     @Override
                     @SuppressWarnings("VisibleForTests")
                     public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+
+                        text.setText(message.getText());
 
                         Uri uri = Uri.fromFile(file);
                         videoView.setVideoURI(uri);

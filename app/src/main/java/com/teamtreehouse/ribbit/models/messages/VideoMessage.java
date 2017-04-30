@@ -11,8 +11,8 @@ public class VideoMessage extends MultimediaMessage {
 
     public VideoMessage(){}
 
-    public VideoMessage(String id, String username, String displayName, String url, String path, long time){
-        super(id, username, displayName, url, path, time);
+    public VideoMessage(String id, String username, String displayName, String text, String url, String path, long time){
+        super(id, username, displayName, text, url, path, time);
     }
 
     public static final Parcelable.Creator<VideoMessage> CREATOR = new Parcelable.Creator<VideoMessage>() {

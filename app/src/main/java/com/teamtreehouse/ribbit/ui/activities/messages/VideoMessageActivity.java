@@ -22,6 +22,12 @@ import butterknife.OnClick;
 public class VideoMessageActivity extends MessageActivity {
 
     @Override
+    protected int getHint() {
+
+        return R.string.video_message_hint;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -42,6 +48,7 @@ public class VideoMessageActivity extends MessageActivity {
         Uri videoUri = fragment.getValue();
 
         Intent intent = new Intent(this, VideoMessageService.class);
+        intent.putExtra("text", messageEditText.getText().toString());
         intent.putExtra(VideoMessage.KEY, videoUri);
         intent.putParcelableArrayListExtra(User.KEY, new ArrayList<>(this.recipients));
         startService(intent);

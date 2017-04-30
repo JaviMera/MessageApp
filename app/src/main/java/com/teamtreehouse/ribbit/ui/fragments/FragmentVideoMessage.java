@@ -46,8 +46,9 @@ public class FragmentVideoMessage extends FragmentMessage<Uri> {
         this.value = getArguments().getParcelable(MultimediaMessage.KEY);
 
         this.videoView.setVideoURI(this.value);
-        this.videoView.start();
 
+        // Set the preview image of the video
+        this.videoView.seekTo(100);
         return view;
     }
 }

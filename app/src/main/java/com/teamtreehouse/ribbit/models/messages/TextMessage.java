@@ -8,8 +8,6 @@ import android.os.Parcel;
 
 public class TextMessage extends Message {
 
-    private String text;
-
     public TextMessage(){
 
         super();
@@ -17,14 +15,11 @@ public class TextMessage extends Message {
 
     public TextMessage(String id, String username, String displayName, String text, long date) {
 
-        super(id, username, displayName, date);
-        this.text = text;
+        super(id, username, displayName, text, date);
     }
 
     protected TextMessage(Parcel in) {
         super(in);
-
-        this.text = in.readString();
     }
 
     public static final Creator<TextMessage> CREATOR = new Creator<TextMessage>() {
@@ -39,20 +34,8 @@ public class TextMessage extends Message {
         }
     };
 
-    public String getText() {
-        return text;
-    }
-
     @Override
     public int describeContents() {
         return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-
-        super.writeToParcel(parcel,i);
-
-        parcel.writeString(text);
     }
 }
