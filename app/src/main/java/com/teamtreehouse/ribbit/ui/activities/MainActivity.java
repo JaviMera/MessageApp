@@ -45,6 +45,10 @@ import com.teamtreehouse.ribbit.database.MultimediaStorageCallback;
 import com.teamtreehouse.ribbit.database.UpdatePictureCallback;
 import com.teamtreehouse.ribbit.dialogs.DialogFragmentError;
 import com.teamtreehouse.ribbit.models.Auth;
+import com.teamtreehouse.ribbit.models.CameraActivityInfo;
+import com.teamtreehouse.ribbit.models.CaptureVideoInfo;
+import com.teamtreehouse.ribbit.models.MessagePicture;
+import com.teamtreehouse.ribbit.models.ProfilePicture;
 import com.teamtreehouse.ribbit.models.messages.Message;
 import com.teamtreehouse.ribbit.models.users.User;
 import com.teamtreehouse.ribbit.ui.activities.intents.MultimediaResultIntent;
@@ -69,13 +73,21 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainActivity extends AppCompatActivity implements MainActivityView, ViewPager.OnPageChangeListener, NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity
+    extends
+        AppCompatActivity
+    implements
+        MainActivityView,
+        ViewPager.OnPageChangeListener,
+        NavigationView.OnNavigationItemSelectedListener {
 
     public static final int ITEM_SELECT_CODE = 1000;
     private static int[] fabIcons = new int[]{
@@ -241,7 +253,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                         return;
                     }
 
-                    launchCameraActivity();
+                    launchCameraActivity(new ProfilePicture(MainActivity.this));
                 }
             });
     }
@@ -355,7 +367,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
 
         // Set these flags to finish any other tasks that are related to Main Activity
         // This way when login fragment is launched, there is no previous fragment to go back to,
-        // and this exiting the app by pressing the back button.
+        // and this exiting the app by pressing the back loginButton.
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
@@ -437,7 +449,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         this.setFabIcon(R.mipmap.ic_message);
 
         Intent choosePhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
-        choosePhotoIntent.setType("image/*");
+        choosePhotoIntent.setType(getString(R.string.image_type));
         startActivityForResult(choosePhotoIntent, MainActivity.PICK_PHOTO_REQUEST);
     }
 
@@ -448,7 +460,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         this.setFabIcon(R.mipmap.ic_message);
         if (isExternalStorageAvailable()) {
 
-           launchCameraActivity();
+           launchCameraActivity(new MessagePicture(this));
         }
     }
 
@@ -458,8 +470,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         this.hideFabMenu();
         this.setFabIcon(R.mipmap.ic_message);
         Intent chooseVideoIntent = new Intent(Intent.ACTION_GET_CONTENT);
-        chooseVideoIntent.setType("video/*");
-        Toast.makeText(MainActivity.this, R.string.video_file_size_warning, Toast.LENGTH_LONG).show();
+        chooseVideoIntent.setType(getString(R.string.video_type));
         startActivityForResult(chooseVideoIntent, PICK_VIDEO_REQUEST);
     }
 
@@ -469,28 +480,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         this.hideFabMenu();
         this.setFabIcon(R.mipmap.ic_message);
         if (isExternalStorageAvailable()) {
-            // getValue the URI
 
-            // 1. Get the external storage directory
-            File mediaStorageDir = getExternalFilesDir(Environment.DIRECTORY_MOVIES);
-
-            // 2. Create a unique file name
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-            String fileName = "VID_" + timeStamp;
-
-            try {
-                File.createTempFile(fileName, ".mp4", mediaStorageDir);
-
-                // 4. Return the file's URI
-                Intent videoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-                videoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 15);
-                videoIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0); // 0 = lowest res
-                startActivityForResult(videoIntent, TAKE_VIDEO_REQUEST);
-            } catch (IOException e) {
-
-                Toast.makeText(this, "Error creating file: " +
-                        mediaStorageDir.getAbsolutePath() + fileName + ".mp4", Toast.LENGTH_SHORT).show();
-            }
+            launchCameraActivity(new CaptureVideoInfo(this));
         }
     }
 
@@ -591,23 +582,33 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         return true;
     }
 
-    private void launchCameraActivity() {
+    private void launchCameraActivity(CameraActivityInfo info) {
 
         // 1. Get the external storage directory
-        File mediaStorageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File mediaStorageDir = info.getDir();
 
         // 2. Create a unique file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String fileName = "IMG_" + timeStamp;
+        String timeStamp = new SimpleDateFormat(
+            info.getTimestamp(),
+            Locale.ENGLISH).format(new Date()
+        );
+
+        String fileName = info.getFileName() + timeStamp;
 
         try {
-            File.createTempFile(fileName, ".jpg", mediaStorageDir);
-            Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST_PROFILE);
+            File.createTempFile(fileName, info.getFileFormat(), mediaStorageDir);
+            Intent intent = info.createIntent();
+            intent.setAction(info.getAction());
+
+            startActivityForResult(intent, info.getRequestCode());
         } catch (IOException e) {
 
-            Toast.makeText(MainActivity.this, "Error creating file: " +
-                    mediaStorageDir.getAbsolutePath() + fileName + ".jpg", Toast.LENGTH_SHORT).show();
+            Toast
+                .makeText(
+                    MainActivity.this,
+                    "Error creating file: " + mediaStorageDir.getAbsolutePath() + fileName + info.getFileFormat(),
+                    Toast.LENGTH_SHORT)
+                .show();
         }
     }
 }

@@ -78,4 +78,13 @@
     <string name="signup_upper_case_error">user name can\'t contain upper case letters.</string>
     <string name="profile_picture_error_message">Something went wrong. Can\'t update profile picture at the moment</string>
     <string name="profile_picture_error_title">Unable to update picture</string>
+    <string name="account_domain">\@messageApp</string>
+    <string name="account_extension">.com</string>
+    <string name="video_type">video/*</string>
+    <string name="timestamp">yyyyMMdd_HHmmss</string>
+    <string name="video_file_name">VID_</string>
+    <string name="video_file_format">.mp4</string>
+    <string name="image_type">image/*</string>
+    <string name="picture_file_name">IMG_</string>
+    <string name="picture_file_format">.jpg</string>
 </resources>

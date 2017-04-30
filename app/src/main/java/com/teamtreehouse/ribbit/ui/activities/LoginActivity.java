@@ -10,16 +10,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GetTokenResult;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.database.MessageDB;
 import com.teamtreehouse.ribbit.dialogs.DialogFragmentError;
@@ -33,22 +29,22 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class LoginActivity extends AppCompatActivity implements DialogInterface.OnClickListener {
+public class LoginActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
-    protected Toolbar mToolbar;
+    protected Toolbar toolbar;
 
     @BindView(R.id.loginProgressBar)
-    protected ProgressBar mProgressBar;
+    protected ProgressBar progressBar;
 
     @BindView(R.id.usernameField)
-    protected EditText mUsername;
+    protected EditText usernameEditText;
 
     @BindView(R.id.passwordField)
-    protected EditText mPassword;
+    protected EditText passwordEditText;
 
     @BindView(R.id.loginButton)
-    Button button;
+    Button loginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +53,9 @@ public class LoginActivity extends AppCompatActivity implements DialogInterface.
 
         ButterKnife.bind(this);
 
-        setSupportActionBar(mToolbar);
+        setSupportActionBar(toolbar);
 
-        mProgressBar.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.INVISIBLE);
 
         FirebaseUser user = FirebaseAuth
             .getInstance()
@@ -67,7 +63,10 @@ public class LoginActivity extends AppCompatActivity implements DialogInterface.
 
         if(user != null) {
 
+            // Get the name part from the email
             String username = user.getEmail().split("@")[0];
+
+            // Login the user
             login(username);
         }
     }
@@ -82,17 +81,16 @@ public class LoginActivity extends AppCompatActivity implements DialogInterface.
     @OnClick(R.id.loginButton)
     public void onLoginClick(View view) {
 
-        String username = mUsername
+        String username = usernameEditText
             .getText()
             .toString()
-            .toLowerCase();
+            .toLowerCase()
+            .trim();
 
-        String password = mPassword
+        String password = passwordEditText
             .getText()
-            .toString();
-
-        username = username.trim();
-        password = password.trim();
+            .toString()
+            .trim();
 
         if (username.isEmpty()) {
 
@@ -116,16 +114,22 @@ public class LoginActivity extends AppCompatActivity implements DialogInterface.
         }
 
         // Login
-        mProgressBar.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
         final String usernameTemp = username;
+        String domain = getString(R.string.account_domain);
+        String extension = getString(R.string.account_extension);
+
         FirebaseAuth
             .getInstance()
-            .signInWithEmailAndPassword(username + "@harambe.com", password)
+            .signInWithEmailAndPassword(
+                username + domain + extension,
+                password
+            )
             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
 
-                    mProgressBar.setVisibility(View.INVISIBLE);
+                    progressBar.setVisibility(View.INVISIBLE);
 
                     if(!task.isSuccessful()) {
 
@@ -144,11 +148,6 @@ public class LoginActivity extends AppCompatActivity implements DialogInterface.
             });
     }
 
-    @Override
-    public void onClick(DialogInterface dialogInterface, int i) {
-
-    }
-
     private void login(String username) {
 
         MessageDB.readUser(username, new UserReadCallback() {
@@ -156,6 +155,7 @@ public class LoginActivity extends AppCompatActivity implements DialogInterface.
             @Override
             public void onUserRead(List<User> user) {
 
+                // Store the current user logged in as a singleton
                 Auth.getInstance().setUser(user.get(0));
 
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);

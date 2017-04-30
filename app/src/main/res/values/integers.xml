@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="message_take_picture_request">0</integer>
+    <integer name="message_take_video_request">1</integer>
+    <integer name="message_pick_picture_request">2</integer>
+    <integer name="message_pick_video_request">3</integer>
+    <integer name="profile_take_picture_request">4</integer>
+</resources>

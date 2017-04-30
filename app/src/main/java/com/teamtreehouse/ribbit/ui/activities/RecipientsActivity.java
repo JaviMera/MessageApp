@@ -49,7 +49,7 @@ public class RecipientsActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.user_grid);
-        // Show the Up button in the action bar.
+        // Show the Up loginButton in the action bar.
         setupActionBar();
 
 //        mGridView = (GridView) findViewById(R.id.friendsGrid);
@@ -129,8 +129,8 @@ public class RecipientsActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                // This ID represents the Home or Up button. In the case of this
-                // fragment, the Up button is shown. Use NavUtils to allow users
+                // This ID represents the Home or Up loginButton. In the case of this
+                // fragment, the Up loginButton is shown. Use NavUtils to allow users
                 // to navigate up one level in the application structure. For
                 // more details, see the Navigation pattern on Android Design:
                 //

@@ -92,13 +92,18 @@ public class SignUpActivity extends AppCompatActivity implements UserInsertCallb
         }
         else {
 
-            FirebaseAuth auth = FirebaseAuth.getInstance();
             final String email = emailView.getText().toString();
             final String username = usernameView.getText().toString();
+            String domain = getString(R.string.account_domain);
+            String extension = getString(R.string.account_extension);
             final String password = passwordView.getText().toString();
 
-            auth
-                .createUserWithEmailAndPassword(username + "@harambe.com", password)
+            FirebaseAuth
+                .getInstance()
+                .createUserWithEmailAndPassword(
+                    username + domain + extension,
+                    password
+                )
                 .addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
