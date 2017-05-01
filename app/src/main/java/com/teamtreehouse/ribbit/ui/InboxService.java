@@ -5,6 +5,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.IntDef;
@@ -65,10 +67,12 @@ public class InboxService extends Service implements MessageListener {
         Intent intent = null;
         PendingIntent pendingIntent = null;
         boolean vibrate = false;
+        Uri soundUri = null;
         if(this.withPendingIntent) {
 
             intent = new Intent(this, LoginActivity.class);
             pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+            soundUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.bullfrog);
             vibrate = true;
         }
 
@@ -77,6 +81,7 @@ public class InboxService extends Service implements MessageListener {
             .setContentText("You have new Messages!")
             .setSmallIcon(R.mipmap.ic_launcher)
             .setAutoCancel(true)
+            .setSound(soundUri)
             .setContentIntent(pendingIntent);
 
         if(vibrate) {
