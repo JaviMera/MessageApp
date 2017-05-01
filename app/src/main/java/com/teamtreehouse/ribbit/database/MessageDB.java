@@ -63,8 +63,16 @@ public class MessageDB {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    final User user = dataSnapshot.getChildren().iterator().next().getValue(UserCurrent.class);
-                    userReadCallback.onUserRead(new LinkedList<User>(){{add(user);}});
+                    for(DataSnapshot ds : dataSnapshot.getChildren()) {
+
+                        final User user = ds.getValue(UserCurrent.class);
+
+                        if(user.getUsername().equals(username)) {
+
+                            userReadCallback.onUserRead(new LinkedList<User>(){{add(user);}});
+                            break;
+                        }
+                    }
                 }
 
                 @Override

@@ -125,7 +125,8 @@ public class EditFriendActivity extends AppCompatActivity implements DialogInter
     @Override
     public void onClick(DialogInterface dialogInterface, int i) {
 
-        MessageDB.deleteFriend(Auth.getInstance().getUser(), friend, new DeleteFriendCallback() {
+        final User user = Auth.getInstance().getUser();
+        MessageDB.deleteFriend(user, friend, new DeleteFriendCallback() {
             @Override
             public void onDeleteFriend() {
 

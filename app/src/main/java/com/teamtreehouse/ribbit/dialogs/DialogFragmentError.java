@@ -2,6 +2,8 @@ package com.teamtreehouse.ribbit.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -14,6 +16,7 @@ public class DialogFragmentError extends DialogFragment {
 
     public static final String DIALOG_ERROR_MESSAGE_KEY = "dialog_message";
     public static final String DIALOG_ERROR_TITLE_KEY = "dialog_title";
+    private DialogInterface.OnClickListener listener;
 
     public static DialogFragmentError newInstance(String message, String title) {
 
@@ -24,6 +27,12 @@ public class DialogFragmentError extends DialogFragment {
         dialogFragment.setArguments(bundle);
 
         return dialogFragment;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.listener = (DialogInterface.OnClickListener) context;
     }
 
     @NonNull
@@ -40,7 +49,7 @@ public class DialogFragmentError extends DialogFragment {
             .Builder(getContext())
             .setMessage(message)
             .setTitle(title)
-            .setPositiveButton(android.R.string.ok, null)
+            .setPositiveButton(android.R.string.ok, listener)
             .create();
     }
 }

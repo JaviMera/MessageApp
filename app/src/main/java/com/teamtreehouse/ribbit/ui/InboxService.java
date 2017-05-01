@@ -64,22 +64,28 @@ public class InboxService extends Service implements MessageListener {
 
         Intent intent = null;
         PendingIntent pendingIntent = null;
-
+        boolean vibrate = false;
         if(this.withPendingIntent) {
 
             intent = new Intent(this, LoginActivity.class);
             pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+            vibrate = true;
         }
 
-        Notification notification = new Notification.Builder(this)
+        Notification.Builder notification = new Notification.Builder(this)
             .setContentTitle("Ribbit")
             .setContentText("You have new Messages!")
             .setSmallIcon(R.mipmap.ic_launcher)
             .setAutoCancel(true)
-            .setContentIntent(pendingIntent)
-            .build();
+            .setContentIntent(pendingIntent);
 
-        this.manager.notify(0, notification);
+        if(vibrate) {
+
+            notification.setDefaults(Notification.DEFAULT_VIBRATE);
+            notification.setPriority(Notification.PRIORITY_HIGH);
+        }
+
+        this.manager.notify(0, notification.build());
     }
 
     @Override

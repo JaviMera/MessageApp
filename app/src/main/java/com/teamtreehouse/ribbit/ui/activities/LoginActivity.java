@@ -29,7 +29,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity
+    extends
+        AppCompatActivity
+    implements
+        DialogInterface.OnClickListener {
 
     @BindView(R.id.toolbar)
     protected Toolbar toolbar;
@@ -57,6 +61,8 @@ public class LoginActivity extends AppCompatActivity {
 
         progressBar.setVisibility(View.INVISIBLE);
 
+        loginButton.setEnabled(true);
+
         FirebaseUser user = FirebaseAuth
             .getInstance()
             .getCurrentUser();
@@ -80,6 +86,8 @@ public class LoginActivity extends AppCompatActivity {
 
     @OnClick(R.id.loginButton)
     public void onLoginClick(View view) {
+
+        loginButton.setEnabled(false);
 
         String username = usernameEditText
             .getText()
@@ -138,6 +146,8 @@ public class LoginActivity extends AppCompatActivity {
                             getString(R.string.login_error_title));
 
                         dialog.show(getSupportFragmentManager(), "dialog_error");
+
+                        loginButton.setEnabled(true);
                     }
                     else{
 
@@ -164,5 +174,10 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public void onClick(DialogInterface dialogInterface, int i) {
+
     }
 }
