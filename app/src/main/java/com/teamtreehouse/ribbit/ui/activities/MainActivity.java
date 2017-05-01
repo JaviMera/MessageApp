@@ -105,12 +105,6 @@ public class MainActivity
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
 
-    public static final int TAKE_PHOTO_REQUEST_MESSAGE = 0;
-    public static final int TAKE_VIDEO_REQUEST = 1;
-    public static final int PICK_PHOTO_REQUEST = 2;
-    public static final int PICK_VIDEO_REQUEST = 3;
-    public static final int TAKE_PHOTO_REQUEST_PROFILE = 4;
-
     private HashMap<Integer, MultimediaResultIntent> intentTypes;
     private CircleImageView userProfilePictureView;
     private TextView usernameTextView;
@@ -197,10 +191,10 @@ public class MainActivity
         setContentView(R.layout.activity_main);
 
         this.intentTypes = new HashMap<>();
-        this.intentTypes.put(PICK_PHOTO_REQUEST, new PicturePickResultIntent());
-        this.intentTypes.put(PICK_VIDEO_REQUEST, new VideoPickResultIntent());
-        this.intentTypes.put(TAKE_PHOTO_REQUEST_MESSAGE, new PictureCaptureResultIntent());
-        this.intentTypes.put(TAKE_VIDEO_REQUEST, new VideoCaptureResultIntent());
+        this.intentTypes.put(getResources().getInteger(R.integer.message_pick_picture_request), new PicturePickResultIntent());
+        this.intentTypes.put(getResources().getInteger(R.integer.message_pick_video_request), new VideoPickResultIntent());
+        this.intentTypes.put(getResources().getInteger(R.integer.message_take_picture_request), new PictureCaptureResultIntent());
+        this.intentTypes.put(getResources().getInteger(R.integer.message_take_video_request), new VideoCaptureResultIntent());
 
         ButterKnife.bind(this);
 
@@ -340,7 +334,7 @@ public class MainActivity
 
         if (resultCode == RESULT_OK) {
 
-            if(requestCode == TAKE_PHOTO_REQUEST_PROFILE) {
+            if(requestCode == getResources().getInteger(R.integer.profile_take_picture_request)) {
 
                 final Bitmap picture = (Bitmap) data.getExtras().get("data");
                 final User user = Auth.getInstance().getUser();
@@ -496,7 +490,7 @@ public class MainActivity
 
         Intent choosePhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
         choosePhotoIntent.setType(getString(R.string.image_type));
-        startActivityForResult(choosePhotoIntent, MainActivity.PICK_PHOTO_REQUEST);
+        startActivityForResult(choosePhotoIntent, getResources().getInteger(R.integer.message_pick_picture_request));
     }
 
     @OnClick(R.id.fabCapturePictureMessage)
@@ -517,7 +511,7 @@ public class MainActivity
         this.setFabIcon(R.mipmap.ic_message);
         Intent chooseVideoIntent = new Intent(Intent.ACTION_GET_CONTENT);
         chooseVideoIntent.setType(getString(R.string.video_type));
-        startActivityForResult(chooseVideoIntent, PICK_VIDEO_REQUEST);
+        startActivityForResult(chooseVideoIntent, getResources().getInteger(R.integer.message_pick_video_request));
     }
 
     @OnClick(R.id.fabCaptureVideoMessage)
