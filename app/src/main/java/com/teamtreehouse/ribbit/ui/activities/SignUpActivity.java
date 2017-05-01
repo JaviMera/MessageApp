@@ -3,6 +3,8 @@ package com.teamtreehouse.ribbit.ui.activities;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -65,7 +67,10 @@ public class SignUpActivity extends AppCompatActivity implements UserInsertCallb
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Sign up Today!");
+
         progressBar.setVisibility(View.INVISIBLE);
+        progressBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
     }
 
     private boolean isTextViewEmpty(TextView view) {

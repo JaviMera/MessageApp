@@ -2,6 +2,8 @@ package com.teamtreehouse.ribbit.ui.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -59,8 +61,9 @@ public class LoginActivity
 
         setSupportActionBar(toolbar);
 
+        getSupportActionBar().setTitle("Login");
         progressBar.setVisibility(View.INVISIBLE);
-
+        progressBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
         loginButton.setEnabled(true);
 
         FirebaseUser user = FirebaseAuth
@@ -68,6 +71,8 @@ public class LoginActivity
             .getCurrentUser();
 
         if(user != null) {
+
+            progressBar.setVisibility(View.VISIBLE);
 
             // Get the name part from the email
             String username = user.getEmail().split("@")[0];
@@ -137,8 +142,6 @@ public class LoginActivity
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
 
-                    progressBar.setVisibility(View.INVISIBLE);
-
                     if(!task.isSuccessful()) {
 
                         DialogFragmentError dialog = DialogFragmentError.newInstance(
@@ -164,6 +167,8 @@ public class LoginActivity
 
             @Override
             public void onUserRead(List<User> user) {
+
+                progressBar.setVisibility(View.INVISIBLE);
 
                 // Store the current user logged in as a singleton
                 Auth.getInstance().setUser(user.get(0));
