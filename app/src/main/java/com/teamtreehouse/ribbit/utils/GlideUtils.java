@@ -23,7 +23,7 @@ public class GlideUtils {
 
         Glide
             .with(context)
-            .load(R.mipmap.ic_person)
+            .load(R.drawable.avatar_empty)
             .into(view);
     }
 
@@ -31,7 +31,7 @@ public class GlideUtils {
 
         Glide
             .with(context)
-            .load(R.mipmap.ic_person)
+            .load(R.drawable.avatar_empty)
             .into(view);
     }
 
