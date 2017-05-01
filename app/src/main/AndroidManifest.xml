@@ -121,6 +121,10 @@
         <service
             android:name=".ui.activities.messages.VideoMessageService"
             android:exported="false" />
+
+        <service
+            android:name=".ui.InboxService"
+            android:exported="false" />
     </application>
 
 </manifest>

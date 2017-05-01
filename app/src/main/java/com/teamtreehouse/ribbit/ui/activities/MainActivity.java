@@ -2,15 +2,18 @@ package com.teamtreehouse.ribbit.ui.activities;
 
 import android.Manifest;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.IBinder;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -51,6 +54,7 @@ import com.teamtreehouse.ribbit.models.MessagePicture;
 import com.teamtreehouse.ribbit.models.ProfilePicture;
 import com.teamtreehouse.ribbit.models.messages.Message;
 import com.teamtreehouse.ribbit.models.users.User;
+import com.teamtreehouse.ribbit.ui.InboxService;
 import com.teamtreehouse.ribbit.ui.activities.intents.MultimediaResultIntent;
 import com.teamtreehouse.ribbit.models.messages.MultimediaMessage;
 import com.teamtreehouse.ribbit.ui.activities.intents.PictureCaptureResultIntent;
@@ -166,6 +170,26 @@ public class MainActivity
     private FragmentPager currentFragment;
     private boolean fabMenuOpen;
     private ActionBarDrawerToggle toggle;
+    private InboxService service;
+    private boolean bound;
+
+    private ServiceConnection connection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder binder) {
+
+            InboxService.InboxBinder serviceBinder = (InboxService.InboxBinder) binder;
+            service = serviceBinder.getService();
+            service.setWithPendingIntent(false);
+            bound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+
+            bound = false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -285,12 +309,23 @@ public class MainActivity
     };
 
     @Override
+    protected void onStart() {
+        super.onStart();
+
+        Intent intent = new Intent(this, InboxService.class);
+        startService(intent);
+        bindService(intent, connection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
 
         IntentFilter filter = new IntentFilter(MessageService.MESSAGE_ACTION_VIEW);
         LocalBroadcastManager.getInstance(this).registerReceiver(messageBroadcast, filter);
     }
+
+
 
     @OnClick(R.id.fab)
     public void onFabClick(View view) {
@@ -388,6 +423,10 @@ public class MainActivity
 
             case R.id.action_logout:
 
+                this.bound = false;
+                this.service.stopSelf();
+                unbindService(this.connection);
+
                 FirebaseAuth
                     .getInstance()
                     .signOut();
@@ -401,6 +440,13 @@ public class MainActivity
     @Override
     protected void onStop() {
         super.onStop();
+
+        if(bound) {
+
+            bound = false;
+            service.setWithPendingIntent(true);
+            unbindService(connection);
+        }
     }
 
     @Override

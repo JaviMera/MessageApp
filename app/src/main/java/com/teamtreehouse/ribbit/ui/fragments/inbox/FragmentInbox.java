@@ -83,78 +83,7 @@ public class FragmentInbox
     @Override
     public void onResume() {
         super.onResume();
-
-//        getActivity().setProgressBarIndeterminateVisibility(true);
     }
-
-//    private void retrieveMessages() {
-//        Query<TextMessage> query = TextMessage.getQuery();
-//        query.whereEqualTo(TextMessage.KEY_RECIPIENT_IDS, ObsoleteUser.getCurrentUser().getObjectId());
-//        query.addDescendingOrder(TextMessage.KEY_CREATED_AT);
-//        query.findInBackground(new FindCallback<TextMessage>() {
-//            @Override
-//            public void done(List<TextMessage> messages, Exception e) {
-////                getActivity().setProgressBarIndeterminateVisibility(false);
-//
-//                if (swipeRefreshLayout.isRefreshing()) {
-//                    swipeRefreshLayout.setRefreshing(false);
-//                }
-//
-//                if (e == null) {
-//                    // We found messages!
-//                    FragmentInbox.this.messages = messages;
-//                    MessageAdapter adapter = (MessageAdapter) recyclerView.createAdapter();
-//
-//                    String[] usernames = new String[FragmentInbox.this.messages.size()];
-//                    int i = 0;
-//                    for (TextMessage message : FragmentInbox.this.messages) {
-//                        usernames[i] = message.getString(TextMessage.KEY_SENDER_NAME);
-//                        i++;
-//                    }
-//
-//                    adapter.addMessages(FragmentInbox.this.messages);
-//
-//                    presenter.setEmptyTextViewVisibility(false);
-//                }
-//                else {
-//
-//                    presenter.setEmptyTextViewVisibility(true);
-//                }
-//            }
-//        });
-//    }
-
-//    @Override
-//    public void onItemSingleClick(TextMessage message) {
-//
-//        String messageType = message.getString(TextMessage.KEY_FILE_TYPE);
-//        MessageFile file = message.getFile(TextMessage.KEY_FILE);
-//        Uri fileUri = file.getUri();
-//
-//        if (messageType.equals(TextMessage.TYPE_IMAGE)) {
-//            // view the image
-//            Intent intent = new Intent(getActivity(), ImageMessageActivity.class);
-//            intent.setData(fileUri);
-//            startActivity(intent);
-//        } else {
-//            // view the video
-//            Intent intent = new Intent(Intent.ACTION_VIEW, fileUri);
-//            intent.setDataAndType(fileUri, "video/*");
-//            startActivity(intent);
-//        }
-//
-//        // Delete it!
-//        List<String> ids = message.getList(TextMessage.KEY_RECIPIENT_IDS);
-//
-//        if (ids.size() == 1) {
-//            // last recipient - delete the whole thing!
-//            message.deleteInBackground();
-//        }
-//        else {
-//            // remove the recipient
-//            message.removeRecipient(ObsoleteUser.getCurrentUser().getObjectId());
-//        }
-//    }
 
     @Override
     public void setEmptyTextViewVisibility(boolean visible) {
