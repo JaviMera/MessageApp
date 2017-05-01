@@ -11,7 +11,7 @@
         android:id="@+id/profilePictureView"
         android:layout_width="150dp"
         android:layout_height="100dp"
-        android:src="@drawable/dummy"
+        tools:src="@drawable/dummy"
         android:layout_marginTop="10dp"
         android:layout_gravity="center"/>
 
