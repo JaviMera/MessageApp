@@ -146,6 +146,11 @@ public class FragmentInbox
     @Override
     public void onMessageAdded(Message message) {
 
+        if(this.textView.getVisibility() == View.VISIBLE) {
+
+            setEmptyTextViewVisibility(false);
+        }
+
         InboxFragmentAdapter adapter = getAdapter();
         adapter.add(message);
     }
