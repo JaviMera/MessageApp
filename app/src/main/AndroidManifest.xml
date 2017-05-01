@@ -65,15 +65,19 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.teamtreehouse.ribbit.ui.activities.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.UsersActivity"
-                android:label="@string/activity_users_label">
+
+        <activity
+            android:name=".ui.activities.UsersActivity"
+                android:label="@string/activity_users_label"
+                android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.teamtreehouse.ribbit.ui.activities.MainActivity" />
         </activity>
         <activity
             android:name=".ui.activities.EditFriendActivity"
-            android:label="@string/activity_edit_friend_label">
+            android:label="@string/activity_edit_friend_label"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.teamtreehouse.ribbit.ui.activities.MainActivity" />
@@ -82,27 +86,41 @@
         <activity
             android:name=".ui.activities.messages.TextMessageActivity"
             android:label="@string/activity_text_message_label"
+            android:screenOrientation="portrait"
             android:parentActivityName=".ui.activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.teamtreehouse.ribbit.ui.activities.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.messages.view.ViewTextMessageActivity" >
+
+        <activity
+            android:name=".ui.activities.messages.view.ViewTextMessageActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.teamtreehouse.ribbit.ui.activities.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.messages.view.ViewImageMessageActivity" >
+
+        <activity
+            android:name=".ui.activities.messages.view.ViewImageMessageActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.teamtreehouse.ribbit.ui.activities.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.messages.VideoMessageActivity" android:windowSoftInputMode="adjustPan" >
+
+        <activity
+            android:name=".ui.activities.messages.VideoMessageActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.teamtreehouse.ribbit.ui.activities.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.messages.view.ViewVideoMessageActivity">
+
+        <activity
+            android:name=".ui.activities.messages.view.ViewVideoMessageActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.teamtreehouse.ribbit.ui.activities.MainActivity" />
