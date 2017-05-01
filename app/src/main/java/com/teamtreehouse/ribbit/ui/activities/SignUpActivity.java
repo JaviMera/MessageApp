@@ -85,8 +85,6 @@ public class SignUpActivity extends AppCompatActivity implements UserInsertCallb
     @OnClick(R.id.signupButton)
     public void onSignUpClick(View view) {
 
-        progressBar.setVisibility(View.VISIBLE);
-
         if (isTextViewEmpty(usernameView) || isTextViewEmpty(passwordView) || isTextViewEmpty(emailView)) {
 
             DialogFragment dialog = DialogFragmentError.newInstance(
@@ -96,6 +94,8 @@ public class SignUpActivity extends AppCompatActivity implements UserInsertCallb
             dialog.show(getSupportFragmentManager(), "dialog_signup");
         }
         else {
+
+            progressBar.setVisibility(View.VISIBLE);
 
             final String email = emailView.getText().toString();
             final String username = usernameView.getText().toString();
@@ -120,6 +120,9 @@ public class SignUpActivity extends AppCompatActivity implements UserInsertCallb
                                     getString(R.string.signup_error_title));
 
                             dialog.show(getSupportFragmentManager(), "dialog_signup");
+
+                            progressBar.setVisibility(View.INVISIBLE);
+
                         } else {
 
                             FirebaseUser firebaseUser = task.getResult().getUser();

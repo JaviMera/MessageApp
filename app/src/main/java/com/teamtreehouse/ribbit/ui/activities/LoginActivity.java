@@ -64,7 +64,6 @@ public class LoginActivity
         getSupportActionBar().setTitle("Login");
         progressBar.setVisibility(View.INVISIBLE);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
-        loginButton.setEnabled(true);
 
         FirebaseUser user = FirebaseAuth
             .getInstance()
@@ -91,8 +90,6 @@ public class LoginActivity
 
     @OnClick(R.id.loginButton)
     public void onLoginClick(View view) {
-
-        loginButton.setEnabled(false);
 
         String username = usernameEditText
             .getText()
@@ -150,7 +147,7 @@ public class LoginActivity
 
                         dialog.show(getSupportFragmentManager(), "dialog_error");
 
-                        loginButton.setEnabled(true);
+                        progressBar.setVisibility(View.INVISIBLE);
                     }
                     else{
 
