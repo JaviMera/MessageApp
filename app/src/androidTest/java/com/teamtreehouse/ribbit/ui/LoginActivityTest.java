@@ -1,9 +1,11 @@
 package com.teamtreehouse.ribbit.ui;
 
+import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.filters.LargeTest;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.models.users.User;
 import com.teamtreehouse.ribbit.models.users.UserCurrent;
@@ -34,10 +36,14 @@ public class LoginActivityTest {
 
     @Rule
     public IntentsTestRule<LoginActivity> mActivityRule = new IntentsTestRule<LoginActivity>(
-        LoginActivity.class);
+        LoginActivity.class, false, false);
 
     @Before
     public void setUp() throws Exception {
+
+        Intent intent = new Intent();
+        intent.putExtra("test", true);
+        mActivityRule.launchActivity(intent);
 
         user = new UserCurrent("lksdjfdsjf", "javier@hotmail.com", "Javito", "Javito", "");
     }

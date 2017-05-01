@@ -69,6 +69,10 @@ public class LoginActivity
             .getInstance()
             .getCurrentUser();
 
+        if(getIntent().hasExtra("test")) {
+            return;
+        }
+
         if(user != null) {
 
             progressBar.setVisibility(View.VISIBLE);
