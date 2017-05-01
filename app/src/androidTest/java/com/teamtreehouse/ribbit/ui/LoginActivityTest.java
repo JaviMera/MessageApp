@@ -5,8 +5,8 @@ import android.support.test.filters.LargeTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.teamtreehouse.ribbit.R;
-import com.teamtreehouse.ribbit.mockdata.MockUsers;
-import com.teamtreehouse.ribbit.models.purgatory.ObsoleteUser;
+import com.teamtreehouse.ribbit.models.users.User;
+import com.teamtreehouse.ribbit.models.users.UserCurrent;
 import com.teamtreehouse.ribbit.ui.activities.LoginActivity;
 import com.teamtreehouse.ribbit.ui.activities.MainActivity;
 
@@ -19,8 +19,6 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.intent.Intents.intended;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -32,7 +30,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 @LargeTest
 public class LoginActivityTest {
 
-    private ObsoleteUser user;
+    User user;
 
     @Rule
     public IntentsTestRule<LoginActivity> mActivityRule = new IntentsTestRule<LoginActivity>(
@@ -41,7 +39,7 @@ public class LoginActivityTest {
     @Before
     public void setUp() throws Exception {
 
-        user = MockUsers.get(0);
+        user = new UserCurrent("lksdjfdsjf", "javier@hotmail.com", "Javito", "Javito", "");
     }
 
     @Test
@@ -80,43 +78,14 @@ public class LoginActivityTest {
     public void invalidUserName_LaunchesErrorDialog() {
 
         // Arrange
-        String expectedMessage = "The username or password you entered is incorrect.";
+        String expectedMessage = "There is no user record corresponding to this identifier. The user may have been deleted.";
         onView(withId(R.id.usernameField)).perform(typeText("Harambe"));
-        onView(withId(R.id.passwordField)).perform(typeText(user.getPassword()));
+        onView(withId(R.id.passwordField)).perform(typeText("roflolmao"));
 
         // Act
         onView(withId(R.id.loginButton)).perform(click());
 
         // Assert
         onView(withText(expectedMessage)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void invalidPassword_LaunchesErrorDialog() {
-
-        // Arrange
-        String expectedMessage = "The username or password you entered is incorrect.";
-        onView(withId(R.id.usernameField)).perform(typeText(user.getUsername()));
-        onView(withId(R.id.passwordField)).perform(typeText("Harambe"));
-
-        // Act
-        onView(withId(R.id.loginButton)).perform(click());
-
-        // Assert
-        onView(withText(expectedMessage)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void validUserPassword_LaunchesMainActivity() throws Exception {
-
-        // Arrange
-        onView(withId(R.id.usernameField)).perform(typeText(user.getUsername()));
-        onView(withId(R.id.passwordField)).perform(typeText(user.getPassword()));
-
-        // Act
-        onView(withId(R.id.loginButton)).perform(click());
-
-        // Assert
-        intended(hasComponent(MainActivity.class.getName()));
     }
 }
