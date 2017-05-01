@@ -9,6 +9,12 @@ import android.os.Parcelable;
 
 public class VideoMessage extends MultimediaMessage {
 
+    @Override
+    public String type() {
+
+        return "Video";
+    }
+
     public VideoMessage(){}
 
     public VideoMessage(String id, String username, String displayName, String text, String url, String path, long time){

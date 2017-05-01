@@ -9,6 +9,12 @@ import android.os.Parcelable;
 
 public class ImageMessage extends MultimediaMessage {
 
+    @Override
+    public String type() {
+
+        return "Picture";
+    }
+
     public ImageMessage() {};
 
     public ImageMessage(String id, String username, String displayName, String text, String url, String path, long time){

@@ -13,6 +13,8 @@ public abstract class Message extends Item implements Parcelable {
 
     public static final String KEY = "message";
 
+    public abstract String type();
+
     private String id;
     private String username;
     private String displayName;

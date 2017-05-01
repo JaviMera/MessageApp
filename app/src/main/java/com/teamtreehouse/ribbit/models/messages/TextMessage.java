@@ -8,6 +8,12 @@ import android.os.Parcel;
 
 public class TextMessage extends Message {
 
+    @Override
+    public String type() {
+
+        return "Text";
+    }
+
     public TextMessage(){
 
         super();

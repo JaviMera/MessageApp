@@ -16,6 +16,7 @@ public class FragmentMessagesVH extends FragmentRecyclerVH<FragmentInboxView, Me
 
     private TextView messageTextView;
     private TextView dateTextView;
+    private TextView messageTypeText;
 
     @Override
     public void bind(final Message message) {
@@ -27,8 +28,10 @@ public class FragmentMessagesVH extends FragmentRecyclerVH<FragmentInboxView, Me
                 fragment.onItemSelected(message);
             }
         });
+
         this.messageTextView.setText(message.getDisplayName());
         this.dateTextView.setText(MessageUtils.getTimeAgo(message.getDate()));
+        this.messageTypeText.setText(message.type());
     }
 
     public FragmentMessagesVH(FragmentInboxView parent, View view) {
@@ -37,6 +40,7 @@ public class FragmentMessagesVH extends FragmentRecyclerVH<FragmentInboxView, Me
 
         this.messageTextView = (TextView) view.findViewById(R.id.usernameLabel);
         this.dateTextView = (TextView) view.findViewById(R.id.timeLabel);
+        this.messageTypeText = (TextView) view.findViewById(R.id.messageTypeText);
     }
 }
 
