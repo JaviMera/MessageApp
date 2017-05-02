@@ -56,6 +56,7 @@ public class LoginActivityTest {
             .getActivity()
             .getString(R.string.login_error_empty_username_message);
 
+        mActivityRule.getActivity().closeKeyboard();
         // Act
         onView(withId(R.id.loginButton)).perform(click());
 
@@ -71,7 +72,10 @@ public class LoginActivityTest {
             .getActivity()
             .getString(R.string.login_error_empty_password_message);
 
+
         onView(withId(R.id.usernameField)).perform(typeText(user.getUsername()));
+
+        mActivityRule.getActivity().closeKeyboard();
 
         // Act
         onView(withId(R.id.loginButton)).perform(click());
@@ -87,6 +91,8 @@ public class LoginActivityTest {
         String expectedMessage = "There is no user record corresponding to this identifier. The user may have been deleted.";
         onView(withId(R.id.usernameField)).perform(typeText("Harambe"));
         onView(withId(R.id.passwordField)).perform(typeText("roflolmao"));
+
+        mActivityRule.getActivity().closeKeyboard();
 
         // Act
         onView(withId(R.id.loginButton)).perform(click());
