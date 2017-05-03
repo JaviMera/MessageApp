@@ -90,6 +90,9 @@ public class LoginActivityTest {
         // Arrange
         String expectedMessage = "There is no user record corresponding to this identifier. The user may have been deleted.";
         onView(withId(R.id.usernameField)).perform(typeText("Harambe"));
+
+        mActivityRule.getActivity().closeKeyboard();
+
         onView(withId(R.id.passwordField)).perform(typeText("roflolmao"));
 
         mActivityRule.getActivity().closeKeyboard();
