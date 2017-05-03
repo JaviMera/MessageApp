@@ -1,6 +1,7 @@
 package com.teamtreehouse.ribbit.ui.activities;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -12,6 +13,7 @@ import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -35,7 +37,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SignUpActivity extends AppCompatActivity implements UserInsertCallback, DialogInterface.OnClickListener {
+public class SignUpActivity
+    extends
+        AppCompatActivity
+    implements
+        UserInsertCallback, DialogInterface.OnClickListener {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -172,5 +178,12 @@ public class SignUpActivity extends AppCompatActivity implements UserInsertCallb
     @Override
     public void onClick(DialogInterface dialogInterface, int i) {
 
+    }
+
+    public void closeKeyboard() {
+
+        View view = this.getCurrentFocus();
+        InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
